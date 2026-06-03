@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="NIREV AI — Next Generation Intelligence for Evaluation & Validation" />
   <meta name="theme-color" content="#080808" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="NIREV AI" />
+  <link rel="manifest" href="/manifest.json" />
   <title>NIREV AI</title>
 
   <!-- Fonts -->
@@ -22,6 +27,7 @@
   <link rel="stylesheet" href="css/assessment.css" />
   <link rel="stylesheet" href="css/analytics.css" />
   <link rel="stylesheet" href="css/progress.css" />
+  <link rel="stylesheet" href="css/reports.css" />
 
   <!-- Supabase CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -432,18 +438,17 @@
         </div>
       </main>
 
-      <!-- ── PAGE: REPORTS (placeholder) ──────────────────── -->
-      <main id="page-reports" class="page-panel page-content" style="display:none;">
-        <div class="dashboard-welcome">
-          <div class="dashboard-welcome__greeting">Phase 4</div>
-          <h1 class="dashboard-welcome__title">Assessment <span>Reports</span></h1>
-        </div>
-        <div class="card">
-          <div class="empty-state">
-            <div class="empty-state__icon">◎</div>
-            <div class="empty-state__title">Reports</div>
-            <div class="empty-state__text">Detailed session reports and export tools.</div>
-            <span class="badge badge--orange">Phase 4</span>
+      <!-- ── PAGE: REPORTS ─────────────────────────────────── -->
+      <main id="page-reports" class="page-panel" style="display:none;">
+        <div class="reports-page">
+          <div class="reports-header">
+            <div class="reports-header__left">
+              <div class="reports-header__eyebrow">Assessment History</div>
+              <h1 class="reports-header__title">Your <span>Reports</span></h1>
+            </div>
+          </div>
+          <div id="reports-content">
+            <!-- Populated by reports.js -->
           </div>
         </div>
       </main>
@@ -468,6 +473,17 @@
   </div><!-- /screen-app -->
 
 </div><!-- /nirev-app -->
+
+<!-- PWA Service Worker -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('[SW] registered:', reg.scope))
+        .catch(err => console.warn('[SW] registration failed:', err));
+    });
+  }
+</script>
 
 <!-- App entry (ES Module) -->
 <script type="module" src="js/app.js"></script>
