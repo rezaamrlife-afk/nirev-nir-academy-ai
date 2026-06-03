@@ -89,11 +89,13 @@ export async function scoreResponse(params) {
 }
 
 /**
- * [Phase 3] Generate feedback — stub
+ * Generate detailed feedback for a completed assessment.
+ * @param {{ sessionScore, userLevel }} params
  */
 export async function generateFeedback(params) {
-  console.warn('[Groq] generateFeedback() — Phase 3');
-  return { data: null, error: 'Feedback engine not yet active.' };
+  const { buildFeedbackPrompt } = await import('./domain/feedback/feedback-domain.js');
+  const prompt = buildFeedbackPrompt(params.sessionScore, params.userLevel);
+  return _call([{ role: 'user', content: prompt }], { temperature: 0.5, max_tokens: 800 });
 }
 
 /**
