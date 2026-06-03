@@ -1,85 +1,102 @@
 /**
- * NIREV AI — Feedback Domain Contract
+ * NIREV AI — Feedback Domain
  * ─────────────────────────────────────────────────────────────
- * Status:  CONTRACT DEFINED — Implementation: Phase 3
- * Version: 0.2.0-contract
+ * Status:  IMPLEMENTED — Phase 3
+ * Version: 3.0.0
  *
- * ── POSITION IN PIPELINE ─────────────────────────────────────
- *
- *   scoring-domain → [feedback-domain]
- *                          ↓
- *                   (renders to UI via store)
- *
- * Triggered when store.scoring is updated after a session.
- * Reads SessionScore, constructs AI prompt, generates
- * human-readable feedback, persists it, and updates store.feedback.
- *
- * ── PURE vs SIDE-EFFECT RULE ─────────────────────────────────
- *
- *   PURE functions:
- *     - buildFeedbackPrompt()   SessionScore → prompt string
- *     - formatFeedback()        raw AI text → structured FeedbackResult
- *     - classifyFeedbackType()  session data → 'immediate'|'summary'|'progress'
- *
- *   SIDE-EFFECT functions:
- *     - generateFeedback()      → calls groq.js
- *     - saveFeedback()          → calls db.js
- *     - publishFeedback()       → writes to store.feedback
- *
- * ── DEPENDENCIES ─────────────────────────────────────────────
- *
- *   ALLOWED to call:
- *     → groq.js              (generateFeedback, callGroq)
- *     → db.js                (saveFeedback, getLatestFeedback)
- *     → store.js             (reads scoring slice, writes feedback slice)
- *
- *   NOT ALLOWED to call:
- *     ✗ assessment-domain    (pipeline flows forward only)
- *     ✗ scoring-domain       (pipeline flows forward only)
- *     ✗ analytics-domain     (separate branch)
- *     ✗ ui.js
- *     ✗ router.js
- *
- * ── INPUT SCHEMA ─────────────────────────────────────────────
- *
- * generateFeedback(input):
- * {
- *   sessionScore: SessionScore,  // full output from scoring-domain
- *   userLevel:    string,        // current CEFR level
- *   feedbackType: 'immediate'    // right after one answer
- *               | 'summary'      // end of full session
- *               | 'progress'     // weekly/monthly trend
- * }
- *
- * ── OUTPUT SCHEMA ────────────────────────────────────────────
- *
- * generateFeedback() → FeedbackResult:
- * {
- *   sessionId:    string,
- *   type:         'immediate' | 'summary' | 'progress',
- *   sections: {
- *     strengths:  string[],      // What learner did well
- *     weaknesses: string[],      // Areas needing improvement
- *     tips:       string[],      // Actionable improvement tips
- *     summary:    string         // 2–3 sentence overall summary
- *   },
- *   cefrComment:  string,        // Comment on current CEFR level
- *   nextSteps:    string[],      // Recommended next actions
- *   tone:         'encouraging' | 'neutral' | 'challenging',
- *   generatedAt:  string         // ISO timestamp
- * }
- *
- * ── FEEDBACK TONE RULES ──────────────────────────────────────
- *
- *   score < 40   → 'encouraging'  (motivate, do not discourage)
- *   score 40–75  → 'neutral'      (balanced, constructive)
- *   score > 75   → 'challenging'  (push further, raise the bar)
- *
- * ── ERROR OUTPUT ─────────────────────────────────────────────
- *
- * { data: FeedbackResult | null, error: string | null }
+ * PURE functions only — no API, no DB, no UI.
  * ─────────────────────────────────────────────────────────────
  */
 
-// Phase 3 implementation goes here.
-export const FEEDBACK_DOMAIN_VERSION = '0.2.0-contract';
+// ── Pure: Classify feedback tone ─────────────────────────────
+
+export function classifyTone(score) {
+  if (score < 40) return 'encouraging';
+  if (score <= 75) return 'neutral';
+  return 'challenging';
+}
+
+// ── Pure: Build Groq feedback prompt ─────────────────────────
+
+export function buildFeedbackPrompt(sessionScore, userLevel) {
+  const tone     = classifyTone(sessionScore.totalScore);
+  const perQ     = sessionScore.breakdown?.perQuestion ?? [];
+  const skill    = sessionScore.skill;
+  const score    = Math.round(sessionScore.totalScore);
+  const cefr     = sessionScore.cefrLevel;
+
+  const answersText = perQ.map((q, i) =>
+    `Q${i+1}: Score ${Math.round(q.normalised)}/100 — ${q.rationale ?? ''}`
+  ).join('\n');
+
+  return `You are an expert English language teacher giving personalised feedback to a learner.
+
+Assessment details:
+- Skill: ${skill}
+- Total Score: ${score}/100
+- CEFR Level: ${cefr}
+- Current learner level: ${userLevel ?? 'unknown'}
+- Feedback tone: ${tone} (${tone === 'encouraging' ? 'be very motivating and supportive' : tone === 'neutral' ? 'be balanced and constructive' : 'be challenging and push them further'})
+
+Per-question results:
+${answersText}
+
+Respond ONLY with a JSON object (no markdown, no extra text):
+{
+  "strengths": ["<specific strength 1>", "<specific strength 2>"],
+  "weaknesses": ["<specific weakness 1>", "<specific weakness 2>"],
+  "tips": ["<actionable tip 1>", "<actionable tip 2>", "<actionable tip 3>"],
+  "summary": "<2-3 sentence overall summary of performance>",
+  "cefrComment": "<1 sentence about their ${cefr} level and what it means>",
+  "nextSteps": ["<next step 1>", "<next step 2>"]
+}
+
+Be specific, practical, and personalised. Reference the actual skill (${skill}) in your feedback.`;
+}
+
+// ── Pure: Parse Groq feedback response ───────────────────────
+
+export function parseFeedbackResponse(groqText, sessionId, score) {
+  try {
+    const clean  = groqText.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(clean);
+
+    return {
+      sessionId,
+      type:        'summary',
+      sections: {
+        strengths:  parsed.strengths  ?? [],
+        weaknesses: parsed.weaknesses ?? [],
+        tips:       parsed.tips       ?? [],
+        summary:    parsed.summary    ?? '',
+      },
+      cefrComment:  parsed.cefrComment ?? '',
+      nextSteps:    parsed.nextSteps   ?? [],
+      tone:         classifyTone(score),
+      generatedAt:  new Date().toISOString(),
+    };
+  } catch {
+    return _fallbackFeedback(sessionId, score);
+  }
+}
+
+// ── Pure: Fallback feedback ───────────────────────────────────
+
+function _fallbackFeedback(sessionId, score) {
+  return {
+    sessionId,
+    type: 'summary',
+    sections: {
+      strengths:  ['You completed the assessment'],
+      weaknesses: ['Keep practising to improve your score'],
+      tips:       ['Review grammar rules', 'Practice daily', 'Read English texts'],
+      summary:    `You scored ${Math.round(score)}/100. Keep practising to improve your performance.`,
+    },
+    cefrComment:  '',
+    nextSteps:    ['Take another assessment', 'Study the areas where you scored low'],
+    tone:         classifyTone(score),
+    generatedAt:  new Date().toISOString(),
+  };
+}
+
+export const FEEDBACK_DOMAIN_VERSION = '3.0.0';
