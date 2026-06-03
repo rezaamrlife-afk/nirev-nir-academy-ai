@@ -19,6 +19,29 @@ import { buildPredictionResult } from './domain/predictions/prediction-domain.js
 
 // ── Initialize ────────────────────────────────────────────────
 
+// ── Count-up Animation ───────────────────────────────────────
+
+function _countUp(element, target, duration = 800) {
+  if (!element) return;
+  const isFloat = typeof target === 'number' && !Number.isInteger(target);
+  const start = 0;
+  const startTime = performance.now();
+
+  function update(currentTime) {
+    const elapsed  = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const ease     = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+    const current  = start + (target - start) * ease;
+
+    element.textContent = isFloat ? current.toFixed(1) : Math.round(current);
+
+    if (progress < 1) requestAnimationFrame(update);
+    else element.textContent = isFloat ? target.toFixed(1) : target;
+  }
+
+  requestAnimationFrame(update);
+}
+
 export function initDashboard() {
   _renderWelcome();
   _loadAndRenderDashboard();
@@ -131,24 +154,24 @@ function _renderStats(analytics, prediction, streak) {
   const { summary } = analytics;
 
   // Assessments taken
-  _setStatCard('stat-assessments',
-    summary.totalSessions,
-    summary.totalSessions === 1 ? '1 session' : `${summary.totalSessions} sessions`
-  );
+  // Use count-up for numeric values
+  const assessEl = document.getElementById('stat-assessments');
+  const avgEl    = document.getElementById('stat-avg-score');
+  const streakEl = document.getElementById('stat-streak');
 
-  // Average score
-  _setStatCard('stat-avg-score',
-    Math.round(summary.averageScore),
-    `Best: ${summary.bestScore}/100`
-  );
+  _setStatCard('stat-assessments', summary.totalSessions,
+    summary.totalSessions === 1 ? '1 session' : `${summary.totalSessions} sessions`);
+  _countUp(assessEl, summary.totalSessions, 600);
 
-  // Streak
+  _setStatCard('stat-avg-score', Math.round(summary.averageScore), `Best: ${summary.bestScore}/100`);
+  _countUp(avgEl, Math.round(summary.averageScore), 800);
+
   _setStatCard('stat-streak',
     streak > 0 ? streak : '—',
     streak > 0 ? `${streak} day streak 🔥` : 'Start today'
   );
+  if (streak > 0) _countUp(streakEl, streak, 600);
 
-  // Current level
   _setStatCard('stat-level',
     summary.currentCEFR,
     prediction.estimatedDays
