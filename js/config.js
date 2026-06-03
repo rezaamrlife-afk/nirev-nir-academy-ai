@@ -27,8 +27,8 @@ export const ENV = {
 // In production, these are the public anon keys (safe to expose).
 
 export const SUPABASE = {
-  URL:      'YOUR_SUPABASE_URL',
-  ANON_KEY: 'YOUR_SUPABASE_ANON_KEY',
+  URL:      'https://odzuzbazeysyxlwczjax.supabase.co',
+  ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9kenV6YmF6ZXlzeXhsd2N6amF4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0ODUyODcsImV4cCI6MjA5NjA2MTI4N30.r8JajCWeUZcMpt1ZdoNT-DAfFTbRMzY_tdSclKndrjs',
 };
 
 // ── Groq ──────────────────────────────────────────────────────
