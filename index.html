@@ -20,6 +20,7 @@
   <link rel="stylesheet" href="css/dashboard.css" />
   <link rel="stylesheet" href="css/auth.css" />
   <link rel="stylesheet" href="css/assessment.css" />
+  <link rel="stylesheet" href="css/analytics.css" />
 
   <!-- Supabase CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -404,19 +405,15 @@
         </div><!-- /assessment-page -->
       </main>
 
-      <!-- ── PAGE: ANALYTICS (placeholder) ───────────────── -->
-      <main id="page-analytics" class="page-panel page-content" style="display:none;">
-        <div class="dashboard-welcome">
-          <div class="dashboard-welcome__greeting">Phase 3</div>
-          <h1 class="dashboard-welcome__title">Performance <span>Analytics</span></h1>
-          <p class="dashboard-welcome__sub">Coming in Phase 3 — Analytics & Scoring.</p>
-        </div>
-        <div class="card">
-          <div class="empty-state">
-            <div class="empty-state__icon">◉</div>
-            <div class="empty-state__title">Analytics Engine</div>
-            <div class="empty-state__text">Analytics, charts, and score breakdowns will appear here.</div>
-            <span class="badge badge--orange">Phase 3</span>
+      <!-- ── PAGE: ANALYTICS ───────────────────────────────── -->
+      <main id="page-analytics" class="page-panel" style="display:none;">
+        <div class="analytics-page">
+          <div class="analytics-header">
+            <div class="analytics-header__eyebrow">Performance Intelligence</div>
+            <h1 class="analytics-header__title">Your <span>Analytics</span></h1>
+          </div>
+          <div id="analytics-content">
+            <!-- Populated by analytics.js -->
           </div>
         </div>
       </main>
