@@ -126,7 +126,7 @@ export const FEATURES = {
   ANALYTICS:          true,   // Phase 3 ✅
   PROGRESS_TRACKING:  true,   // Phase 4 ✅
   PREDICTIONS:        true,   // Phase 4 ✅
-  BENCHMARKING:       false,  // Phase 5
-  REPORTING:          false,  // Phase 4
-  PWA:                false,  // Phase 5
+  BENCHMARKING:       false,  // Phase 5 (next)
+  REPORTING:          true,   // Phase 5 ✅
+  PWA:                true,   // Phase 5 ✅
 };
