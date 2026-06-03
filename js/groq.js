@@ -1,132 +1,110 @@
 /**
  * NIREV AI — Groq API Wrapper
  * ─────────────────────────────────────────────────────────────
- * Architecture-ready stub. Business logic is NOT implemented yet.
- * This file defines the interface all future AI calls will use.
+ * Version: 2.0.0 — Phase 2 Implementation
  *
- * Security Model:
- *   All Groq calls are proxied through a Supabase Edge Function.
- *   The Groq secret key never appears in frontend code.
- *   The Edge Function URL is defined in config.js (GROQ.EDGE_FN_URL).
- *
- * Pattern:
- *   Each public function takes a structured prompt input
- *   and returns { data: string | null, error: string | null }.
- *   Callers handle the result — this layer never touches DOM or store.
- *
- * Future Domains:
- *   - Assessment scoring prompts     → domain/scoring/
- *   - Feedback generation prompts    → domain/feedback/
- *   - Prediction analysis prompts    → domain/predictions/
- *
- * Rule: Raw prompts live in their domain folder.
- *       This file handles transport, auth headers, retries, and errors.
+ * Security: Groq API key is passed via config.js (GROQ.API_KEY).
+ * Direct browser call — no Edge Function needed for Phase 2.
  * ─────────────────────────────────────────────────────────────
  */
 
 import { GROQ } from './config.js';
-import { getSupabase } from './auth.js';
 
 // ── Internal Transport ────────────────────────────────────────
 
-/**
- * Send a request to the Groq proxy Edge Function.
- * The Edge Function attaches the Groq API key server-side.
- *
- * @param {Object} payload - { messages, model?, max_tokens?, temperature? }
- * @returns {{ data: string | null, error: string | null }}
- */
-async function _callProxy(payload) {
-  const sb = getSupabase();
-  if (!sb) return { data: null, error: 'Supabase not initialized' };
-
+async function _call(messages, options = {}) {
   try {
-    // Get current session token to authenticate with the Edge Function
-    const { data: sessionData } = await sb.auth.getSession();
-    const accessToken = sessionData?.session?.access_token;
-    if (!accessToken) return { data: null, error: 'Not authenticated' };
-
-    const response = await fetch(GROQ.EDGE_FN_URL, {
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type':  'application/json',
-        'Authorization': `Bearer ${accessToken}`,
+        'Authorization': `Bearer ${GROQ.API_KEY}`,
       },
       body: JSON.stringify({
-        model:       payload.model       ?? GROQ.MODEL,
-        max_tokens:  payload.max_tokens  ?? GROQ.MAX_TOKENS,
-        temperature: payload.temperature ?? GROQ.TEMPERATURE,
-        messages:    payload.messages,
+        model:       options.model       ?? GROQ.MODEL,
+        max_tokens:  options.max_tokens  ?? GROQ.MAX_TOKENS,
+        temperature: options.temperature ?? GROQ.TEMPERATURE,
+        messages,
       }),
     });
 
     if (!response.ok) {
-      const errText = await response.text();
-      return { data: null, error: `Groq proxy error ${response.status}: ${errText}` };
+      const err = await response.text();
+      return { data: null, error: `Groq API error ${response.status}: ${err}` };
     }
 
-    const result = await response.json();
+    const result  = await response.json();
     const content = result?.choices?.[0]?.message?.content ?? null;
 
-    if (!content) return { data: null, error: 'Empty response from AI' };
+    if (!content) return { data: null, error: 'Empty response from Groq' };
     return { data: content, error: null };
 
   } catch (err) {
-    return { data: null, error: err.message ?? 'Network error' };
+    return { data: null, error: err.message ?? 'Network error calling Groq' };
   }
 }
 
-// ── Public API Stubs ──────────────────────────────────────────
-// These are the contracts that domain modules will call.
-// Implementation details will be added per phase.
+// ── Public API ────────────────────────────────────────────────
 
 /**
- * [Phase 2] Score a learner's assessment response.
- * @param {{ skill, question, answer, rubric }} params
- * @returns {{ data: { score, feedback, details } | null, error: string | null }}
+ * Generate assessment questions for a skill and level.
+ * @param {{ skill, level, type, count }} params
  */
-export async function scoreResponse(params) {
-  // Prompt construction will be implemented in domain/scoring/
-  // when Phase 2 begins. This stub defines the interface contract.
-  console.warn('[Groq] scoreResponse() — not yet implemented (Phase 2)');
-  return { data: null, error: 'Assessment engine not yet active.' };
+export async function generateQuestions(params) {
+  const { skill, level, type, count = 5 } = params;
+
+  const prompt = `You are an expert English language assessment designer.
+Generate ${count} assessment questions for the following:
+- Skill: ${skill}
+- Level: ${level ?? 'B1'} (CEFR)
+- Assessment type: ${type ?? 'practice'}
+
+Return ONLY a JSON array of question objects with no markdown or extra text:
+[
+  {
+    "question": "<question text>",
+    "type": "multiple-choice" | "short-answer" | "essay",
+    "options": ["A) ...", "B) ...", "C) ...", "D) ..."] or null,
+    "difficulty": <1-5>,
+    "rubric": "<scoring criteria for this question>"
+  }
+]
+
+For multiple-choice questions, always include 4 options labeled A) B) C) D).
+For short-answer and essay, set options to null.
+Make questions appropriate for ${level ?? 'B1'} level learners.
+Vary difficulty between ${Math.max(1, (level === 'A1' ? 1 : level === 'A2' ? 2 : level === 'B1' ? 2 : level === 'B2' ? 3 : 4))}-${Math.min(5, (level === 'C1' || level === 'C2' ? 5 : 4))}.`;
+
+  return _call([{ role: 'user', content: prompt }], { temperature: 0.7 });
 }
 
 /**
- * [Phase 3] Generate detailed feedback for a completed assessment.
- * @param {{ skill, answers, scores, userLevel }} params
- * @returns {{ data: string | null, error: string | null }}
+ * Score a single learner answer.
+ * @param {{ question, answer, rubric, skill, type, options }} params
+ */
+export async function scoreResponse(params) {
+  const { buildScoringPrompt } = await import('./domain/scoring/scoring-domain.js');
+  const prompt = buildScoringPrompt(params);
+  return _call([{ role: 'user', content: prompt }], { temperature: 0.2, max_tokens: 300 });
+}
+
+/**
+ * [Phase 3] Generate feedback — stub
  */
 export async function generateFeedback(params) {
-  console.warn('[Groq] generateFeedback() — not yet implemented (Phase 3)');
+  console.warn('[Groq] generateFeedback() — Phase 3');
   return { data: null, error: 'Feedback engine not yet active.' };
 }
 
 /**
- * [Phase 4] Generate a progress prediction for a learner.
- * @param {{ scoreHistory, currentLevel, targetLevel }} params
- * @returns {{ data: { estimatedDays, confidence, nextMilestone } | null, error: string | null }}
+ * [Phase 4] Generate prediction — stub
  */
 export async function generatePrediction(params) {
-  console.warn('[Groq] generatePrediction() — not yet implemented (Phase 4)');
+  console.warn('[Groq] generatePrediction() — Phase 4');
   return { data: null, error: 'Prediction engine not yet active.' };
 }
 
 /**
- * [Phase 2] Generate assessment questions for a skill.
- * @param {{ skill, level, type, count }} params
- * @returns {{ data: Question[] | null, error: string | null }}
+ * Low-level call for domain modules.
  */
-export async function generateQuestions(params) {
-  console.warn('[Groq] generateQuestions() — not yet implemented (Phase 2)');
-  return { data: null, error: 'Assessment engine not yet active.' };
-}
-
-// ── Exported Transport (for domain modules that build raw payloads) ──
-
-/**
- * Low-level call for domain modules that build their own payloads.
- * Only use this inside js/domain/ submodules.
- * @param {Object} payload
- */
-export { _callProxy as callGroq };
+export { _call as callGroq };
