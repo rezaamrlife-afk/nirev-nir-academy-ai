@@ -122,8 +122,8 @@ export const LIMITS = {
 export const FEATURES = {
   ASSESSMENT_ENGINE:  true,   // Phase 2 ✅
   SCORING_ENGINE:     true,   // Phase 2 ✅
-  FEEDBACK_ENGINE:    false,  // Phase 3
-  ANALYTICS:          false,  // Phase 3
+  FEEDBACK_ENGINE:    true,   // Phase 3 ✅
+  ANALYTICS:          true,   // Phase 3 ✅
   PROGRESS_TRACKING:  false,  // Phase 4
   PREDICTIONS:        false,  // Phase 4
   BENCHMARKING:       false,  // Phase 5
