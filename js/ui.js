@@ -29,8 +29,16 @@ export function showToast(message, type = 'info', duration = 3500) {
   const container = getToastContainer();
   const toast = document.createElement('div');
   toast.className = `toast toast--${type}`;
+
+  const icons = {
+    success: '✓',
+    error:   '✕',
+    warning: '⚠',
+    info:    'ℹ',
+  };
+
   toast.innerHTML = `
-    <span class="toast__icon"></span>
+    <div class="toast__icon-wrap">${icons[type] ?? icons.info}</div>
     <span class="toast__message">${message}</span>
   `;
   container.appendChild(toast);
