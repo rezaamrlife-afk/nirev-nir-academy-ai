@@ -1,352 +1,182 @@
-/* ============================================================
-   NIREV AI — Analytics Page Styles
-   Phase 3
-   ============================================================ */
+/**
+ * NIREV AI — Analytics Domain
+ * ─────────────────────────────────────────────────────────────
+ * Status:  IMPLEMENTED — Phase 3
+ * Version: 3.0.0
+ *
+ * PURE functions only — no API, no DB, no UI.
+ * ─────────────────────────────────────────────────────────────
+ */
 
-.analytics-page {
-  padding: var(--space-8);
-  max-width: var(--content-max);
+// ── Pure: Compute average ─────────────────────────────────────
+
+export function computeAverage(scores) {
+  if (!scores || scores.length === 0) return 0;
+  const sum = scores.reduce((a, b) => a + (parseFloat(b) || 0), 0);
+  return parseFloat((sum / scores.length).toFixed(1));
 }
 
-/* ── Page Header ── */
-.analytics-header {
-  margin-bottom: var(--space-8);
-  animation: fade-up var(--dur-slow) var(--ease-out) both;
+// ── Pure: Compute trajectory ──────────────────────────────────
+
+export function computeTrajectory(scores) {
+  if (!scores || scores.length < 2) return 'plateauing';
+  const half   = Math.floor(scores.length / 2);
+  const first  = computeAverage(scores.slice(0, half));
+  const second = computeAverage(scores.slice(half));
+  const diff   = second - first;
+  if (diff > 5)  return 'improving';
+  if (diff < -5) return 'declining';
+  return 'plateauing';
 }
 
-.analytics-header__eyebrow {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--white-muted);
-  margin-bottom: var(--space-2);
+// ── Pure: Compute consistency index ──────────────────────────
+
+export function computeConsistency(scores) {
+  if (!scores || scores.length < 2) return 0;
+  const avg  = computeAverage(scores);
+  const variance = scores.reduce((sum, s) => sum + Math.pow(s - avg, 2), 0) / scores.length;
+  const stdDev   = Math.sqrt(variance);
+  return Math.max(0, Math.round(100 - stdDev));
 }
 
-.analytics-header__title {
-  font-family: var(--font-display);
-  font-size: 2rem;
-  font-weight: 400;
-  color: var(--white-primary);
+// ── Pure: Compute skill gaps ──────────────────────────────────
+
+export function computeSkillGaps(bySkill) {
+  const cefrTargets = { A1: 40, A2: 55, B1: 70, B2: 80, C1: 90, C2: 100 };
+
+  return Object.entries(bySkill).map(([skill, data]) => {
+    const current    = data.average;
+    const cefrLevel  = _scoreToCEFR(current);
+    const nextLevels = Object.keys(cefrTargets);
+    const nextIdx    = nextLevels.indexOf(cefrLevel) + 1;
+    const target     = cefrTargets[nextLevels[nextIdx]] ?? 100;
+    const gap        = Math.max(0, target - current);
+
+    return {
+      skill,
+      current:  parseFloat(current.toFixed(1)),
+      target,
+      gap:      parseFloat(gap.toFixed(1)),
+      priority: gap > 20 ? 'high' : gap > 10 ? 'medium' : 'low',
+    };
+  });
 }
 
-.analytics-header__title span {
-  background: linear-gradient(135deg, var(--gold-pure), var(--gold-light));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+// ── Pure: Build line chart data ───────────────────────────────
+
+export function buildLineChartData(scores) {
+  if (!scores || scores.length === 0) {
+    return { labels: [], values: [] };
+  }
+  return {
+    labels: scores.map((s, i) => {
+      const d = new Date(s.created_at ?? s.date ?? Date.now());
+      return `${d.getMonth()+1}/${d.getDate()}`;
+    }),
+    values: scores.map(s => Math.round(parseFloat(s.score ?? s.value ?? 0))),
+  };
 }
 
-/* ── Summary Stats ── */
-.analytics-stats {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-4);
-  margin-bottom: var(--space-8);
-  animation: fade-up var(--dur-slow) var(--ease-out) 0.1s both;
+// ── Pure: Build radar chart data ──────────────────────────────
+
+export function buildRadarChartData(bySkill) {
+  const skills = Object.keys(bySkill);
+  if (skills.length === 0) return { labels: [], values: [] };
+  return {
+    labels: skills.map(s => s.charAt(0).toUpperCase() + s.slice(1)),
+    values: skills.map(s => Math.round(bySkill[s].average ?? 0)),
+  };
 }
 
-@media (max-width: 1000px) { .analytics-stats { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 600px)  { .analytics-stats { grid-template-columns: 1fr; } }
+// ── Pure: Build bar chart data ────────────────────────────────
 
-/* ── Charts Grid ── */
-.charts-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: var(--space-5);
-  margin-bottom: var(--space-6);
-  animation: fade-up var(--dur-slow) var(--ease-out) 0.2s both;
+export function buildBarChartData(scores) {
+  if (!scores || scores.length === 0) return { labels: [], values: [] };
+
+  // Group by week
+  const weeks = {};
+  scores.forEach(s => {
+    const d    = new Date(s.created_at ?? s.date ?? Date.now());
+    const week = `W${_getWeekNumber(d)}`;
+    if (!weeks[week]) weeks[week] = 0;
+    weeks[week]++;
+  });
+
+  return {
+    labels: Object.keys(weeks),
+    values: Object.values(weeks),
+  };
 }
 
-@media (max-width: 900px) { .charts-grid { grid-template-columns: 1fr; } }
+// ── Pure: Build full analytics result ────────────────────────
 
-.chart-card {
-  background: var(--black-surface);
-  border: 1px solid var(--black-border);
-  border-radius: var(--radius-xl);
-  padding: var(--space-6);
+export function buildAnalyticsResult(scores) {
+  if (!scores || scores.length === 0) {
+    return {
+      summary:    { totalSessions: 0, averageScore: 0, bestScore: 0, currentCEFR: '—', consistencyIndex: 0, trajectory: 'plateauing' },
+      bySkill:    {},
+      charts:     { scoreLine: { labels: [], values: [] }, skillRadar: { labels: [], values: [] }, sessionBar: { labels: [], values: [] } },
+      skillGaps:  [],
+      computedAt: new Date().toISOString(),
+    };
+  }
+
+  const scoreValues = scores.map(s => parseFloat(s.score ?? 0));
+  const avg         = computeAverage(scoreValues);
+  const best        = Math.max(...scoreValues);
+
+  // Group by skill
+  const bySkill = {};
+  scores.forEach(s => {
+    const skill = s.skill ?? 'general';
+    if (!bySkill[skill]) bySkill[skill] = { scores: [], sessions: 0 };
+    bySkill[skill].scores.push(parseFloat(s.score ?? 0));
+    bySkill[skill].sessions++;
+  });
+
+  const bySkillSummary = {};
+  Object.entries(bySkill).forEach(([skill, data]) => {
+    bySkillSummary[skill] = {
+      average:  computeAverage(data.scores),
+      sessions: data.sessions,
+      trend:    computeTrajectory(data.scores),
+    };
+  });
+
+  return {
+    summary: {
+      totalSessions:    scores.length,
+      averageScore:     avg,
+      bestScore:        Math.round(best),
+      currentCEFR:      _scoreToCEFR(avg),
+      consistencyIndex: computeConsistency(scoreValues),
+      trajectory:       computeTrajectory(scoreValues),
+    },
+    bySkill: bySkillSummary,
+    charts: {
+      scoreLine:  buildLineChartData(scores),
+      skillRadar: buildRadarChartData(bySkillSummary),
+      sessionBar: buildBarChartData(scores),
+    },
+    skillGaps:  computeSkillGaps(bySkillSummary),
+    computedAt: new Date().toISOString(),
+  };
 }
 
-.chart-card__title {
-  font-family: var(--font-display);
-  font-size: 1rem;
-  font-weight: 500;
-  color: var(--white-primary);
-  margin-bottom: var(--space-5);
+// ── Helpers ───────────────────────────────────────────────────
+
+function _scoreToCEFR(score) {
+  if (score >= 90) return 'C2';
+  if (score >= 80) return 'C1';
+  if (score >= 70) return 'B2';
+  if (score >= 55) return 'B1';
+  if (score >= 40) return 'A2';
+  return 'A1';
 }
 
-/* ── Score Line Chart ── */
-.chart-container {
-  position: relative;
-  height: 200px;
-  width: 100%;
+function _getWeekNumber(d) {
+  const oneJan = new Date(d.getFullYear(), 0, 1);
+  return Math.ceil((((d - oneJan) / 86400000) + oneJan.getDay() + 1) / 7);
 }
 
-.chart-svg {
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-
-.chart-line {
-  fill: none;
-  stroke: var(--gold-pure);
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.chart-area {
-  fill: url(#gold-gradient);
-  opacity: 0.15;
-}
-
-.chart-dot {
-  fill: var(--gold-pure);
-  stroke: var(--black-surface);
-  stroke-width: 2;
-  cursor: pointer;
-  transition: r 0.15s;
-}
-
-.chart-dot:hover { r: 5; }
-
-.chart-label {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  fill: var(--white-muted);
-}
-
-.chart-grid-line {
-  stroke: var(--black-border);
-  stroke-width: 1;
-  stroke-dasharray: 4 4;
-}
-
-/* ── Radar Chart ── */
-.radar-container {
-  height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.radar-svg {
-  width: 100%;
-  height: 100%;
-}
-
-.radar-bg   { fill: none; stroke: var(--black-border); stroke-width: 1; }
-.radar-area { fill: rgba(212,175,55,0.15); stroke: var(--gold-pure); stroke-width: 1.5; }
-.radar-dot  { fill: var(--gold-pure); }
-.radar-label {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  fill: var(--white-muted);
-  text-anchor: middle;
-}
-
-/* ── Skill breakdown ── */
-.skill-breakdown {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-  margin-bottom: var(--space-6);
-  animation: fade-up var(--dur-slow) var(--ease-out) 0.3s both;
-}
-
-.skill-row {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-  padding: var(--space-4) var(--space-5);
-  background: var(--black-surface);
-  border: 1px solid var(--black-border);
-  border-radius: var(--radius-lg);
-  transition: border-color var(--dur-base);
-}
-
-.skill-row:hover { border-color: var(--gold-line); }
-
-.skill-row__name {
-  width: 100px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--white-primary);
-  text-transform: capitalize;
-  flex-shrink: 0;
-}
-
-.skill-row__bar-wrap {
-  flex: 1;
-  height: 6px;
-  background: var(--black-border);
-  border-radius: var(--radius-pill);
-  overflow: hidden;
-}
-
-.skill-row__bar {
-  height: 100%;
-  border-radius: var(--radius-pill);
-  background: linear-gradient(90deg, var(--gold-dim), var(--gold-pure));
-  transition: width var(--dur-slow) var(--ease-smooth);
-  box-shadow: 0 0 6px var(--gold-glow);
-}
-
-.skill-row__score {
-  font-family: var(--font-display);
-  font-size: 1.125rem;
-  font-weight: 500;
-  color: var(--gold-bright);
-  min-width: 48px;
-  text-align: right;
-}
-
-.skill-row__trend {
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.08em;
-  min-width: 72px;
-  text-align: right;
-}
-
-.skill-row__trend.improving { color: var(--status-success); }
-.skill-row__trend.declining { color: var(--status-danger);  }
-.skill-row__trend.plateauing{ color: var(--white-muted);    }
-
-/* ── Skill Gaps ── */
-.skill-gaps {
-  animation: fade-up var(--dur-slow) var(--ease-out) 0.4s both;
-}
-
-.gap-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--space-4) var(--space-5);
-  background: var(--black-surface);
-  border: 1px solid var(--black-border);
-  border-radius: var(--radius-lg);
-  margin-bottom: var(--space-3);
-}
-
-.gap-item__skill {
-  font-size: 0.875rem;
-  font-weight: 500;
-  text-transform: capitalize;
-  color: var(--white-primary);
-}
-
-.gap-item__detail {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  color: var(--white-muted);
-  margin-top: 2px;
-}
-
-.gap-badge {
-  padding: 3px 10px;
-  border-radius: var(--radius-pill);
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.gap-badge.high   { background: rgba(231,76,60,0.12);  color: var(--status-danger);  border: 1px solid rgba(231,76,60,0.2); }
-.gap-badge.medium { background: var(--gold-ghost);      color: var(--gold-bright);     border: 1px solid var(--gold-line);    }
-.gap-badge.low    { background: rgba(46,204,113,0.08); color: var(--status-success); border: 1px solid rgba(46,204,113,0.2);}
-
-/* ── Trajectory badge ── */
-.trajectory-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-1) var(--space-3);
-  border-radius: var(--radius-pill);
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.trajectory-badge.improving  { background: rgba(46,204,113,0.10); color: var(--status-success); border: 1px solid rgba(46,204,113,0.2); }
-.trajectory-badge.declining  { background: rgba(231,76,60,0.10);  color: var(--status-danger);  border: 1px solid rgba(231,76,60,0.2);  }
-.trajectory-badge.plateauing { background: var(--white-ghost);    color: var(--white-muted);    border: 1px solid var(--black-border);  }
-
-/* ── Feedback Card ── */
-.feedback-card {
-  background: var(--black-surface);
-  border: 1px solid var(--gold-line);
-  border-radius: var(--radius-xl);
-  padding: var(--space-6);
-  margin-bottom: var(--space-6);
-  animation: fade-up var(--dur-slow) var(--ease-out) 0.15s both;
-}
-
-.feedback-card__header {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  margin-bottom: var(--space-5);
-}
-
-.feedback-card__title {
-  font-family: var(--font-display);
-  font-size: 1.125rem;
-  font-weight: 500;
-  color: var(--white-primary);
-}
-
-.feedback-section {
-  margin-bottom: var(--space-5);
-}
-
-.feedback-section__label {
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--white-muted);
-  margin-bottom: var(--space-3);
-}
-
-.feedback-section__summary {
-  font-size: 0.9375rem;
-  color: var(--white-secondary);
-  line-height: 1.7;
-}
-
-.feedback-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.feedback-list__item {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--space-3);
-  font-size: 0.875rem;
-  color: var(--white-secondary);
-  line-height: 1.6;
-}
-
-.feedback-list__bullet {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  margin-top: 7px;
-  flex-shrink: 0;
-}
-
-.feedback-list__bullet.green  { background: var(--status-success); }
-.feedback-list__bullet.red    { background: var(--status-danger);  }
-.feedback-list__bullet.gold   { background: var(--gold-pure);      }
-.feedback-list__bullet.orange { background: var(--orange-core);    }
-
-/* ── Empty analytics ── */
-.analytics-empty {
-  text-align: center;
-  padding: var(--space-20) var(--space-8);
-}
+export const ANALYTICS_DOMAIN_VERSION = '3.0.0';
