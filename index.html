@@ -19,6 +19,7 @@
   <link rel="stylesheet" href="css/components.css" />
   <link rel="stylesheet" href="css/dashboard.css" />
   <link rel="stylesheet" href="css/auth.css" />
+  <link rel="stylesheet" href="css/assessment.css" />
 
   <!-- Supabase CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -251,21 +252,156 @@
       </main><!-- /page-dashboard -->
 
 
-      <!-- ── PAGE: ASSESSMENT (placeholder) ──────────────── -->
-      <main id="page-assessment" class="page-panel page-content" style="display:none;">
-        <div class="dashboard-welcome">
-          <div class="dashboard-welcome__greeting">Phase 2</div>
-          <h1 class="dashboard-welcome__title">Assessment <span>Engine</span></h1>
-          <p class="dashboard-welcome__sub">Coming in Phase 2 — Assessment Engine.</p>
-        </div>
-        <div class="card">
-          <div class="empty-state">
-            <div class="empty-state__icon">✦</div>
-            <div class="empty-state__title">Assessment Engine</div>
-            <div class="empty-state__text">The assessment engine will be built in Phase 2.</div>
-            <span class="badge badge--orange">Phase 2</span>
+      <!-- ── PAGE: ASSESSMENT ─────────────────────────────── -->
+      <main id="page-assessment" class="page-panel" style="display:none;">
+        <div class="assessment-page">
+
+          <!-- START SCREEN -->
+          <div id="assessment-start" class="assessment-start">
+            <div class="assessment-start__header">
+              <div class="assessment-start__eyebrow">Assessment Engine</div>
+              <h1 class="assessment-start__title">Choose Your <span>Assessment</span></h1>
+              <p class="assessment-start__sub">Select a skill and assessment type to begin. Our AI will generate personalised questions and provide detailed scoring.</p>
+            </div>
+
+            <!-- Skill Selection -->
+            <div class="form-label" style="margin-bottom: var(--space-3);">Select Skill</div>
+            <div class="skill-grid" id="skill-grid">
+              <div class="skill-card" data-skill="grammar">
+                <span class="skill-card__icon">⚡</span>
+                <div class="skill-card__name">Grammar</div>
+                <div class="skill-card__desc">Tenses, sentence structure, accuracy</div>
+                <span class="skill-card__check">✓</span>
+              </div>
+              <div class="skill-card" data-skill="vocabulary">
+                <span class="skill-card__icon">◈</span>
+                <div class="skill-card__name">Vocabulary</div>
+                <div class="skill-card__desc">Word choice, range, and precision</div>
+                <span class="skill-card__check">✓</span>
+              </div>
+              <div class="skill-card" data-skill="writing">
+                <span class="skill-card__icon">✦</span>
+                <div class="skill-card__name">Writing</div>
+                <div class="skill-card__desc">Paragraphs, coherence, task achievement</div>
+                <span class="skill-card__check">✓</span>
+              </div>
+              <div class="skill-card" data-skill="reading">
+                <span class="skill-card__icon">◉</span>
+                <div class="skill-card__name">Reading</div>
+                <div class="skill-card__desc">Comprehension and inference skills</div>
+                <span class="skill-card__check">✓</span>
+              </div>
+            </div>
+
+            <!-- Type Selection -->
+            <div class="form-label" style="margin-bottom: var(--space-3);">Assessment Type</div>
+            <div class="type-selector" id="type-selector">
+              <div class="type-btn selected" data-type="practice">
+                <div class="type-btn__name">Practice</div>
+                <div class="type-btn__desc">5 questions · skill focus</div>
+              </div>
+              <div class="type-btn" data-type="placement">
+                <div class="type-btn__name">Placement</div>
+                <div class="type-btn__desc">8 questions · find your level</div>
+              </div>
+              <div class="type-btn" data-type="mock">
+                <div class="type-btn__name">Mock Test</div>
+                <div class="type-btn__desc">10 questions · full simulation</div>
+              </div>
+            </div>
+
+            <div class="assessment-start__action">
+              <button id="btn-start-assessment" class="btn btn--primary btn--lg" disabled>
+                Begin Assessment
+              </button>
+              <div class="assessment-start__meta" id="assessment-meta">Select a skill to continue</div>
+            </div>
           </div>
-        </div>
+
+          <!-- LOADING SCREEN -->
+          <div id="assessment-loading" class="assessment-loading" style="display:none;">
+            <div class="assessment-loading__ring"></div>
+            <div class="assessment-loading__text" id="loading-text">Generating questions...</div>
+          </div>
+
+          <!-- QUIZ SCREEN -->
+          <div id="assessment-quiz" class="assessment-quiz" style="display:none;">
+
+            <div class="quiz-progress">
+              <div class="quiz-progress__header">
+                <span class="quiz-progress__label" id="quiz-skill-label">Grammar</span>
+                <span class="quiz-progress__count" id="quiz-progress-count">1 / 5</span>
+              </div>
+              <div class="quiz-progress__bar">
+                <div class="quiz-progress__fill" id="quiz-progress-fill" style="width:20%"></div>
+              </div>
+            </div>
+
+            <div class="question-card" id="question-card">
+              <div class="question-card__meta">
+                <span class="question-card__type" id="question-type">Short Answer</span>
+                <div class="question-card__difficulty" id="question-difficulty"></div>
+              </div>
+              <div class="question-card__text" id="question-text">Loading question...</div>
+            </div>
+
+            <div class="answer-area" id="answer-area">
+              <!-- Populated dynamically -->
+            </div>
+
+            <div class="quiz-actions">
+              <button class="btn btn--ghost" id="btn-abandon">Exit</button>
+              <button class="btn btn--primary btn--lg" id="btn-submit-answer" disabled>
+                Next Question →
+              </button>
+            </div>
+          </div>
+
+          <!-- RESULTS SCREEN -->
+          <div id="assessment-results" class="assessment-results" style="display:none;">
+
+            <div class="results-hero">
+              <div class="results-hero__label">Assessment Complete</div>
+              <div class="results-hero__score" id="result-score">—</div>
+              <div class="results-hero__cefr" id="result-cefr">—</div>
+              <div class="results-hero__ielts" id="result-ielts">IELTS Band —</div>
+            </div>
+
+            <div class="results-grid">
+              <div class="stat-card stat-card--gold">
+                <div class="stat-card__label">Total Score</div>
+                <div class="stat-card__value" id="result-total">—</div>
+                <div class="stat-card__trend" id="result-skill-label">—</div>
+              </div>
+              <div class="stat-card stat-card--orange">
+                <div class="stat-card__label">CEFR Level</div>
+                <div class="stat-card__value" id="result-cefr-card">—</div>
+                <div class="stat-card__trend">Current level</div>
+              </div>
+              <div class="stat-card stat-card--gold">
+                <div class="stat-card__label">Questions</div>
+                <div class="stat-card__value" id="result-questions">—</div>
+                <div class="stat-card__trend">Answered</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="section-header">
+                <h2 class="section-title">Score Breakdown</h2>
+              </div>
+              <div class="breakdown-list" id="breakdown-list">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+
+            <div class="results-actions">
+              <button class="btn btn--secondary btn--lg" id="btn-retake">Take Another</button>
+              <button class="btn btn--primary btn--lg" onclick="window.NIREV.navigateTo('dashboard')">Back to Dashboard</button>
+            </div>
+
+          </div>
+
+        </div><!-- /assessment-page -->
       </main>
 
       <!-- ── PAGE: ANALYTICS (placeholder) ───────────────── -->
