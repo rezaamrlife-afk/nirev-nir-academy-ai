@@ -37,7 +37,7 @@ export const SUPABASE = {
 // This object holds only non-secret configuration.
 
 export const GROQ = {
-  API_KEY:         'YOUR_GROQ_API_KEY',
+  API_KEY:         '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',
   MODEL:           'llama-3.1-8b-instant',
   MAX_TOKENS:      1024,
   TEMPERATURE:     0.4,
