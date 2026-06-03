@@ -124,8 +124,8 @@ export const FEATURES = {
   SCORING_ENGINE:     true,   // Phase 2 ✅
   FEEDBACK_ENGINE:    true,   // Phase 3 ✅
   ANALYTICS:          true,   // Phase 3 ✅
-  PROGRESS_TRACKING:  false,  // Phase 4
-  PREDICTIONS:        false,  // Phase 4
+  PROGRESS_TRACKING:  true,   // Phase 4 ✅
+  PREDICTIONS:        true,   // Phase 4 ✅
   BENCHMARKING:       false,  // Phase 5
   REPORTING:          false,  // Phase 4
   PWA:                false,  // Phase 5
