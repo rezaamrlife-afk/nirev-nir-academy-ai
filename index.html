@@ -50,80 +50,124 @@
 
   <!-- ══ SCREEN: AUTH ════════════════════════════════════════ -->
   <div id="screen-auth" class="screen screen--auth">
-    <div class="auth-card animate-fade-up">
 
-      <!-- Header -->
-      <div class="auth-card__header">
-        <div class="auth-card__logo">
-          <span class="auth-card__logo-text">NIREV</span>
-          <span class="auth-card__logo-dot"></span>
+    <!-- ── LEFT: Brand Panel ── -->
+    <div class="auth-brand">
+
+      <!-- NIR Academy Logo -->
+      <div class="auth-brand__logo-wrap">
+        <img src="assets/logo.jpg" alt="NIR Academy" class="auth-brand__logo-img" />
+      </div>
+
+      <!-- Brand Text -->
+      <div class="auth-brand__text">
+        <div class="auth-brand__academy">NIR ACADEMY</div>
+        <div class="auth-brand__tagline">Next Generation Instructional Resources for ELT</div>
+        <div class="auth-brand__divider"></div>
+        <div class="auth-brand__pills">
+          <span class="auth-brand__pill">Pedagogy First</span>
+          <span class="auth-brand__pill">AI Enhanced</span>
+          <span class="auth-brand__pill">Future Ready</span>
         </div>
-        <div class="auth-card__subtitle">
-          Next Generation Intelligence<br/>for Evaluation &amp; Validation
+      </div>
+
+      <!-- NIREV Character -->
+      <div class="auth-brand__character-wrap">
+        <img src="assets/nirev-character.png" alt="NIREV AI" class="auth-brand__character" />
+        <div class="auth-brand__character-caption">
+          <div class="auth-brand__nirev-name">NIREV</div>
+          <div class="auth-brand__nirev-sub">ASSESS · ANALYZE · IMPROVE · ACHIEVE</div>
         </div>
       </div>
 
-      <!-- Tabs -->
-      <div class="auth-tabs" role="tablist">
-        <div class="auth-tab active" data-tab="signin" role="tab">Sign In</div>
-        <div class="auth-tab" data-tab="signup" role="tab">Sign Up</div>
+      <!-- Founder -->
+      <div class="auth-brand__founder">
+        <div class="auth-brand__founder-name">Dr. Niki Majidi</div>
+        <div class="auth-brand__founder-title">Founder · PhD Applied Linguistics · 18+ years ELT</div>
       </div>
 
-      <!-- Sign In Form -->
-      <div id="form-signin" class="auth-form-panel active">
-        <form onsubmit="return false;">
-          <div class="form-group">
-            <label class="form-label" for="signin-email">Email Address</label>
-            <input id="signin-email" type="email" class="form-input"
-                   placeholder="your@email.com" autocomplete="email" required />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="signin-password">Password</label>
-            <input id="signin-password" type="password" class="form-input"
-                   placeholder="••••••••" autocomplete="current-password" required />
-          </div>
-          <button type="submit" class="btn btn--primary btn--full btn--lg"
-                  style="margin-bottom: var(--space-4);">
-            Sign In
-          </button>
-          <div style="text-align:center;">
-            <a id="forgot-password-link" href="#" style="font-size:0.8rem; color:var(--white-muted);">
-              Forgot password?
-            </a>
-          </div>
-        </form>
-      </div>
+    </div><!-- /auth-brand -->
 
-      <!-- Sign Up Form -->
-      <div id="form-signup" class="auth-form-panel">
-        <form onsubmit="return false;">
-          <div class="form-group">
-            <label class="form-label" for="signup-name">Full Name</label>
-            <input id="signup-name" type="text" class="form-input"
-                   placeholder="Your Name" autocomplete="name" required />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="signup-email">Email Address</label>
-            <input id="signup-email" type="email" class="form-input"
-                   placeholder="your@email.com" autocomplete="email" required />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="signup-password">Password</label>
-            <input id="signup-password" type="password" class="form-input"
-                   placeholder="Minimum 8 characters" autocomplete="new-password" required />
-          </div>
-          <button type="submit" class="btn btn--primary btn--full btn--lg">
-            Create Account
-          </button>
-        </form>
-      </div>
+    <!-- ── RIGHT: Auth Form ── -->
+    <div class="auth-form-wrap">
+      <div class="auth-card">
 
-      <!-- Badge -->
-      <div style="text-align:center; margin-top: var(--space-6);">
-        <span class="badge badge--gold">AI-Powered Assessment Platform</span>
-      </div>
+        <!-- Header -->
+        <div class="auth-card__header">
+          <div class="auth-card__logo">
+            <span class="auth-card__logo-text">NIREV</span>
+            <span class="auth-card__logo-dot"></span>
+          </div>
+          <div class="auth-card__subtitle">
+            Assessment Intelligence Platform
+          </div>
+        </div>
 
-    </div><!-- /auth-card -->
+        <!-- Tabs -->
+        <div class="auth-tabs" role="tablist">
+          <div class="auth-tab active" data-tab="signin" role="tab">Sign In</div>
+          <div class="auth-tab" data-tab="signup" role="tab">Sign Up</div>
+        </div>
+
+        <!-- Sign In Form -->
+        <div id="form-signin" class="auth-form-panel active">
+          <form onsubmit="return false;">
+            <div class="form-group">
+              <label class="form-label" for="signin-email">Email Address</label>
+              <input id="signin-email" type="email" class="form-input"
+                     placeholder="your@email.com" autocomplete="email" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="signin-password">Password</label>
+              <input id="signin-password" type="password" class="form-input"
+                     placeholder="••••••••" autocomplete="current-password" required />
+            </div>
+            <button type="submit" class="btn btn--primary btn--full btn--lg"
+                    style="margin-bottom: var(--space-4);">
+              Sign In
+            </button>
+            <div style="text-align:center;">
+              <a id="forgot-password-link" href="#" style="font-size:0.8rem; color:var(--white-muted);">
+                Forgot password?
+              </a>
+            </div>
+          </form>
+        </div>
+
+        <!-- Sign Up Form -->
+        <div id="form-signup" class="auth-form-panel">
+          <form onsubmit="return false;">
+            <div class="form-group">
+              <label class="form-label" for="signup-name">Full Name</label>
+              <input id="signup-name" type="text" class="form-input"
+                     placeholder="Your Name" autocomplete="name" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="signup-email">Email Address</label>
+              <input id="signup-email" type="email" class="form-input"
+                     placeholder="your@email.com" autocomplete="email" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="signup-password">Password</label>
+              <input id="signup-password" type="password" class="form-input"
+                     placeholder="Minimum 8 characters" autocomplete="new-password" required />
+            </div>
+            <button type="submit" class="btn btn--primary btn--full btn--lg">
+              Create Account
+            </button>
+          </form>
+        </div>
+
+        <!-- Footer -->
+        <div style="text-align:center; margin-top: var(--space-5);">
+          <div style="font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.12em;color:var(--white-subtle);text-transform:uppercase;">
+            AI-Powered Assessment Intelligence
+          </div>
+        </div>
+
+      </div><!-- /auth-card -->
+    </div><!-- /auth-form-wrap -->
+
   </div><!-- /screen-auth -->
 
 
@@ -135,11 +179,16 @@
 
       <!-- Brand -->
       <div class="sidebar__brand">
-        <div class="sidebar__logo">
-          <span class="sidebar__logo-text">NIREV</span>
-          <span class="sidebar__logo-dot"></span>
+        <div class="sidebar__brand-top">
+          <img src="assets/logo.jpg" alt="NIR Academy" class="sidebar__logo-img" />
+          <div class="sidebar__brand-info">
+            <div class="sidebar__logo">
+              <span class="sidebar__logo-text">NIREV</span>
+              <span class="sidebar__logo-dot"></span>
+            </div>
+            <div class="sidebar__tagline">Assessment Intelligence</div>
+          </div>
         </div>
-        <div class="sidebar__tagline">Assessment Intelligence</div>
       </div>
 
       <!-- Nav -->
@@ -201,11 +250,22 @@
 
         <!-- Welcome -->
         <div class="dashboard-welcome">
-          <div class="dashboard-welcome__greeting" id="dashboard-greeting">Good morning,</div>
-          <h1 class="dashboard-welcome__title">
-            Welcome back, <span id="dashboard-name">Learner</span>
-          </h1>
-          <p class="dashboard-welcome__sub" id="dashboard-sub-text">Your assessment intelligence platform is ready.</p>
+          <div class="dashboard-welcome__inner">
+            <div class="dashboard-welcome__content">
+              <div class="dashboard-welcome__greeting" id="dashboard-greeting">Good morning,</div>
+              <h1 class="dashboard-welcome__title">
+                Welcome back, <span id="dashboard-name">Learner</span>
+              </h1>
+              <p class="dashboard-welcome__sub" id="dashboard-sub-text">Your assessment intelligence platform is ready.</p>
+              <div class="dashboard-welcome__badges">
+                <span class="dashboard-welcome__badge">Assessment Intelligence</span>
+                <span class="dashboard-welcome__badge dashboard-welcome__badge--orange">AI Powered</span>
+              </div>
+            </div>
+            <div class="dashboard-welcome__character">
+              <img src="assets/nirev-character.png" alt="NIREV AI" class="dashboard-character-img" />
+            </div>
+          </div>
         </div>
 
         <!-- Stats -->
