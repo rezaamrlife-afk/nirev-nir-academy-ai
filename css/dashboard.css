@@ -234,3 +234,134 @@
   margin: 0 auto var(--space-6);
   line-height: 1.7;
 }
+
+/* ── Activity List ── */
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.activity-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  background: var(--black-elevated);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--black-border);
+  transition: all var(--dur-base) var(--ease-smooth);
+}
+
+.activity-item:hover {
+  border-color: var(--gold-line);
+  background: var(--gold-ghost);
+}
+
+.activity-item__left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.activity-item__icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.activity-item__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.activity-item__title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--white-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.activity-item__meta {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--white-muted);
+  letter-spacing: 0.06em;
+}
+
+.activity-item__score {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* ── Intelligence Insights ── */
+.insights-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.insight-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--black-border);
+}
+
+.insight-item:last-child { border-bottom: none; }
+
+.insight-item__icon {
+  font-size: 1rem;
+  color: var(--gold-pure);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.insight-item__content { flex: 1; }
+
+.insight-item__label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--white-muted);
+  margin-bottom: var(--space-1);
+}
+
+.insight-item__value {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--white-primary);
+}
+
+.insight-bar-wrap {
+  flex: 1;
+  max-width: 100px;
+  height: 4px;
+  background: var(--black-border);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.insight-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold-dim), var(--gold-pure));
+  border-radius: var(--radius-pill);
+  transition: width var(--dur-slow) var(--ease-smooth);
+}
