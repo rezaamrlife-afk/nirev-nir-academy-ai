@@ -1,53 +1,69 @@
 /* ============================================================
-   NIREV AI — Theme System
+   NIREV AI — Theme System  [Modernized: UI Pass]
    Next Generation Intelligence for Evaluation & Validation
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap');
 
 /* ── Color Tokens ── */
 :root {
-  /* Blacks */
-  --black-void:     #040404;
-  --black-deep:     #080808;
-  --black-base:     #0D0D0D;
-  --black-surface:  #121212;
-  --black-elevated: #181818;
-  --black-card:     #1E1E1E;
-  --black-border:   #2A2A2A;
-  --black-muted:    #333333;
+  /* Blacks — refined for depth */
+  --black-void:     #020202;
+  --black-deep:     #060606;
+  --black-base:     #0A0A0A;
+  --black-surface:  #111111;
+  --black-elevated: #161616;
+  --black-card:     #1C1C1C;
+  --black-border:   #252525;
+  --black-muted:    #2E2E2E;
+  --black-subtle:   #383838;
 
-  /* Golds */
-  --gold-pure:      #D4AF37;
-  --gold-bright:    #E6C55A;
-  --gold-light:     #F7D774;
-  --gold-dim:       #A08920;
-  --gold-ghost:     rgba(212, 175, 55, 0.12);
-  --gold-glow:      rgba(212, 175, 55, 0.25);
-  --gold-line:      rgba(212, 175, 55, 0.18);
+  /* Golds — more refined */
+  --gold-pure:      #C9A84C;
+  --gold-bright:    #DDB96A;
+  --gold-light:     #EDD090;
+  --gold-dim:       #8A6F28;
+  --gold-ghost:     rgba(201, 168, 76, 0.10);
+  --gold-glow:      rgba(201, 168, 76, 0.20);
+  --gold-line:      rgba(201, 168, 76, 0.15);
+  --gold-text:      #C9A84C;
 
-  /* Orange Accents */
-  --orange-core:    #FF8A00;
-  --orange-bright:  #FF9F1A;
-  --orange-glow:    rgba(255, 138, 0, 0.20);
-  --orange-ghost:   rgba(255, 138, 0, 0.08);
+  /* Orange — primary action & intelligence accent */
+  --orange-core:    #E07B00;
+  --orange-bright:  #F08C1A;
+  --orange-light:   #FFB347;
+  --orange-glow:    rgba(224, 123, 0, 0.18);
+  --orange-ghost:   rgba(224, 123, 0, 0.09);
+  --orange-line:    rgba(224, 123, 0, 0.20);
 
   /* Typography */
-  --white-primary:  #F5F5F0;
-  --white-secondary:#C8C8C0;
-  --white-muted:    #888884;
-  --white-ghost:    rgba(245, 245, 240, 0.08);
+  --white-primary:  #F0F0EC;
+  --white-secondary:#ABABА5;
+  --white-muted:    #6B6B66;
+  --white-subtle:   #4A4A46;
+  --white-ghost:    rgba(240, 240, 236, 0.06);
 
   /* Status */
-  --status-success: #2ECC71;
-  --status-warning: #F39C12;
-  --status-danger:  #E74C3C;
-  --status-info:    #3498DB;
+  --status-success: #22C55E;
+  --status-warning: #EAB308;
+  --status-danger:  #EF4444;
+  --status-info:    #3B82F6;
 
   /* ── Typography ── */
   --font-display:   'Cormorant Garamond', Georgia, serif;
-  --font-ui:        'Syne', sans-serif;
-  --font-mono:      'DM Mono', 'Courier New', monospace;
+  --font-ui:        'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:      'JetBrains Mono', 'Courier New', monospace;
+
+  /* ── Type Scale ── */
+  --text-xs:   0.6875rem;   /* 11px — labels, badges */
+  --text-sm:   0.8125rem;   /* 13px — secondary */
+  --text-base: 0.9375rem;   /* 15px — body */
+  --text-md:   1.0625rem;   /* 17px — emphasis */
+  --text-lg:   1.25rem;     /* 20px — subheadings */
+  --text-xl:   1.5rem;      /* 24px — headings */
+  --text-2xl:  2rem;        /* 32px — page titles */
+  --text-3xl:  2.75rem;     /* 44px — hero */
+  --text-4xl:  4rem;        /* 64px — score display */
 
   /* ── Spacing (8px grid) ── */
   --space-1:  4px;
@@ -68,31 +84,48 @@
   --radius-md:  8px;
   --radius-lg:  12px;
   --radius-xl:  16px;
-  --radius-2xl: 24px;
+  --radius-2xl: 20px;
+  --radius-3xl: 28px;
   --radius-pill: 999px;
 
-  /* ── Shadows ── */
-  --shadow-gold-sm:  0 0 12px rgba(212, 175, 55, 0.15);
-  --shadow-gold-md:  0 0 24px rgba(212, 175, 55, 0.20);
-  --shadow-gold-lg:  0 0 48px rgba(212, 175, 55, 0.15), 0 0 96px rgba(212, 175, 55, 0.08);
-  --shadow-card:     0 1px 3px rgba(0,0,0,0.6), 0 4px 16px rgba(0,0,0,0.4);
+  /* ── Shadows — refined and layered ── */
+  --shadow-xs:       0 1px 2px rgba(0,0,0,0.4);
+  --shadow-sm:       0 2px 8px rgba(0,0,0,0.5), 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-md:       0 4px 16px rgba(0,0,0,0.6), 0 2px 4px rgba(0,0,0,0.4);
+  --shadow-lg:       0 8px 32px rgba(0,0,0,0.7), 0 2px 8px rgba(0,0,0,0.5);
+  --shadow-xl:       0 16px 48px rgba(0,0,0,0.8), 0 4px 16px rgba(0,0,0,0.6);
+  --shadow-gold-sm:  0 0 0 1px var(--gold-line), 0 4px 16px rgba(201,168,76,0.12);
+  --shadow-gold-md:  0 0 0 1px var(--gold-line), 0 8px 32px rgba(201,168,76,0.16);
+  --shadow-gold-lg:  0 0 0 1px var(--gold-line), 0 16px 48px rgba(201,168,76,0.14);
+  --shadow-orange:   0 0 0 1px var(--orange-line), 0 4px 16px rgba(224,123,0,0.14);
+  --shadow-card:     0 1px 0 rgba(255,255,255,0.03) inset, 0 2px 8px rgba(0,0,0,0.5);
   --shadow-elevated: 0 8px 32px rgba(0,0,0,0.7), 0 2px 8px rgba(0,0,0,0.5);
 
   /* ── Transitions ── */
-  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-  --ease-out:    cubic-bezier(0, 0, 0.2, 1);
-  --dur-fast:    150ms;
-  --dur-base:    250ms;
-  --dur-slow:    400ms;
+  --ease-smooth:  cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out:     cubic-bezier(0, 0, 0.2, 1);
+  --ease-in:      cubic-bezier(0.4, 0, 1, 1);
+  --ease-bounce:  cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --dur-instant:  80ms;
+  --dur-fast:     140ms;
+  --dur-base:     220ms;
+  --dur-slow:     380ms;
+  --dur-slower:   500ms;
+  --dur-page:     300ms;
 
   /* ── Layout ── */
-  --sidebar-w:    240px;
-  --topbar-h:     60px;
-  --content-max:  1280px;
+  --sidebar-w:    256px;
+  --topbar-h:     56px;
+  --content-max:  1320px;
 
   /* ── Glass ── */
-  --glass-bg:     rgba(18, 18, 18, 0.72);
-  --glass-border: rgba(212, 175, 55, 0.10);
-  --glass-blur:   blur(20px) saturate(180%);
+  --glass-bg:     rgba(14, 14, 14, 0.80);
+  --glass-border: rgba(201, 168, 76, 0.08);
+  --glass-blur:   blur(24px) saturate(180%);
+
+  /* ── Orange Intelligence Tokens ── */
+  --intel-bg:     rgba(224, 123, 0, 0.06);
+  --intel-border: rgba(224, 123, 0, 0.16);
+  --intel-glow:   0 0 24px rgba(224, 123, 0, 0.12);
 }
