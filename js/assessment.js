@@ -1,147 +1,359 @@
 /**
- * NIREV AI — Scoring Domain
+ * NIREV AI — Assessment Page Controller
  * ─────────────────────────────────────────────────────────────
- * Status:  IMPLEMENTED — Phase 2
- * Version: 2.0.0
+ * Version: 2.0.0 — Phase 2
  *
- * PURE functions only — no API, no DB, no UI.
- * Side-effects handled by assessment-engine.js
+ * This module controls the Assessment page UI only.
+ * It calls assessment-engine.js for all logic — never domain files directly.
+ *
+ * Screens managed:
+ *   1. Start     — skill/type selection
+ *   2. Loading   — question generation spinner
+ *   3. Quiz      — question + answer loop
+ *   4. Results   — score display + breakdown
  * ─────────────────────────────────────────────────────────────
  */
 
-// ── Pure: Normalize raw score to 0–100 ───────────────────────
+import { startAssessment, submitAnswer, abandonAssessment } from './engine/assessment-engine.js';
+import { showToast } from './ui.js';
+import store from './store.js';
 
-export function normalizeScore(rawScore) {
-  const n = parseFloat(rawScore);
-  if (isNaN(n)) return 0;
-  return Math.min(100, Math.max(0, parseFloat(n.toFixed(2))));
+// ── Page State ────────────────────────────────────────────────
+
+const _state = {
+  selectedSkill:   null,
+  selectedType:    'practice',
+  currentQuestion: null,
+  questionTimer:   null,
+  timeStarted:     null,
+};
+
+// ── Question counts per type ──────────────────────────────────
+const TYPE_QUESTION_COUNT = {
+  practice:  5,
+  placement: 8,
+  mock:      10,
+};
+
+// ── Initialize ────────────────────────────────────────────────
+
+export function initAssessmentPage() {
+  _wireSkillCards();
+  _wireTypeButtons();
+  _wireStartButton();
+  _wireAbandonButton();
+  _wireSubmitButton();
+  _wireRetakeButton();
+  _wireEngineEvents();
 }
 
-// ── Pure: Map score to CEFR level ────────────────────────────
+// ── Screen Switcher ───────────────────────────────────────────
 
-export function mapToCEFR(score) {
-  if (score >= 90) return 'C2';
-  if (score >= 80) return 'C1';
-  if (score >= 70) return 'B2';
-  if (score >= 55) return 'B1';
-  if (score >= 40) return 'A2';
-  return 'A1';
+function _showScreen(name) {
+  ['start', 'loading', 'quiz', 'results'].forEach(s => {
+    const el = document.getElementById(`assessment-${s}`);
+    if (el) el.style.display = s === name ? '' : 'none';
+  });
 }
 
-// ── Pure: Map score to IELTS band ────────────────────────────
+// ── Skill Card Wiring ─────────────────────────────────────────
 
-export function mapToIELTSBand(score) {
-  if (score >= 95) return '9.0';
-  if (score >= 87) return '8.5';
-  if (score >= 80) return '8.0';
-  if (score >= 73) return '7.5';
-  if (score >= 66) return '7.0';
-  if (score >= 60) return '6.5';
-  if (score >= 53) return '6.0';
-  if (score >= 46) return '5.5';
-  if (score >= 40) return '5.0';
-  if (score >= 33) return '4.5';
-  if (score >= 26) return '4.0';
-  return '3.5';
+function _wireSkillCards() {
+  document.querySelectorAll('.skill-card').forEach(card => {
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.skill-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      _state.selectedSkill = card.dataset.skill;
+      _updateStartButton();
+    });
+  });
 }
 
-// ── Pure: Compute weighted average ───────────────────────────
+// ── Type Button Wiring ────────────────────────────────────────
 
-export function computeAverage(scores) {
-  if (!scores || scores.length === 0) return 0;
-  const sum = scores.reduce((acc, s) => acc + (parseFloat(s) || 0), 0);
-  return parseFloat((sum / scores.length).toFixed(2));
+function _wireTypeButtons() {
+  document.querySelectorAll('.type-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      _state.selectedType = btn.dataset.type;
+      _updateStartButton();
+    });
+  });
 }
 
-// ── Pure: Parse Groq scoring response ────────────────────────
+// ── Update Start Button ───────────────────────────────────────
 
-export function parseGroqScore(groqText, questionId) {
-  try {
-    const clean = groqText.replace(/```json|```/g, '').trim();
-    const parsed = JSON.parse(clean);
+function _updateStartButton() {
+  const btn  = document.getElementById('btn-start-assessment');
+  const meta = document.getElementById('assessment-meta');
+  if (!btn) return;
 
-    return {
-      questionId,
-      rawScore:   parseFloat(parsed.score ?? parsed.raw_score ?? 50),
-      normalised: normalizeScore(parsed.score ?? parsed.raw_score ?? 50),
-      rationale:  parsed.rationale ?? parsed.feedback ?? parsed.explanation ?? '',
-      tags:       parsed.tags ?? parsed.issues ?? [],
-    };
-  } catch {
-    // Fallback score if parsing fails
-    return {
-      questionId,
-      rawScore:   50,
-      normalised: 50,
-      rationale:  'Score estimated based on response.',
-      tags:       [],
-    };
+  if (_state.selectedSkill) {
+    btn.disabled = false;
+    const count = TYPE_QUESTION_COUNT[_state.selectedType] ?? 5;
+    if (meta) meta.textContent = `${count} questions · ${_state.selectedSkill} · ${_state.selectedType}`;
+  } else {
+    btn.disabled = true;
+    if (meta) meta.textContent = 'Select a skill to continue';
   }
 }
 
-// ── Pure: Build score breakdown ──────────────────────────────
+// ── Start Button ──────────────────────────────────────────────
 
-export function buildScoreBreakdown(answerScores) {
-  const bySubSkill = {};
+function _wireStartButton() {
+  const btn = document.getElementById('btn-start-assessment');
+  if (!btn) return;
 
-  answerScores.forEach(s => {
-    s.tags?.forEach(tag => {
-      if (!bySubSkill[tag]) bySubSkill[tag] = [];
-      bySubSkill[tag].push(s.normalised);
+  btn.addEventListener('click', async () => {
+    if (!_state.selectedSkill) return;
+
+    const user = store.get('user');
+    if (!user) { showToast('Please sign in to start an assessment.', 'error'); return; }
+
+    btn.classList.add('loading');
+    _showScreen('loading');
+
+    const { error } = await startAssessment({
+      userId:        user.id,
+      type:          _state.selectedType,
+      skill:         _state.selectedSkill,
+      level:         store.get('profile.level') ?? null,
+      questionCount: TYPE_QUESTION_COUNT[_state.selectedType] ?? 5,
     });
+
+    btn.classList.remove('loading');
+
+    if (error) {
+      showToast(error, 'error');
+      _showScreen('start');
+    }
+  });
+}
+
+// ── Engine Event Listeners ────────────────────────────────────
+
+function _wireEngineEvents() {
+  document.addEventListener('nirev:assessment:loading', (e) => {
+    const textEl = document.getElementById('loading-text');
+    if (textEl) textEl.textContent = e.detail?.message ?? 'Loading...';
+    _showScreen('loading');
   });
 
-  // Average each sub-skill
-  Object.keys(bySubSkill).forEach(k => {
-    bySubSkill[k] = computeAverage(bySubSkill[k]);
+  document.addEventListener('nirev:assessment:started', (e) => {
+    const { questions } = e.detail;
+    _renderQuestion(questions, 0);
+    _showScreen('quiz');
   });
 
-  return {
-    perQuestion: answerScores,
-    bySubSkill,
-  };
+  document.addEventListener('nirev:assessment:answer-submitted', (e) => {
+    if (!e.detail.isLast) {
+      const assessment = store.get('assessment');
+      _renderQuestion(assessment.questions, assessment.currentIndex);
+    } else {
+      _showScreen('loading');
+      document.getElementById('loading-text').textContent = 'Scoring your answers...';
+    }
+  });
+
+  document.addEventListener('nirev:scoring:complete', (e) => {
+    _renderResults(e.detail.sessionScore);
+    _showScreen('results');
+  });
+
+  document.addEventListener('nirev:engine:error', (e) => {
+    showToast(e.detail.error ?? 'An error occurred.', 'error');
+    if (!e.detail.recoverable) _showScreen('start');
+  });
 }
 
-// ── Pure: Build full SessionScore ────────────────────────────
+// ── Render Question ───────────────────────────────────────────
 
-export function buildSessionScore(sessionId, userId, skill, answerScores) {
-  const scores     = answerScores.map(s => s.normalised);
-  const totalScore = computeAverage(scores);
+function _renderQuestion(questions, index) {
+  const question = questions[index];
+  if (!question) return;
 
-  return {
-    sessionId,
-    userId,
-    skill,
-    totalScore,
-    cefrLevel:  mapToCEFR(totalScore),
-    ieltsBand:  mapToIELTSBand(totalScore),
-    breakdown:  buildScoreBreakdown(answerScores),
-    gradedAt:   new Date().toISOString(),
-  };
+  _state.currentQuestion = question;
+  _state.timeStarted     = Date.now();
+
+  const total    = questions.length;
+  const progress = ((index + 1) / total) * 100;
+
+  // Progress
+  const countEl = document.getElementById('quiz-progress-count');
+  const fillEl  = document.getElementById('quiz-progress-fill');
+  const labelEl = document.getElementById('quiz-skill-label');
+  if (countEl) countEl.textContent = `${index + 1} / ${total}`;
+  if (fillEl)  fillEl.style.width  = `${progress}%`;
+  if (labelEl) labelEl.textContent = _state.selectedSkill?.charAt(0).toUpperCase() + _state.selectedSkill?.slice(1);
+
+  // Question meta
+  const typeEl = document.getElementById('question-type');
+  const diffEl = document.getElementById('question-difficulty');
+  if (typeEl) typeEl.textContent = _formatType(question.type);
+  if (diffEl) {
+    diffEl.innerHTML = Array.from({ length: 5 }, (_, i) =>
+      `<span class="difficulty-dot ${i < question.difficulty ? 'active' : ''}"></span>`
+    ).join('');
+  }
+
+  // Question text
+  const textEl = document.getElementById('question-text');
+  if (textEl) textEl.textContent = question.text;
+
+  // Answer area
+  const answerEl = document.getElementById('answer-area');
+  if (answerEl) {
+    if (question.type === 'multiple-choice' && question.options?.length) {
+      answerEl.innerHTML = `
+        <div class="options-grid" id="options-grid">
+          ${question.options.map((opt, i) => `
+            <button class="option-btn" data-value="${opt}" data-index="${i}" type="button">
+              <span class="option-btn__letter">${String.fromCharCode(65 + i)}</span>
+              <span>${opt.replace(/^[A-D]\)\s*/, '')}</span>
+            </button>
+          `).join('')}
+        </div>`;
+
+      // Wire option buttons
+      answerEl.querySelectorAll('.option-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          answerEl.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          document.getElementById('btn-submit-answer').disabled = false;
+        });
+      });
+    } else {
+      const placeholder = question.type === 'essay'
+        ? 'Write your response here (4-6 sentences recommended)...'
+        : 'Type your answer here...';
+      answerEl.innerHTML = `
+        <textarea class="answer-textarea" id="answer-input"
+                  placeholder="${placeholder}" rows="${question.type === 'essay' ? 6 : 3}"></textarea>`;
+
+      answerEl.querySelector('#answer-input')?.addEventListener('input', (e) => {
+        document.getElementById('btn-submit-answer').disabled = e.target.value.trim().length === 0;
+      });
+    }
+  }
+
+  // Reset submit button
+  const submitBtn = document.getElementById('btn-submit-answer');
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.textContent = index === total - 1 ? 'Submit Assessment ✓' : 'Next Question →';
+  }
 }
 
-// ── Pure: Build Groq scoring prompt ──────────────────────────
-
-export function buildScoringPrompt(answerRecord) {
-  return `You are an expert English language assessor. Score the following learner response.
-
-Skill being assessed: ${answerRecord.skill}
-Question type: ${answerRecord.type}
-Question: ${answerRecord.question}
-${answerRecord.options ? `Options: ${answerRecord.options.join(', ')}` : ''}
-Learner's answer: ${answerRecord.answer}
-Scoring rubric: ${answerRecord.rubric}
-
-Respond ONLY with a JSON object in this exact format (no markdown, no extra text):
-{
-  "score": <number 0-100>,
-  "rationale": "<1-2 sentence explanation of the score>",
-  "tags": ["<issue or strength tag>", ...]
+function _formatType(type) {
+  return { 'multiple-choice': 'Multiple Choice', 'short-answer': 'Short Answer', 'essay': 'Essay' }[type] ?? type;
 }
 
-Score strictly. Consider accuracy, appropriateness, and completeness.
-For multiple choice: 100 if correct, 0 if wrong.
-For short-answer and essay: score 0-100 based on the rubric.`;
+// ── Submit Answer ─────────────────────────────────────────────
+
+function _wireSubmitButton() {
+  const btn = document.getElementById('btn-submit-answer');
+  if (!btn) return;
+
+  btn.addEventListener('click', async () => {
+    const question = _state.currentQuestion;
+    if (!question) return;
+
+    let answer = '';
+    if (question.type === 'multiple-choice') {
+      const selected = document.querySelector('.option-btn.selected');
+      if (!selected) { showToast('Please select an answer.', 'warning'); return; }
+      answer = selected.dataset.value;
+    } else {
+      const input = document.getElementById('answer-input');
+      if (!input?.value.trim()) { showToast('Please write an answer.', 'warning'); return; }
+      answer = input.value.trim();
+    }
+
+    const timeSpentMs = Date.now() - (_state.timeStarted ?? Date.now());
+    btn.disabled = true;
+
+    const assessment = store.get('assessment');
+    const { error } = await submitAnswer({
+      sessionId:   assessment.sessionId,
+      questionId:  question.id,
+      answer,
+      timeSpentMs,
+    });
+
+    if (error) {
+      showToast(error, 'error');
+      btn.disabled = false;
+    }
+  });
 }
 
-export const SCORING_DOMAIN_VERSION = '2.0.0';
+// ── Abandon Button ────────────────────────────────────────────
+
+function _wireAbandonButton() {
+  const btn = document.getElementById('btn-abandon');
+  if (!btn) return;
+  btn.addEventListener('click', async () => {
+    await abandonAssessment();
+    _showScreen('start');
+    showToast('Assessment abandoned.', 'warning');
+  });
+}
+
+// ── Retake Button ─────────────────────────────────────────────
+
+function _wireRetakeButton() {
+  const btn = document.getElementById('btn-retake');
+  if (!btn) return;
+  btn.addEventListener('click', () => {
+    _state.selectedSkill = null;
+    document.querySelectorAll('.skill-card').forEach(c => c.classList.remove('selected'));
+    _updateStartButton();
+    _showScreen('start');
+  });
+}
+
+// ── Render Results ────────────────────────────────────────────
+
+function _renderResults(sessionScore) {
+  if (!sessionScore) return;
+
+  const scoreEl  = document.getElementById('result-score');
+  const cefrEl   = document.getElementById('result-cefr');
+  const ieltsEl  = document.getElementById('result-ielts');
+  const totalEl  = document.getElementById('result-total');
+  const cefrCard = document.getElementById('result-cefr-card');
+  const qEl      = document.getElementById('result-questions');
+  const skillEl  = document.getElementById('result-skill-label');
+
+  const score = Math.round(sessionScore.totalScore ?? 0);
+
+  if (scoreEl)  scoreEl.textContent  = score;
+  if (cefrEl)   cefrEl.textContent   = sessionScore.cefrLevel ?? '—';
+  if (ieltsEl)  ieltsEl.textContent  = `IELTS Band ${sessionScore.ieltsBand ?? '—'}`;
+  if (totalEl)  totalEl.textContent  = `${score}/100`;
+  if (cefrCard) cefrCard.textContent = sessionScore.cefrLevel ?? '—';
+  if (skillEl)  skillEl.textContent  = sessionScore.skill ?? '—';
+
+  const perQ = sessionScore.breakdown?.perQuestion ?? [];
+  if (qEl) qEl.textContent = `${perQ.length}/${perQ.length}`;
+
+  // Breakdown list
+  const listEl = document.getElementById('breakdown-list');
+  if (listEl && perQ.length > 0) {
+    listEl.innerHTML = perQ.map((item, i) => {
+      const s = Math.round(item.normalised ?? 0);
+      const cls = s >= 70 ? 'high' : s >= 40 ? 'medium' : 'low';
+      const assessment = store.get('assessment');
+      const qText = assessment?.questions?.[i]?.text ?? `Question ${i + 1}`;
+      return `
+        <div class="breakdown-item">
+          <div style="flex:1; min-width:0;">
+            <div class="breakdown-item__q">Q${i + 1}: ${qText}</div>
+            ${item.rationale ? `<div class="breakdown-item__rationale">${item.rationale}</div>` : ''}
+          </div>
+          <div class="breakdown-item__score ${cls}">${s}</div>
+        </div>`;
+    }).join('');
+  }
+}
