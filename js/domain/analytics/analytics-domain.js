@@ -1,290 +1,381 @@
 /**
- * NIREV AI — Assessment Engine (Orchestration Layer)
+ * NIREV AI — Analytics Page Controller
  * ─────────────────────────────────────────────────────────────
  * Version: 3.0.0 — Phase 3
- * Layer:   ENGINE — orchestration only
+ *
+ * Controls the Analytics page UI.
+ * Reads from store.analytics and store.feedback.
+ * Renders: summary stats, line chart, radar chart, skill breakdown,
+ *          skill gaps, and AI feedback card.
  * ─────────────────────────────────────────────────────────────
  */
 
-import store  from '../store.js';
-import * as db from '../db.js';
-import * as groq from '../groq.js';
-import * as AssessmentDomain from '../domain/assessments/assessment-domain.js';
-import * as ScoringDomain    from '../domain/scoring/scoring-domain.js';
-import * as FeedbackDomain   from '../domain/feedback/feedback-domain.js';
-import * as AnalyticsDomain  from '../domain/analytics/analytics-domain.js';
+import store from './store.js';
+import { getScores } from './db.js';
+import { buildAnalyticsResult } from './domain/analytics/analytics-domain.js';
+import { showToast } from './ui.js';
 
-// ── Event Bus ─────────────────────────────────────────────────
+// ── Initialize ────────────────────────────────────────────────
 
-function _emit(name, detail = {}) {
-  document.dispatchEvent(new CustomEvent(name, { detail }));
+export function initAnalyticsPage() {
+  // Listen for analytics ready event
+  document.addEventListener('nirev:analytics:ready', (e) => {
+    _renderAnalytics(e.detail.analytics);
+  });
+
+  // Listen for feedback ready event
+  document.addEventListener('nirev:feedback:ready', (e) => {
+    _renderFeedback(e.detail.feedback);
+  });
+
+  // Listen for navigate to analytics
+  document.addEventListener('nirev:navigate', (e) => {
+    if (e.detail?.pageId === 'analytics') {
+      _loadAndRender();
+    }
+  });
 }
 
-// ── Engine State ──────────────────────────────────────────────
+// ── Load and Render ───────────────────────────────────────────
 
-const _engine = { stage: 'idle', sessionId: null };
+async function _loadAndRender() {
+  const userId = store.get('user')?.id;
+  if (!userId) return;
 
-function _setStage(s) { _engine.stage = s; }
+  // Check if we have cached analytics
+  const cached = store.get('analytics');
+  if (cached?.loaded && cached?.full) {
+    _renderAnalytics(cached.full);
+    const feedback = store.get('feedback')?.lastFeedback;
+    if (feedback) _renderFeedback(feedback);
+    return;
+  }
 
-export function getEngineStage() { return _engine.stage; }
-
-// ── ENTRY: Start Assessment ───────────────────────────────────
-
-export async function startAssessment(input) {
-  _setStage('assessing');
+  // Load from DB
+  const container = document.getElementById('analytics-content');
+  if (container) container.innerHTML = _loadingHTML();
 
   try {
-    const validationError = AssessmentDomain.validateStartInput(input);
-    if (validationError) return _error('validation', validationError);
-
-    store.reset('assessment');
-    _emit('nirev:assessment:loading', { message: 'Generating questions...' });
-
-    // Generate questions via Groq
-    const { data: groqText } = await groq.generateQuestions({
-      skill: input.skill,
-      level: input.level ?? null,
-      type:  input.type,
-      count: input.questionCount ?? 5,
-    });
-
-    const questions = AssessmentDomain.parseGroqQuestions(
-      groqText ?? '', input.skill, input.questionCount ?? 5
-    );
-
-    // Persist to DB
-    const userId = store.get('user')?.id;
-    let sessionId = `local-${Date.now()}`;
-
-    if (userId) {
-      const { data: dbSession } = await db.createAssessment({
-        user_id: userId,
-        type:    input.type,
-        skill:   input.skill,
-      });
-      if (dbSession?.id) sessionId = dbSession.id;
+    const { data: scores, error } = await getScores(userId, { limit: 50 });
+    if (error || !scores || scores.length === 0) {
+      if (container) container.innerHTML = _emptyHTML();
+      return;
     }
 
-    const session = AssessmentDomain.buildSessionContext(input, questions, sessionId);
-    _engine.sessionId = sessionId;
+    const analytics = buildAnalyticsResult(scores);
+    store.set('analytics', { loaded: true, full: analytics, scoresBySkill: analytics.bySkill });
+    _renderAnalytics(analytics);
 
-    store.set('assessment', {
-      sessionId,
-      type:         session.type,
-      skill:        session.skill,
-      status:       'active',
-      questions,
-      currentIndex: 0,
-      answers:      {},
-      startedAt:    session.startedAt,
-    });
-
-    _emit('nirev:assessment:started', { sessionId, questions });
-    return { data: session, error: null };
+    const feedback = store.get('feedback')?.lastFeedback;
+    if (feedback) _renderFeedback(feedback);
 
   } catch (err) {
-    return _error('assessment', err.message);
+    showToast('Could not load analytics.', 'error');
   }
 }
 
-// ── Submit Answer ─────────────────────────────────────────────
+// ── Render Analytics ──────────────────────────────────────────
 
-export async function submitAnswer(input) {
-  try {
-    const current = store.get('assessment');
-    if (!current || current.status !== 'active')
-      return _error('submit', 'No active assessment session.');
+function _renderAnalytics(analytics) {
+  const container = document.getElementById('analytics-content');
+  if (!container || !analytics) return;
 
-    const question = current.questions[current.currentIndex];
-    if (!question) return _error('submit', 'Question not found.');
+  const { summary, bySkill, charts, skillGaps } = analytics;
 
-    const validationError = AssessmentDomain.validateAnswer(input.answer, question);
-    if (validationError) return _error('submit', validationError);
+  container.innerHTML = `
+    <!-- Summary Stats -->
+    <div class="analytics-stats">
+      <div class="stat-card stat-card--gold">
+        <div class="stat-card__label">Total Assessments</div>
+        <div class="stat-card__value" style="font-size:2rem">${summary.totalSessions}</div>
+        <div class="stat-card__trend">All time</div>
+      </div>
+      <div class="stat-card stat-card--orange">
+        <div class="stat-card__label">Average Score</div>
+        <div class="stat-card__value" style="font-size:2rem">${Math.round(summary.averageScore)}</div>
+        <div class="stat-card__trend">Out of 100</div>
+      </div>
+      <div class="stat-card stat-card--gold">
+        <div class="stat-card__label">Best Score</div>
+        <div class="stat-card__value" style="font-size:2rem">${summary.bestScore}</div>
+        <div class="stat-card__trend">Personal best</div>
+      </div>
+      <div class="stat-card stat-card--orange">
+        <div class="stat-card__label">CEFR Level</div>
+        <div class="stat-card__value" style="font-size:2rem">${summary.currentCEFR}</div>
+        <div class="stat-card__trend">
+          <span class="trajectory-badge ${summary.trajectory}">${summary.trajectory}</span>
+        </div>
+      </div>
+    </div>
 
-    const isLast    = AssessmentDomain.checkCompletion(current.currentIndex, current.questions.length);
-    const nextIndex = current.currentIndex + 1;
+    <!-- Charts -->
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-card__title">Score History</div>
+        <div class="chart-container" id="line-chart-container">
+          ${charts.scoreLine.values.length > 0
+            ? _buildLineChart(charts.scoreLine)
+            : '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--white-muted);font-size:0.8rem;">Complete more assessments to see your progress</div>'
+          }
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-card__title">Skill Balance</div>
+        <div class="radar-container" id="radar-chart-container">
+          ${charts.skillRadar.labels.length > 1
+            ? _buildRadarChart(charts.skillRadar)
+            : '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--white-muted);font-size:0.8rem;text-align:center;">Complete assessments in multiple skills</div>'
+          }
+        </div>
+      </div>
+    </div>
 
-    const updatedAnswers = {
-      ...current.answers,
-      [question.id]: { answer: input.answer, timeSpentMs: input.timeSpentMs ?? 0 },
-    };
+    <!-- Skill Breakdown -->
+    ${Object.keys(bySkill).length > 0 ? `
+    <div class="card" style="margin-bottom:var(--space-5);">
+      <div class="section-header">
+        <h2 class="section-title">Performance by Skill</h2>
+      </div>
+      <div class="skill-breakdown">
+        ${Object.entries(bySkill).map(([skill, data]) => `
+          <div class="skill-row">
+            <div class="skill-row__name">${skill}</div>
+            <div class="skill-row__bar-wrap">
+              <div class="skill-row__bar" style="width:${Math.round(data.average)}%"></div>
+            </div>
+            <div class="skill-row__score">${Math.round(data.average)}</div>
+            <div class="skill-row__trend ${data.trend}">${data.trend} · ${data.sessions} sessions</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>` : ''}
 
-    store.set('assessment', {
-      answers:      updatedAnswers,
-      currentIndex: nextIndex,
-      status:       isLast ? 'completed' : 'active',
-      completedAt:  isLast ? new Date().toISOString() : null,
-    });
+    <!-- Skill Gaps -->
+    ${skillGaps.length > 0 ? `
+    <div class="card skill-gaps">
+      <div class="section-header">
+        <h2 class="section-title">Areas to Improve</h2>
+      </div>
+      ${skillGaps.map(gap => `
+        <div class="gap-item">
+          <div>
+            <div class="gap-item__skill">${gap.skill}</div>
+            <div class="gap-item__detail">${Math.round(gap.current)} / ${gap.target} target · ${Math.round(gap.gap)} points to go</div>
+          </div>
+          <span class="gap-badge ${gap.priority}">${gap.priority}</span>
+        </div>
+      `).join('')}
+    </div>` : ''}
 
-    _emit('nirev:assessment:answer-submitted', { questionId: question.id, isLast });
-
-    if (isLast) {
-      _emit('nirev:assessment:completed', { sessionId: current.sessionId });
-      _triggerScoring(current.sessionId, updatedAnswers, current).catch(err => {
-        _error('scoring', err.message);
-      });
-    }
-
-    return { data: { questionId: question.id, received: true, isLast }, error: null };
-
-  } catch (err) {
-    return _error('submit', err.message);
-  }
+    <!-- Feedback placeholder -->
+    <div id="feedback-container"></div>
+  `;
 }
 
-// ── Abandon ───────────────────────────────────────────────────
+// ── Render Feedback ───────────────────────────────────────────
 
-export async function abandonAssessment() {
-  const current = store.get('assessment');
-  if (!current?.sessionId) return;
-  store.set('assessment', { status: 'abandoned', completedAt: new Date().toISOString() });
-  _setStage('idle');
-  _emit('nirev:assessment:abandoned', { sessionId: current.sessionId });
+function _renderFeedback(feedback) {
+  const container = document.getElementById('feedback-container');
+  if (!container || !feedback) return;
+
+  const { sections, cefrComment, nextSteps, tone } = feedback;
+  const toneColors = { encouraging: 'var(--status-success)', neutral: 'var(--gold-pure)', challenging: 'var(--orange-core)' };
+
+  container.innerHTML = `
+    <div class="feedback-card" style="margin-top:var(--space-5);">
+      <div class="feedback-card__header">
+        <span style="font-size:1.25rem">✦</span>
+        <div class="feedback-card__title">AI Feedback</div>
+        <span class="badge badge--gold" style="margin-left:auto;text-transform:capitalize;">${tone}</span>
+      </div>
+
+      ${sections.summary ? `
+      <div class="feedback-section">
+        <div class="feedback-section__label">Overall Summary</div>
+        <div class="feedback-section__summary">${sections.summary}</div>
+        ${cefrComment ? `<div class="feedback-section__summary" style="margin-top:var(--space-3);color:var(--gold-bright)">${cefrComment}</div>` : ''}
+      </div>` : ''}
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-5);margin-bottom:var(--space-5);">
+        ${sections.strengths?.length ? `
+        <div class="feedback-section">
+          <div class="feedback-section__label">Strengths</div>
+          <div class="feedback-list">
+            ${sections.strengths.map(s => `
+              <div class="feedback-list__item">
+                <span class="feedback-list__bullet green"></span>
+                <span>${s}</span>
+              </div>`).join('')}
+          </div>
+        </div>` : ''}
+
+        ${sections.weaknesses?.length ? `
+        <div class="feedback-section">
+          <div class="feedback-section__label">Areas to Improve</div>
+          <div class="feedback-list">
+            ${sections.weaknesses.map(w => `
+              <div class="feedback-list__item">
+                <span class="feedback-list__bullet red"></span>
+                <span>${w}</span>
+              </div>`).join('')}
+          </div>
+        </div>` : ''}
+      </div>
+
+      ${sections.tips?.length ? `
+      <div class="feedback-section">
+        <div class="feedback-section__label">Tips for Improvement</div>
+        <div class="feedback-list">
+          ${sections.tips.map(t => `
+            <div class="feedback-list__item">
+              <span class="feedback-list__bullet gold"></span>
+              <span>${t}</span>
+            </div>`).join('')}
+        </div>
+      </div>` : ''}
+
+      ${nextSteps?.length ? `
+      <div class="feedback-section" style="margin-bottom:0">
+        <div class="feedback-section__label">Next Steps</div>
+        <div class="feedback-list">
+          ${nextSteps.map(n => `
+            <div class="feedback-list__item">
+              <span class="feedback-list__bullet orange"></span>
+              <span>${n}</span>
+            </div>`).join('')}
+        </div>
+      </div>` : ''}
+    </div>
+  `;
 }
 
-// ── Internal: Scoring ─────────────────────────────────────────
+// ── Chart Builders ────────────────────────────────────────────
 
-async function _triggerScoring(sessionId, answers, ctx) {
-  _setStage('scoring');
-  _emit('nirev:scoring:started', { sessionId });
-  _emit('nirev:assessment:loading', { message: 'Scoring your answers...' });
+function _buildLineChart(data) {
+  const { labels, values } = data;
+  if (!values.length) return '';
 
-  try {
-    const answerRecords = AssessmentDomain.buildCompletedSession(
-      sessionId, answers, ctx.questions, ctx.skill
-    ).answers;
+  const W = 600, H = 180, pad = { top: 20, right: 20, bottom: 30, left: 40 };
+  const innerW = W - pad.left - pad.right;
+  const innerH = H - pad.top - pad.bottom;
 
-    const answerScores = [];
-    for (const record of answerRecords) {
-      if (!record.answer || record.answer.trim() === '') {
-        answerScores.push(ScoringDomain.parseGroqScore(
-          '{"score":0,"rationale":"No answer provided.","tags":["no_answer"]}',
-          record.questionId
-        ));
-        continue;
-      }
-      const { data: scoreText } = await groq.scoreResponse(record);
-      answerScores.push(ScoringDomain.parseGroqScore(scoreText ?? '', record.questionId));
-    }
+  const minV = Math.max(0, Math.min(...values) - 10);
+  const maxV = Math.min(100, Math.max(...values) + 10);
+  const xStep = innerW / Math.max(values.length - 1, 1);
 
-    const userId       = store.get('user')?.id ?? 'guest';
-    const sessionScore = ScoringDomain.buildSessionScore(sessionId, userId, ctx.skill, answerScores);
+  const pts = values.map((v, i) => {
+    const x = pad.left + i * xStep;
+    const y = pad.top + innerH - ((v - minV) / (maxV - minV || 1)) * innerH;
+    return { x, y, v };
+  });
 
-    const currentHistory = store.get('scoring')?.history ?? [];
-    store.set('scoring', {
-      lastScore: sessionScore,
-      history: [...currentHistory, {
-        sessionId,
-        score: sessionScore.totalScore,
-        cefr:  sessionScore.cefrLevel,
-        skill: sessionScore.skill,
-        date:  sessionScore.gradedAt,
-      }],
-      average: ScoringDomain.computeAverage([
-        ...currentHistory.map(h => h.score),
-        sessionScore.totalScore,
-      ]),
-    });
+  const linePath = pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
+  const areaPath = `${linePath} L ${pts[pts.length-1].x} ${pad.top + innerH} L ${pts[0].x} ${pad.top + innerH} Z`;
 
-    if (userId !== 'guest') {
-      await db.completeAssessment(sessionId);
-      await db.saveScore({
-        user_id:       userId,
-        assessment_id: sessionId,
-        skill:         ctx.skill,
-        score:         sessionScore.totalScore,
-        cefr_level:    sessionScore.cefrLevel,
-        details:       sessionScore.breakdown,
-      });
-    }
+  // Grid lines
+  const gridLines = [0, 25, 50, 75, 100].map(v => {
+    if (v < minV || v > maxV) return '';
+    const y = pad.top + innerH - ((v - minV) / (maxV - minV || 1)) * innerH;
+    return `
+      <line class="chart-grid-line" x1="${pad.left}" y1="${y}" x2="${pad.left + innerW}" y2="${y}"/>
+      <text class="chart-label" x="${pad.left - 5}" y="${y + 4}" text-anchor="end">${v}</text>`;
+  }).join('');
 
-    _emit('nirev:scoring:complete', { sessionScore });
+  // X labels
+  const xLabels = labels.map((l, i) => {
+    if (labels.length > 8 && i % 2 !== 0) return '';
+    const x = pad.left + i * xStep;
+    return `<text class="chart-label" x="${x}" y="${pad.top + innerH + 18}" text-anchor="middle">${l}</text>`;
+  }).join('');
 
-    // Fan out to feedback + analytics in parallel
-    await Promise.allSettled([
-      _triggerFeedback(sessionScore, userId),
-      _triggerAnalytics(userId),
-    ]);
-
-    _setStage('complete');
-
-  } catch (err) {
-    _error('scoring', err.message);
-  }
+  return `
+    <svg class="chart-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <linearGradient id="gold-gradient" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#D4AF37" stop-opacity="0.4"/>
+          <stop offset="100%" stop-color="#D4AF37" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      ${gridLines}
+      ${xLabels}
+      <path class="chart-area" d="${areaPath}"/>
+      <path class="chart-line" d="${linePath}"/>
+      ${pts.map(p => `<circle class="chart-dot" cx="${p.x}" cy="${p.y}" r="3">
+        <title>${p.v}/100</title>
+      </circle>`).join('')}
+    </svg>`;
 }
 
-// ── Internal: Feedback ────────────────────────────────────────
+function _buildRadarChart(data) {
+  const { labels, values } = data;
+  if (labels.length < 2) return '';
 
-async function _triggerFeedback(sessionScore, userId) {
-  _emit('nirev:feedback:generating', {});
+  const CX = 120, CY = 100, R = 75;
+  const n     = labels.length;
+  const angle = (i) => (i * 2 * Math.PI / n) - Math.PI / 2;
 
-  try {
-    store.set('feedback', { isGenerating: true });
+  // Background rings
+  const rings = [0.25, 0.5, 0.75, 1].map(r => {
+    const pts = Array.from({ length: n }, (_, i) => {
+      const a = angle(i);
+      return `${CX + R * r * Math.cos(a)},${CY + R * r * Math.sin(a)}`;
+    }).join(' ');
+    return `<polygon class="radar-bg" points="${pts}"/>`;
+  }).join('');
 
-    const userLevel = store.get('profile.level') ?? sessionScore.cefrLevel;
-    const { data: feedbackText } = await groq.generateFeedback({
-      sessionScore,
-      userLevel,
-    });
+  // Axes
+  const axes = Array.from({ length: n }, (_, i) => {
+    const a = angle(i);
+    return `<line class="radar-bg" x1="${CX}" y1="${CY}" x2="${CX + R * Math.cos(a)}" y2="${CY + R * Math.sin(a)}"/>`;
+  }).join('');
 
-    const feedback = FeedbackDomain.parseFeedbackResponse(
-      feedbackText ?? '',
-      sessionScore.sessionId,
-      sessionScore.totalScore
-    );
+  // Data polygon
+  const dataPoints = values.map((v, i) => {
+    const a = angle(i);
+    const r = (v / 100) * R;
+    return `${CX + r * Math.cos(a)},${CY + r * Math.sin(a)}`;
+  }).join(' ');
 
-    store.set('feedback', { lastFeedback: feedback, isGenerating: false });
+  // Labels
+  const lbls = labels.map((l, i) => {
+    const a = angle(i);
+    const x = CX + (R + 16) * Math.cos(a);
+    const y = CY + (R + 16) * Math.sin(a);
+    return `<text class="radar-label" x="${x}" y="${y + 4}">${l}</text>`;
+  }).join('');
 
-    if (userId && userId !== 'guest') {
-      await db.saveFeedback({
-        user_id:       userId,
-        assessment_id: sessionScore.sessionId,
-        content:       feedback.sections?.summary ?? '',
-        model:         'llama-3.1-8b-instant',
-      });
-    }
+  // Dots
+  const dots = values.map((v, i) => {
+    const a = angle(i);
+    const r = (v / 100) * R;
+    return `<circle class="radar-dot" cx="${CX + r * Math.cos(a)}" cy="${CY + r * Math.sin(a)}" r="3"/>`;
+  }).join('');
 
-    _emit('nirev:feedback:ready', { feedback });
-
-  } catch (err) {
-    store.set('feedback', { isGenerating: false });
-    _error('feedback', err.message, true);
-  }
+  return `
+    <svg class="radar-svg" viewBox="0 0 240 200" preserveAspectRatio="xMidYMid meet">
+      ${rings}${axes}
+      <polygon class="radar-area" points="${dataPoints}"/>
+      ${dots}${lbls}
+    </svg>`;
 }
 
-// ── Internal: Analytics ───────────────────────────────────────
+// ── Utility HTML ──────────────────────────────────────────────
 
-async function _triggerAnalytics(userId) {
-  try {
-    if (!userId || userId === 'guest') return;
-
-    const { data: scores } = await db.getScores(userId, { limit: 50 });
-    if (!scores || scores.length === 0) return;
-
-    const analyticsResult = AnalyticsDomain.buildAnalyticsResult(scores);
-
-    store.set('analytics', {
-      loaded:        true,
-      scoresBySkill: analyticsResult.bySkill,
-      progressData:  analyticsResult.charts.scoreLine.values,
-      full:          analyticsResult,
-    });
-
-    _emit('nirev:analytics:ready', { analytics: analyticsResult });
-
-  } catch (err) {
-    _error('analytics', err.message, true);
-  }
+function _loadingHTML() {
+  return `
+    <div class="assessment-loading">
+      <div class="assessment-loading__ring"></div>
+      <div class="assessment-loading__text">Loading analytics...</div>
+    </div>`;
 }
 
-// ── Error Handler ─────────────────────────────────────────────
-
-function _error(stage, message, recoverable = false) {
-  console.error(`[Engine] ${stage}: ${message}`);
-  _emit('nirev:engine:error', { stage, error: message, recoverable });
-  if (!recoverable) {
-    _setStage('error');
-    store.set('assessment', { status: 'error' });
-  }
-  return { data: null, error: message };
+function _emptyHTML() {
+  return `
+    <div class="analytics-empty">
+      <div class="empty-state__icon">◈</div>
+      <div class="empty-state__title">No data yet</div>
+      <div class="empty-state__text">Complete your first assessment to see your analytics.</div>
+      <button class="btn btn--primary" onclick="window.NIREV.navigateTo('assessment')">Start Assessment</button>
+    </div>`;
 }
