@@ -1,6 +1,0 @@
-/* ============================================================
-   NIREV AI — Auth Form Panel visibility
-   ============================================================ */
-
-.auth-form-panel { display: none; }
-.auth-form-panel.active { display: block; }
