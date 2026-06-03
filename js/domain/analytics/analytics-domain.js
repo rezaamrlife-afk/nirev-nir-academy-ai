@@ -1,182 +1,290 @@
 /**
- * NIREV AI — Analytics Domain
+ * NIREV AI — Assessment Engine (Orchestration Layer)
  * ─────────────────────────────────────────────────────────────
- * Status:  IMPLEMENTED — Phase 3
- * Version: 3.0.0
- *
- * PURE functions only — no API, no DB, no UI.
+ * Version: 3.0.0 — Phase 3
+ * Layer:   ENGINE — orchestration only
  * ─────────────────────────────────────────────────────────────
  */
 
-// ── Pure: Compute average ─────────────────────────────────────
+import store  from '../store.js';
+import * as db from '../db.js';
+import * as groq from '../groq.js';
+import * as AssessmentDomain from '../domain/assessments/assessment-domain.js';
+import * as ScoringDomain    from '../domain/scoring/scoring-domain.js';
+import * as FeedbackDomain   from '../domain/feedback/feedback-domain.js';
+import * as AnalyticsDomain  from '../domain/analytics/analytics-domain.js';
 
-export function computeAverage(scores) {
-  if (!scores || scores.length === 0) return 0;
-  const sum = scores.reduce((a, b) => a + (parseFloat(b) || 0), 0);
-  return parseFloat((sum / scores.length).toFixed(1));
+// ── Event Bus ─────────────────────────────────────────────────
+
+function _emit(name, detail = {}) {
+  document.dispatchEvent(new CustomEvent(name, { detail }));
 }
 
-// ── Pure: Compute trajectory ──────────────────────────────────
+// ── Engine State ──────────────────────────────────────────────
 
-export function computeTrajectory(scores) {
-  if (!scores || scores.length < 2) return 'plateauing';
-  const half   = Math.floor(scores.length / 2);
-  const first  = computeAverage(scores.slice(0, half));
-  const second = computeAverage(scores.slice(half));
-  const diff   = second - first;
-  if (diff > 5)  return 'improving';
-  if (diff < -5) return 'declining';
-  return 'plateauing';
-}
+const _engine = { stage: 'idle', sessionId: null };
 
-// ── Pure: Compute consistency index ──────────────────────────
+function _setStage(s) { _engine.stage = s; }
 
-export function computeConsistency(scores) {
-  if (!scores || scores.length < 2) return 0;
-  const avg  = computeAverage(scores);
-  const variance = scores.reduce((sum, s) => sum + Math.pow(s - avg, 2), 0) / scores.length;
-  const stdDev   = Math.sqrt(variance);
-  return Math.max(0, Math.round(100 - stdDev));
-}
+export function getEngineStage() { return _engine.stage; }
 
-// ── Pure: Compute skill gaps ──────────────────────────────────
+// ── ENTRY: Start Assessment ───────────────────────────────────
 
-export function computeSkillGaps(bySkill) {
-  const cefrTargets = { A1: 40, A2: 55, B1: 70, B2: 80, C1: 90, C2: 100 };
+export async function startAssessment(input) {
+  _setStage('assessing');
 
-  return Object.entries(bySkill).map(([skill, data]) => {
-    const current    = data.average;
-    const cefrLevel  = _scoreToCEFR(current);
-    const nextLevels = Object.keys(cefrTargets);
-    const nextIdx    = nextLevels.indexOf(cefrLevel) + 1;
-    const target     = cefrTargets[nextLevels[nextIdx]] ?? 100;
-    const gap        = Math.max(0, target - current);
+  try {
+    const validationError = AssessmentDomain.validateStartInput(input);
+    if (validationError) return _error('validation', validationError);
 
-    return {
-      skill,
-      current:  parseFloat(current.toFixed(1)),
-      target,
-      gap:      parseFloat(gap.toFixed(1)),
-      priority: gap > 20 ? 'high' : gap > 10 ? 'medium' : 'low',
-    };
-  });
-}
+    store.reset('assessment');
+    _emit('nirev:assessment:loading', { message: 'Generating questions...' });
 
-// ── Pure: Build line chart data ───────────────────────────────
+    // Generate questions via Groq
+    const { data: groqText } = await groq.generateQuestions({
+      skill: input.skill,
+      level: input.level ?? null,
+      type:  input.type,
+      count: input.questionCount ?? 5,
+    });
 
-export function buildLineChartData(scores) {
-  if (!scores || scores.length === 0) {
-    return { labels: [], values: [] };
+    const questions = AssessmentDomain.parseGroqQuestions(
+      groqText ?? '', input.skill, input.questionCount ?? 5
+    );
+
+    // Persist to DB
+    const userId = store.get('user')?.id;
+    let sessionId = `local-${Date.now()}`;
+
+    if (userId) {
+      const { data: dbSession } = await db.createAssessment({
+        user_id: userId,
+        type:    input.type,
+        skill:   input.skill,
+      });
+      if (dbSession?.id) sessionId = dbSession.id;
+    }
+
+    const session = AssessmentDomain.buildSessionContext(input, questions, sessionId);
+    _engine.sessionId = sessionId;
+
+    store.set('assessment', {
+      sessionId,
+      type:         session.type,
+      skill:        session.skill,
+      status:       'active',
+      questions,
+      currentIndex: 0,
+      answers:      {},
+      startedAt:    session.startedAt,
+    });
+
+    _emit('nirev:assessment:started', { sessionId, questions });
+    return { data: session, error: null };
+
+  } catch (err) {
+    return _error('assessment', err.message);
   }
-  return {
-    labels: scores.map((s, i) => {
-      const d = new Date(s.created_at ?? s.date ?? Date.now());
-      return `${d.getMonth()+1}/${d.getDate()}`;
-    }),
-    values: scores.map(s => Math.round(parseFloat(s.score ?? s.value ?? 0))),
-  };
 }
 
-// ── Pure: Build radar chart data ──────────────────────────────
+// ── Submit Answer ─────────────────────────────────────────────
 
-export function buildRadarChartData(bySkill) {
-  const skills = Object.keys(bySkill);
-  if (skills.length === 0) return { labels: [], values: [] };
-  return {
-    labels: skills.map(s => s.charAt(0).toUpperCase() + s.slice(1)),
-    values: skills.map(s => Math.round(bySkill[s].average ?? 0)),
-  };
-}
+export async function submitAnswer(input) {
+  try {
+    const current = store.get('assessment');
+    if (!current || current.status !== 'active')
+      return _error('submit', 'No active assessment session.');
 
-// ── Pure: Build bar chart data ────────────────────────────────
+    const question = current.questions[current.currentIndex];
+    if (!question) return _error('submit', 'Question not found.');
 
-export function buildBarChartData(scores) {
-  if (!scores || scores.length === 0) return { labels: [], values: [] };
+    const validationError = AssessmentDomain.validateAnswer(input.answer, question);
+    if (validationError) return _error('submit', validationError);
 
-  // Group by week
-  const weeks = {};
-  scores.forEach(s => {
-    const d    = new Date(s.created_at ?? s.date ?? Date.now());
-    const week = `W${_getWeekNumber(d)}`;
-    if (!weeks[week]) weeks[week] = 0;
-    weeks[week]++;
-  });
+    const isLast    = AssessmentDomain.checkCompletion(current.currentIndex, current.questions.length);
+    const nextIndex = current.currentIndex + 1;
 
-  return {
-    labels: Object.keys(weeks),
-    values: Object.values(weeks),
-  };
-}
-
-// ── Pure: Build full analytics result ────────────────────────
-
-export function buildAnalyticsResult(scores) {
-  if (!scores || scores.length === 0) {
-    return {
-      summary:    { totalSessions: 0, averageScore: 0, bestScore: 0, currentCEFR: '—', consistencyIndex: 0, trajectory: 'plateauing' },
-      bySkill:    {},
-      charts:     { scoreLine: { labels: [], values: [] }, skillRadar: { labels: [], values: [] }, sessionBar: { labels: [], values: [] } },
-      skillGaps:  [],
-      computedAt: new Date().toISOString(),
+    const updatedAnswers = {
+      ...current.answers,
+      [question.id]: { answer: input.answer, timeSpentMs: input.timeSpentMs ?? 0 },
     };
+
+    store.set('assessment', {
+      answers:      updatedAnswers,
+      currentIndex: nextIndex,
+      status:       isLast ? 'completed' : 'active',
+      completedAt:  isLast ? new Date().toISOString() : null,
+    });
+
+    _emit('nirev:assessment:answer-submitted', { questionId: question.id, isLast });
+
+    if (isLast) {
+      _emit('nirev:assessment:completed', { sessionId: current.sessionId });
+      _triggerScoring(current.sessionId, updatedAnswers, current).catch(err => {
+        _error('scoring', err.message);
+      });
+    }
+
+    return { data: { questionId: question.id, received: true, isLast }, error: null };
+
+  } catch (err) {
+    return _error('submit', err.message);
   }
-
-  const scoreValues = scores.map(s => parseFloat(s.score ?? 0));
-  const avg         = computeAverage(scoreValues);
-  const best        = Math.max(...scoreValues);
-
-  // Group by skill
-  const bySkill = {};
-  scores.forEach(s => {
-    const skill = s.skill ?? 'general';
-    if (!bySkill[skill]) bySkill[skill] = { scores: [], sessions: 0 };
-    bySkill[skill].scores.push(parseFloat(s.score ?? 0));
-    bySkill[skill].sessions++;
-  });
-
-  const bySkillSummary = {};
-  Object.entries(bySkill).forEach(([skill, data]) => {
-    bySkillSummary[skill] = {
-      average:  computeAverage(data.scores),
-      sessions: data.sessions,
-      trend:    computeTrajectory(data.scores),
-    };
-  });
-
-  return {
-    summary: {
-      totalSessions:    scores.length,
-      averageScore:     avg,
-      bestScore:        Math.round(best),
-      currentCEFR:      _scoreToCEFR(avg),
-      consistencyIndex: computeConsistency(scoreValues),
-      trajectory:       computeTrajectory(scoreValues),
-    },
-    bySkill: bySkillSummary,
-    charts: {
-      scoreLine:  buildLineChartData(scores),
-      skillRadar: buildRadarChartData(bySkillSummary),
-      sessionBar: buildBarChartData(scores),
-    },
-    skillGaps:  computeSkillGaps(bySkillSummary),
-    computedAt: new Date().toISOString(),
-  };
 }
 
-// ── Helpers ───────────────────────────────────────────────────
+// ── Abandon ───────────────────────────────────────────────────
 
-function _scoreToCEFR(score) {
-  if (score >= 90) return 'C2';
-  if (score >= 80) return 'C1';
-  if (score >= 70) return 'B2';
-  if (score >= 55) return 'B1';
-  if (score >= 40) return 'A2';
-  return 'A1';
+export async function abandonAssessment() {
+  const current = store.get('assessment');
+  if (!current?.sessionId) return;
+  store.set('assessment', { status: 'abandoned', completedAt: new Date().toISOString() });
+  _setStage('idle');
+  _emit('nirev:assessment:abandoned', { sessionId: current.sessionId });
 }
 
-function _getWeekNumber(d) {
-  const oneJan = new Date(d.getFullYear(), 0, 1);
-  return Math.ceil((((d - oneJan) / 86400000) + oneJan.getDay() + 1) / 7);
+// ── Internal: Scoring ─────────────────────────────────────────
+
+async function _triggerScoring(sessionId, answers, ctx) {
+  _setStage('scoring');
+  _emit('nirev:scoring:started', { sessionId });
+  _emit('nirev:assessment:loading', { message: 'Scoring your answers...' });
+
+  try {
+    const answerRecords = AssessmentDomain.buildCompletedSession(
+      sessionId, answers, ctx.questions, ctx.skill
+    ).answers;
+
+    const answerScores = [];
+    for (const record of answerRecords) {
+      if (!record.answer || record.answer.trim() === '') {
+        answerScores.push(ScoringDomain.parseGroqScore(
+          '{"score":0,"rationale":"No answer provided.","tags":["no_answer"]}',
+          record.questionId
+        ));
+        continue;
+      }
+      const { data: scoreText } = await groq.scoreResponse(record);
+      answerScores.push(ScoringDomain.parseGroqScore(scoreText ?? '', record.questionId));
+    }
+
+    const userId       = store.get('user')?.id ?? 'guest';
+    const sessionScore = ScoringDomain.buildSessionScore(sessionId, userId, ctx.skill, answerScores);
+
+    const currentHistory = store.get('scoring')?.history ?? [];
+    store.set('scoring', {
+      lastScore: sessionScore,
+      history: [...currentHistory, {
+        sessionId,
+        score: sessionScore.totalScore,
+        cefr:  sessionScore.cefrLevel,
+        skill: sessionScore.skill,
+        date:  sessionScore.gradedAt,
+      }],
+      average: ScoringDomain.computeAverage([
+        ...currentHistory.map(h => h.score),
+        sessionScore.totalScore,
+      ]),
+    });
+
+    if (userId !== 'guest') {
+      await db.completeAssessment(sessionId);
+      await db.saveScore({
+        user_id:       userId,
+        assessment_id: sessionId,
+        skill:         ctx.skill,
+        score:         sessionScore.totalScore,
+        cefr_level:    sessionScore.cefrLevel,
+        details:       sessionScore.breakdown,
+      });
+    }
+
+    _emit('nirev:scoring:complete', { sessionScore });
+
+    // Fan out to feedback + analytics in parallel
+    await Promise.allSettled([
+      _triggerFeedback(sessionScore, userId),
+      _triggerAnalytics(userId),
+    ]);
+
+    _setStage('complete');
+
+  } catch (err) {
+    _error('scoring', err.message);
+  }
 }
 
-export const ANALYTICS_DOMAIN_VERSION = '3.0.0';
+// ── Internal: Feedback ────────────────────────────────────────
+
+async function _triggerFeedback(sessionScore, userId) {
+  _emit('nirev:feedback:generating', {});
+
+  try {
+    store.set('feedback', { isGenerating: true });
+
+    const userLevel = store.get('profile.level') ?? sessionScore.cefrLevel;
+    const { data: feedbackText } = await groq.generateFeedback({
+      sessionScore,
+      userLevel,
+    });
+
+    const feedback = FeedbackDomain.parseFeedbackResponse(
+      feedbackText ?? '',
+      sessionScore.sessionId,
+      sessionScore.totalScore
+    );
+
+    store.set('feedback', { lastFeedback: feedback, isGenerating: false });
+
+    if (userId && userId !== 'guest') {
+      await db.saveFeedback({
+        user_id:       userId,
+        assessment_id: sessionScore.sessionId,
+        content:       feedback.sections?.summary ?? '',
+        model:         'llama-3.1-8b-instant',
+      });
+    }
+
+    _emit('nirev:feedback:ready', { feedback });
+
+  } catch (err) {
+    store.set('feedback', { isGenerating: false });
+    _error('feedback', err.message, true);
+  }
+}
+
+// ── Internal: Analytics ───────────────────────────────────────
+
+async function _triggerAnalytics(userId) {
+  try {
+    if (!userId || userId === 'guest') return;
+
+    const { data: scores } = await db.getScores(userId, { limit: 50 });
+    if (!scores || scores.length === 0) return;
+
+    const analyticsResult = AnalyticsDomain.buildAnalyticsResult(scores);
+
+    store.set('analytics', {
+      loaded:        true,
+      scoresBySkill: analyticsResult.bySkill,
+      progressData:  analyticsResult.charts.scoreLine.values,
+      full:          analyticsResult,
+    });
+
+    _emit('nirev:analytics:ready', { analytics: analyticsResult });
+
+  } catch (err) {
+    _error('analytics', err.message, true);
+  }
+}
+
+// ── Error Handler ─────────────────────────────────────────────
+
+function _error(stage, message, recoverable = false) {
+  console.error(`[Engine] ${stage}: ${message}`);
+  _emit('nirev:engine:error', { stage, error: message, recoverable });
+  if (!recoverable) {
+    _setStage('error');
+    store.set('assessment', { status: 'error' });
+  }
+  return { data: null, error: message };
+}
