@@ -32,6 +32,7 @@ import { initSupabase, onAuthStateChange,
 import { initRouter, navigateTo, restoreLastPage } from './router.js';
 import { initDashboard }                           from './dashboard.js';
 import { initAssessmentPage }                      from './assessment.js';
+import { initAnalyticsPage }                       from './analytics.js';
 import store                                       from './store.js';
 
 // ── Bootstrap ─────────────────────────────────────────────────
@@ -87,6 +88,7 @@ function _onUserLoggedIn(user) {
   restoreLastPage();
   initDashboard();
   initAssessmentPage();
+  initAnalyticsPage();
 }
 
 /**
