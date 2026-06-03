@@ -37,10 +37,10 @@ export const SUPABASE = {
 // This object holds only non-secret configuration.
 
 export const GROQ = {
+  API_KEY:         'YOUR_GROQ_API_KEY',
   MODEL:           'llama-3.1-8b-instant',
   MAX_TOKENS:      1024,
   TEMPERATURE:     0.4,
-  // Edge function endpoint (Supabase will handle auth + key)
   EDGE_FN_URL:     '/functions/v1/groq-proxy',
 };
 
@@ -120,8 +120,8 @@ export const LIMITS = {
 // Set to true as each feature is built and ready.
 
 export const FEATURES = {
-  ASSESSMENT_ENGINE:  false,  // Phase 2
-  SCORING_ENGINE:     false,  // Phase 2
+  ASSESSMENT_ENGINE:  true,   // Phase 2 ✅
+  SCORING_ENGINE:     true,   // Phase 2 ✅
   FEEDBACK_ENGINE:    false,  // Phase 3
   ANALYTICS:          false,  // Phase 3
   PROGRESS_TRACKING:  false,  // Phase 4
