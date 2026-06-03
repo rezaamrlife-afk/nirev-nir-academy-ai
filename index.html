@@ -238,21 +238,37 @@
           <div class="card">
             <div class="section-header">
               <h2 class="section-title">Recent Activity</h2>
-              <a class="section-link" href="#">View all →</a>
+              <a class="section-link" href="#" onclick="window.NIREV.navigateTo('reports');return false;">View all →</a>
             </div>
             <div id="recent-activity-list">
               <!-- Populated by dashboard.js -->
             </div>
           </div>
 
-          <!-- Quick Actions -->
-          <div class="card card--gold">
-            <div class="section-header">
-              <h2 class="section-title">Quick Actions</h2>
+          <!-- Right Column -->
+          <div style="display:flex;flex-direction:column;gap:var(--space-5);">
+
+            <!-- Intelligence Insights -->
+            <div class="card card--gold">
+              <div class="section-header">
+                <h2 class="section-title">Intelligence</h2>
+                <a class="section-link" href="#" onclick="window.NIREV.navigateTo('analytics');return false;">Details →</a>
+              </div>
+              <div id="dashboard-insights">
+                <!-- Populated by dashboard.js -->
+              </div>
             </div>
-            <div id="quick-actions-grid" class="quick-actions">
-              <!-- Populated by app.js -->
+
+            <!-- Quick Actions -->
+            <div class="card">
+              <div class="section-header">
+                <h2 class="section-title">Quick Actions</h2>
+              </div>
+              <div id="quick-actions-grid" class="quick-actions">
+                <!-- Populated by app.js -->
+              </div>
             </div>
+
           </div>
 
         </div><!-- /dashboard-grid -->
