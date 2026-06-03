@@ -1,5 +1,5 @@
 /* ============================================================
-   NIREV AI — Base & Reset
+   NIREV AI — Base & Reset  [Modernized: UI Pass]
    ============================================================ */
 
 *, *::before, *::after {
@@ -14,38 +14,32 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
 }
 
 body {
   background-color: var(--black-void);
   color: var(--white-primary);
   font-family: var(--font-ui);
-  font-size: 0.9375rem;
+  font-size: var(--text-base);
+  font-weight: 400;
   line-height: 1.6;
   min-height: 100vh;
   overflow-x: hidden;
+  letter-spacing: -0.01em;
 }
 
 /* ── Scrollbar ── */
-::-webkit-scrollbar { width: 4px; height: 4px; }
-::-webkit-scrollbar-track { background: var(--black-base); }
-::-webkit-scrollbar-thumb {
-  background: var(--gold-dim);
-  border-radius: var(--radius-pill);
-}
-::-webkit-scrollbar-thumb:hover { background: var(--gold-pure); }
+::-webkit-scrollbar        { width: 3px; height: 3px; }
+::-webkit-scrollbar-track  { background: transparent; }
+::-webkit-scrollbar-thumb  { background: var(--black-muted); border-radius: var(--radius-pill); }
+::-webkit-scrollbar-thumb:hover { background: var(--gold-dim); }
 
 /* ── Selection ── */
-::selection {
-  background: var(--gold-glow);
-  color: var(--gold-light);
-}
+::selection { background: rgba(201, 168, 76, 0.18); color: var(--gold-light); }
 
 /* ── Links ── */
-a {
-  color: inherit;
-  text-decoration: none;
-}
+a { color: inherit; text-decoration: none; }
 
 /* ── Focus ── */
 :focus-visible {
@@ -65,6 +59,7 @@ button, input, select, textarea {
   border: none;
   outline: none;
   color: inherit;
+  letter-spacing: inherit;
 }
 
 button { cursor: pointer; }
@@ -76,8 +71,9 @@ button { cursor: pointer; }
   clip: rect(0,0,0,0); border: 0;
 }
 
+/* ── Text utilities ── */
 .gold-text {
-  background: linear-gradient(135deg, var(--gold-pure), var(--gold-light), var(--gold-pure));
+  background: linear-gradient(135deg, var(--gold-pure) 0%, var(--gold-light) 50%, var(--gold-pure) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -90,28 +86,26 @@ button { cursor: pointer; }
   background-clip: text;
 }
 
-/* ── Noise texture overlay ── */
+.text-muted    { color: var(--white-muted); }
+.text-secondary{ color: var(--white-secondary); }
+
+/* ── Subtle noise texture ── */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
   pointer-events: none;
-  z-index: 9999;
-  opacity: 0.3;
+  z-index: 9998;
+  opacity: 0.25;
 }
 
-/* ── Gold grid lines (decorative) ── */
+/* ── Subtle vignette ── */
 body::after {
   content: '';
   position: fixed;
   inset: 0;
-  background-image:
-    linear-gradient(var(--gold-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--gold-line) 1px, transparent 1px);
-  background-size: 80px 80px;
+  background: radial-gradient(ellipse 100% 100% at 50% 0%, transparent 40%, rgba(0,0,0,0.4) 100%);
   pointer-events: none;
   z-index: 0;
-  opacity: 0.18;
-  mask-image: radial-gradient(ellipse 80% 80% at 50% 0%, black 30%, transparent 100%);
 }
