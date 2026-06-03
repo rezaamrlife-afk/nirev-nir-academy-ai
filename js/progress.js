@@ -3,7 +3,7 @@
  * ─────────────────────────────────────────────────────────────
  * Version: 4.0.0 — Phase 4
  *
- * Controls the Progress page UI.
+ * Controls the Progress page UI. 
  * Reads from store.analytics and store.predictions.
  * Renders: prediction hero, recommendations, milestone timeline.
  * ─────────────────────────────────────────────────────────────
