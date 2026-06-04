@@ -16,7 +16,7 @@
 
 .analytics-header__eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--white-muted);
@@ -113,7 +113,7 @@
 
 .chart-label {
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 11px;
   fill: var(--white-muted);
 }
 
@@ -141,7 +141,7 @@
 .radar-dot  { fill: var(--gold-pure); }
 .radar-label {
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 11px;
   fill: var(--white-muted);
   text-anchor: middle;
 }
@@ -204,7 +204,7 @@
 
 .skill-row__trend {
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   letter-spacing: 0.08em;
   min-width: 72px;
   text-align: right;
@@ -239,7 +239,7 @@
 
 .gap-item__detail {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   color: var(--white-muted);
   margin-top: 2px;
 }
@@ -248,7 +248,7 @@
   padding: 3px 10px;
   border-radius: var(--radius-pill);
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -265,7 +265,7 @@
   padding: var(--space-1) var(--space-3);
   border-radius: var(--radius-pill);
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.78rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -304,7 +304,7 @@
 
 .feedback-section__label {
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--white-muted);
