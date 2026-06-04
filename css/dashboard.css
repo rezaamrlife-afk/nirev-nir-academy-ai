@@ -219,7 +219,7 @@
   font-size: var(--text-xs);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--white-muted);
+  color: var(--white-secondary);
   margin-bottom: var(--space-3);
   font-weight: 500;
 }
@@ -239,7 +239,7 @@
 
 .stat-card__trend {
   font-size: var(--text-sm);
-  color: var(--white-muted);
+  color: var(--white-secondary);
   letter-spacing: -0.01em;
 }
 
@@ -349,7 +349,7 @@
 .activity-item__meta {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
-  color: var(--white-muted);
+  color: var(--white-secondary);
   letter-spacing: 0.04em;
 }
 
@@ -477,7 +477,7 @@
   font-size: var(--text-xs);
   letter-spacing: 0.10em;
   text-transform: uppercase;
-  color: var(--white-muted);
+  color: var(--white-secondary);
   margin-bottom: 4px;
 }
 
