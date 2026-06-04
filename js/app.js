@@ -54,13 +54,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   try {
     // 2. Supabase
-    // Guard: CDN might fail on mobile
-    if (!window.supabase) {
-      throw new Error('Supabase CDN not loaded');
-    }
+    if (!window.supabase) throw new Error('Supabase CDN not loaded');
     initSupabase(SUPABASE.URL, SUPABASE.ANON_KEY);
 
-    // 3. Router — builds nav DOM + wires click/keyboard events
+    // 3. Router
     initRouter();
 
     // 4. Auth forms
@@ -71,35 +68,60 @@ document.addEventListener('DOMContentLoaded', async () => {
     _wireSignOutEvent();
     _wireSidebarToggle();
 
-    // 6. Auth state — drives screen transitions
+    // 6. Auth state listener
+    // _authResolved: set to true as soon as onAuthStateChange fires
+    // Prevents getSession timeout from showing auth when session may exist
+    let _authResolved = false;
+
     onAuthStateChange(
       (user) => {
+        _authResolved = true;
         clearTimeout(_safetyTimer);
         hideLoader();
         _onUserLoggedIn(user);
       },
       () => {
+        _authResolved = true;
         clearTimeout(_safetyTimer);
         hideLoader();
         showScreen('auth');
       }
     );
 
-    // 7. Check for existing session on load
-    // Wrap in timeout to prevent infinite hang on mobile
-    const sessionPromise = getSession();
-    const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve(null), 6000));
-    const session = await Promise.race([sessionPromise, timeoutPromise]);
+    // 7. getSession with timeout
+    //
+    // KEY DESIGN DECISION (prevents flicker):
+    //   - getSession returns null BEFORE timeout → session confirmed absent → show auth
+    //   - getSession times out → session state unknown → keep loader, let onAuthStateChange decide
+    //   - onAuthStateChange(user) → show app (always wins)
+    //   - onAuthStateChange(null) → show auth (confirmed absent)
+    //   - safety timer (8s) → show auth (absolute last resort)
+    //
+    // This eliminates auth→app flicker because we never prematurely show auth
+    // when session might exist but Supabase is responding slowly.
 
-    if (!session) {
-      clearTimeout(_safetyTimer);
-      hideLoader();
-      showScreen('auth');
+    const sessionPromise = getSession();
+    const timeoutPromise = new Promise((resolve) =>
+      setTimeout(() => resolve('__timeout__'), 6000)
+    );
+    const result = await Promise.race([sessionPromise, timeoutPromise]);
+
+    if (result === '__timeout__') {
+      // Timed out — session state UNKNOWN
+      // Do NOT show auth: onAuthStateChange will resolve this
+      // Safety timer at 8s is still running as backstop
+      // No action needed here — avoid premature screen change
+    } else if (!result) {
+      // getSession returned null BEFORE timeout — session confirmed absent
+      if (!_authResolved) {
+        clearTimeout(_safetyTimer);
+        hideLoader();
+        showScreen('auth');
+      }
     }
-    // If session exists: onAuthStateChange will fire and dismiss loader
+    // result is a valid session → onAuthStateChange will fire and handle it
 
   } catch (err) {
-    // Any bootstrap failure → show auth screen (never leave user stuck)
     clearTimeout(_safetyTimer);
     hideLoader();
     showScreen('auth');
