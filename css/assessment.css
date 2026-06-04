@@ -21,7 +21,7 @@
 
 .assessment-start__eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--white-muted);
@@ -116,7 +116,7 @@
 
 .skill-card__desc {
   font-size: 0.8125rem;
-  color: var(--white-muted);
+  color: var(--white-secondary);
   line-height: 1.5;
 }
 
@@ -131,7 +131,7 @@
   display: none;
   align-items: center;
   justify-content: center;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   color: var(--black-base);
   font-weight: 700;
 }
@@ -183,7 +183,7 @@
 
 .type-btn__desc {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.78rem;
   color: var(--white-muted);
   letter-spacing: 0.06em;
 }
@@ -197,7 +197,7 @@
 
 .assessment-start__meta {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   color: var(--white-muted);
   letter-spacing: 0.06em;
 }
@@ -249,7 +249,7 @@
 
 .quiz-progress__label {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--white-muted);
@@ -306,7 +306,7 @@
 
 .question-card__type {
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--white-muted);
@@ -391,7 +391,7 @@
   align-items: center;
   justify-content: center;
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   font-weight: 600;
   flex-shrink: 0;
   transition: all var(--dur-base);
@@ -461,7 +461,7 @@
 
 .results-hero__label {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--white-muted);
@@ -547,7 +547,7 @@
 .breakdown-item__score.low    { color: var(--status-danger); }
 
 .breakdown-item__rationale {
-  font-size: 0.775rem;
+  font-size: 0.85rem;
   color: var(--white-muted);
   line-height: 1.5;
   margin-top: var(--space-1);
