@@ -248,23 +248,25 @@
       <!-- ── PAGE: DASHBOARD ──────────────────────────────── -->
       <main id="page-dashboard" class="page-panel active page-content">
 
-        <!-- Welcome -->
-        <div class="dashboard-welcome">
-          <div class="dashboard-welcome__inner">
-            <div class="dashboard-welcome__content">
-              <div class="dashboard-welcome__greeting" id="dashboard-greeting">Good morning,</div>
-              <h1 class="dashboard-welcome__title">
-                Welcome back, <span id="dashboard-name">Learner</span>
-              </h1>
-              <p class="dashboard-welcome__sub" id="dashboard-sub-text">Your assessment intelligence platform is ready.</p>
-              <div class="dashboard-welcome__badges">
-                <span class="dashboard-welcome__badge">Assessment Intelligence</span>
-                <span class="dashboard-welcome__badge dashboard-welcome__badge--orange">AI Powered</span>
-              </div>
+        <!-- Hero Section -->
+        <div class="dashboard-hero">
+          <div class="dashboard-hero__content">
+            <div class="dashboard-hero__greeting" id="dashboard-greeting">Good morning,</div>
+            <h1 class="dashboard-hero__title">
+              Welcome back, <span id="dashboard-name">Learner</span>
+            </h1>
+            <p class="dashboard-hero__sub">Your AI-powered assessment intelligence platform is ready.</p>
+            <div class="dashboard-hero__actions">
+              <button class="dashboard-hero__cta" onclick="window.NIREV.navigateTo('assessment')" type="button">
+                ✦ Start Assessment
+              </button>
+              <button class="dashboard-hero__link" onclick="window.NIREV.navigateTo('analytics')" type="button">
+                View Analytics →
+              </button>
             </div>
-            <div class="dashboard-welcome__character">
-              <img src="/assets/nirev-character.png" alt="NIREV AI" class="dashboard-character-img" />
-            </div>
+          </div>
+          <div class="dashboard-hero__character">
+            <img src="/assets/nirev-character.png" alt="NIREV AI" />
           </div>
         </div>
 
@@ -310,9 +312,12 @@
           <div style="display:flex;flex-direction:column;gap:var(--space-5);">
 
             <!-- Intelligence Insights -->
-            <div class="card card--gold">
-              <div class="section-header">
-                <h2 class="section-title">Intelligence</h2>
+            <div class="intel-panel">
+              <div class="intel-panel__header">
+                <div class="intel-panel__title">
+                  <span class="intel-panel__title-dot"></span>
+                  Intelligence
+                </div>
                 <a class="section-link" href="#" onclick="window.NIREV.navigateTo('analytics');return false;">Details →</a>
               </div>
               <div id="dashboard-insights">
