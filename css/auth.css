@@ -1,6 +1,233 @@
 /* ============================================================
-   NIREV AI — Auth Form Panel visibility
+   NIREV AI — Auth Page  [Modernized: Full Redesign]
    ============================================================ */
 
 .auth-form-panel { display: none; }
 .auth-form-panel.active { display: block; }
+
+/* ── Auth Screen Layout — Two Column ── */
+.screen--auth {
+  display: flex !important;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: stretch;
+  padding: 0;
+  background: var(--black-void);
+  min-height: 100vh;
+}
+
+/* ── LEFT: Brand Panel ── */
+.auth-brand {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-10) var(--space-8);
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,168,76,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(224,123,0,0.05) 0%, transparent 50%),
+    linear-gradient(180deg, #060606 0%, #030303 100%);
+  border-right: 1px solid var(--black-border);
+  position: relative;
+  overflow: hidden;
+  animation: fade-in var(--dur-slow) var(--ease-out) both;
+}
+
+/* Decorative top line */
+.auth-brand::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 10%; right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-pure), transparent);
+  opacity: 0.4;
+}
+
+/* Logo wrap */
+.auth-brand__logo-wrap {
+  display: flex;
+  justify-content: center;
+  animation: fade-up var(--dur-slow) var(--ease-out) 0.1s both;
+}
+
+.auth-brand__logo-img {
+  width: 120px;
+  height: auto;
+  border-radius: var(--radius-xl);
+  filter: drop-shadow(0 8px 24px rgba(201, 168, 76, 0.25));
+}
+
+/* Brand text */
+.auth-brand__text {
+  text-align: center;
+  animation: fade-up var(--dur-slow) var(--ease-out) 0.2s both;
+}
+
+.auth-brand__academy {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  background: linear-gradient(135deg, var(--gold-pure), var(--gold-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--space-2);
+}
+
+.auth-brand__tagline {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--white-muted);
+  margin-bottom: var(--space-4);
+  line-height: 1.6;
+}
+
+.auth-brand__divider {
+  width: 40px;
+  height: 1px;
+  background: var(--gold-line);
+  margin: 0 auto var(--space-4);
+}
+
+.auth-brand__pills {
+  display: flex;
+  gap: var(--space-2);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.auth-brand__pill {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--white-subtle);
+  padding: 3px 10px;
+  border: 1px solid var(--black-border);
+  border-radius: var(--radius-pill);
+  background: var(--black-elevated);
+}
+
+/* Character */
+.auth-brand__character-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  animation: fade-up var(--dur-slow) var(--ease-out) 0.3s both;
+  flex: 1;
+  justify-content: center;
+}
+
+.auth-brand__character {
+  width: 100%;
+  max-width: 340px;
+  height: auto;
+  filter: drop-shadow(0 16px 48px rgba(201, 168, 76, 0.15))
+          drop-shadow(0 4px 16px rgba(0,0,0,0.8));
+  animation: fade-up var(--dur-slower) var(--ease-spring) 0.35s both;
+}
+
+.auth-brand__character-caption {
+  text-align: center;
+}
+
+.auth-brand__nirev-name {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  background: linear-gradient(135deg, var(--gold-pure), var(--gold-light), var(--gold-pure));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  margin-bottom: var(--space-2);
+}
+
+.auth-brand__nirev-sub {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--white-subtle);
+}
+
+/* Founder */
+.auth-brand__founder {
+  text-align: center;
+  padding: var(--space-4) var(--space-5);
+  background: var(--black-elevated);
+  border: 1px solid var(--black-border);
+  border-radius: var(--radius-lg);
+  animation: fade-up var(--dur-slow) var(--ease-out) 0.4s both;
+  width: 100%;
+  max-width: 300px;
+}
+
+.auth-brand__founder-name {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--gold-bright);
+  margin-bottom: 3px;
+  letter-spacing: -0.01em;
+}
+
+.auth-brand__founder-title {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--white-subtle);
+  letter-spacing: 0.06em;
+  line-height: 1.5;
+}
+
+/* ── RIGHT: Form Panel ── */
+.auth-form-wrap {
+  width: 460px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8) var(--space-8);
+  background: var(--black-base);
+  position: relative;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 380px;
+  animation: fade-up var(--dur-slow) var(--ease-spring) 0.15s both;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .screen--auth {
+    flex-direction: column;
+  }
+
+  .auth-brand {
+    border-right: none;
+    border-bottom: 1px solid var(--black-border);
+    padding: var(--space-8) var(--space-6);
+  }
+
+  .auth-brand__character { max-width: 220px; }
+  .auth-brand__character-wrap { gap: var(--space-2); }
+
+  .auth-form-wrap {
+    width: 100%;
+    padding: var(--space-6);
+  }
+}
+
+@media (max-width: 600px) {
+  .auth-brand { padding: var(--space-6) var(--space-4); }
+  .auth-brand__logo-img { width: 80px; }
+  .auth-brand__academy { font-size: 1.25rem; }
+  .auth-brand__character { max-width: 160px; }
+  .auth-brand__nirev-name { font-size: 1.75rem; }
+}
