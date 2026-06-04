@@ -417,8 +417,9 @@
 /* Character image */
 .dashboard-welcome__character {
   flex-shrink: 0;
-  width: 180px;
+  width: 130px;
   position: relative;
+  align-self: flex-end;
 }
 
 .dashboard-character-img {
@@ -432,6 +433,6 @@
   .dashboard-welcome__character { display: none; }
 }
 
-@media (max-width: 1100px) {
-  .dashboard-welcome__character { width: 130px; }
+@media (max-width: 1200px) {
+  .dashboard-welcome__character { width: 100px; }
 }
