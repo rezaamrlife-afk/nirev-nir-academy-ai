@@ -7,7 +7,6 @@
 
 /* ── Auth Screen Layout — Two Column ── */
 .screen--auth {
-  display: flex !important;
   flex-direction: row;
   align-items: stretch;
   justify-content: stretch;
