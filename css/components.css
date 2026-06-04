@@ -391,7 +391,7 @@
   font-size: 0.8rem;
 }
 
-.toast__message { flex: 1; color: var(--white-primary); }
+.toast__message { flex: 1; color: var(--white-primary); font-size: var(--text-sm); font-weight: 500; }
 
 .toast--success {
   border-color: rgba(34, 197, 94, 0.25);
@@ -463,7 +463,7 @@
   font-size: var(--text-xs);
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--white-muted);
+  color: var(--white-secondary);
 }
 
 /* ── Gold Divider ── */
@@ -509,7 +509,7 @@
 
 .badge--muted {
   background: var(--white-ghost);
-  color: var(--white-muted);
+  color: var(--white-secondary);
   border: 1px solid var(--black-border);
 }
 
@@ -544,7 +544,7 @@
 .empty-state {
   text-align: center;
   padding: var(--space-12) var(--space-8);
-  color: var(--white-muted);
+  color: var(--white-secondary);
 }
 
 .empty-state__icon {
@@ -566,7 +566,7 @@
   max-width: 300px;
   margin: 0 auto var(--space-6);
   line-height: 1.7;
-  color: var(--white-muted);
+  color: var(--white-secondary);
 }
 
 /* ── Status Dot ── */
@@ -607,6 +607,6 @@
 
 .trajectory-badge.plateauing {
   background: var(--white-ghost);
-  color: var(--white-muted);
+  color: var(--white-secondary);
   border: 1px solid var(--black-border);
 }
