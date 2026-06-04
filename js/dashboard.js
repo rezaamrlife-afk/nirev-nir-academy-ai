@@ -42,9 +42,14 @@ function _countUp(element, target, duration = 800) {
   requestAnimationFrame(update);
 }
 
+let _dashboardInitialized = false;
+
 export function initDashboard() {
   _renderWelcome();
   _loadAndRenderDashboard();
+
+  if (_dashboardInitialized) return;
+  _dashboardInitialized = true;
 
   // Re-render when new assessment scoring completes
   document.addEventListener('nirev:scoring:complete', () => {
@@ -73,6 +78,10 @@ function _renderWelcome() {
 
   if (greetingEl) greetingEl.textContent = `${getGreeting()},`;
   if (nameEl)     nameEl.textContent     = firstName;
+
+  // Update sub text dynamically
+  const subEl = document.getElementById('dashboard-sub-text');
+  // sub text is now hardcoded in HTML — no update needed
 }
 
 // ── Main Load ─────────────────────────────────────────────────
