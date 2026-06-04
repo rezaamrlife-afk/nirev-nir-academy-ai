@@ -45,41 +45,68 @@ document.addEventListener('DOMContentLoaded', async () => {
   initTheme();
   showLoader('Initializing NIREV');
 
-  // 2. Supabase
-  initSupabase(SUPABASE.URL, SUPABASE.ANON_KEY);
+  // Safety net: if bootstrap takes too long, force auth screen
+  // Covers: network timeout, CDN failure, unhandled rejection
+  const _safetyTimer = setTimeout(() => {
+    hideLoader();
+    showScreen('auth');
+  }, 8000);
 
-  // 3. Router — builds nav DOM + wires click/keyboard events
-  initRouter();
+  try {
+    // 2. Supabase
+    // Guard: CDN might fail on mobile
+    if (!window.supabase) {
+      throw new Error('Supabase CDN not loaded');
+    }
+    initSupabase(SUPABASE.URL, SUPABASE.ANON_KEY);
 
-  // 4. Auth forms
-  initAuthForms();
+    // 3. Router — builds nav DOM + wires click/keyboard events
+    initRouter();
 
-  // 5. Global event listeners
-  _wireSignOut();
-  _wireSignOutEvent();
-  _wireSidebarToggle();
+    // 4. Auth forms
+    initAuthForms();
 
-  // 6. Auth state — drives screen transitions
-  onAuthStateChange(
-    (user) => {
-      hideLoader();
-      _onUserLoggedIn(user);
-    },
-    () => {
+    // 5. Global event listeners
+    _wireSignOut();
+    _wireSignOutEvent();
+    _wireSidebarToggle();
+
+    // 6. Auth state — drives screen transitions
+    onAuthStateChange(
+      (user) => {
+        clearTimeout(_safetyTimer);
+        hideLoader();
+        _onUserLoggedIn(user);
+      },
+      () => {
+        clearTimeout(_safetyTimer);
+        hideLoader();
+        showScreen('auth');
+      }
+    );
+
+    // 7. Check for existing session on load
+    // Wrap in timeout to prevent infinite hang on mobile
+    const sessionPromise = getSession();
+    const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve(null), 6000));
+    const session = await Promise.race([sessionPromise, timeoutPromise]);
+
+    if (!session) {
+      clearTimeout(_safetyTimer);
       hideLoader();
       showScreen('auth');
     }
-  );
+    // If session exists: onAuthStateChange will fire and dismiss loader
 
-  // 7. Check for existing session on load
-  const session = await getSession();
-  if (!session) {
+  } catch (err) {
+    // Any bootstrap failure → show auth screen (never leave user stuck)
+    clearTimeout(_safetyTimer);
     hideLoader();
     showScreen('auth');
+    console.error('[Bootstrap] failed:', err);
   }
 
   // 8. Expose minimal global API for inline HTML event handlers
-  // (Only navigateTo is exposed; everything else stays modular)
   window.NIREV = { navigateTo };
 });
 
