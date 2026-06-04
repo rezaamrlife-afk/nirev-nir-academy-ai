@@ -37,6 +37,8 @@ const TYPE_QUESTION_COUNT = {
 
 // ── Initialize ────────────────────────────────────────────────
 
+let _assessmentInitialized = false;
+
 export function initAssessmentPage() {
   _wireSkillCards();
   _wireTypeButtons();
@@ -44,7 +46,11 @@ export function initAssessmentPage() {
   _wireAbandonButton();
   _wireSubmitButton();
   _wireRetakeButton();
-  _wireEngineEvents();
+
+  if (_assessmentInitialized) return;
+  _assessmentInitialized = true;
+
+  _wireEngineEvents(); // document-level listeners — must only attach once
 }
 
 // ── Screen Switcher ───────────────────────────────────────────
