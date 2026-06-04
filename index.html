@@ -10,6 +10,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="NIREV AI" />
   <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" type="image/jpeg" href="/assets/logo.jpg" />
+  <link rel="apple-touch-icon" href="/assets/logo.jpg" />
   <title>NIREV AI</title>
 
   <!-- Fonts -->
@@ -47,6 +49,9 @@
 
 <!-- ══ APP ROOT ═══════════════════════════════════════════════ -->
 <div id="nirev-app">
+
+<!-- ── Mobile Sidebar Overlay ── -->
+<div id="sidebar-overlay" class="sidebar-overlay" onclick="document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebar-overlay').classList.remove('active');"></div>
 
   <!-- ══ SCREEN: AUTH ════════════════════════════════════════ -->
   <div id="screen-auth" class="screen screen--auth">
@@ -188,6 +193,7 @@
             </div>
             <div class="sidebar__tagline">Assessment Intelligence</div>
           </div>
+          <button class="sidebar__close" id="sidebar-close" aria-label="Close menu">✕</button>
         </div>
       </div>
 
