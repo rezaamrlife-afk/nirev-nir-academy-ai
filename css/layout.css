@@ -353,3 +353,23 @@
   .page-content { padding: var(--space-5) var(--space-4); }
   .topbar { padding: 0 var(--space-4); }
 }
+
+/* ── Sidebar Logo Image ── */
+.sidebar__brand-top {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.sidebar__logo-img {
+  width: 36px;
+  height: auto;
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 8px rgba(201, 168, 76, 0.20));
+}
+
+.sidebar__brand-info {
+  flex: 1;
+  min-width: 0;
+}
