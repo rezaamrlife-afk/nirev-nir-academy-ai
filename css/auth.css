@@ -101,10 +101,10 @@
 
 .auth-brand__pill {
   font-family: var(--font-mono);
-  font-size: 0.58rem;
+  font-size: 0.75rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--white-subtle);
+  color: var(--white-muted);
   padding: 3px 10px;
   border: 1px solid var(--black-border);
   border-radius: var(--radius-pill);
@@ -150,10 +150,10 @@
 
 .auth-brand__nirev-sub {
   font-family: var(--font-mono);
-  font-size: 0.58rem;
+  font-size: 0.75rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--white-subtle);
+  color: var(--white-muted);
 }
 
 /* Founder */
@@ -178,8 +178,8 @@
 
 .auth-brand__founder-title {
   font-family: var(--font-mono);
-  font-size: 0.6rem;
-  color: var(--white-subtle);
+  font-size: 0.78rem;
+  color: var(--white-muted);
   letter-spacing: 0.06em;
   line-height: 1.5;
 }
