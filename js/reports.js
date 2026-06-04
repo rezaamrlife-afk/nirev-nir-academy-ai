@@ -16,7 +16,12 @@ import { getScores, getAssessments } from './db.js';
 
 // ── Initialize ────────────────────────────────────────────────
 
+let _reportsInitialized = false;
+
 export function initReportsPage() {
+  if (_reportsInitialized) return;
+  _reportsInitialized = true;
+
   document.addEventListener('nirev:navigate', (e) => {
     if (e.detail?.pageId === 'reports') {
       _loadAndRender();
