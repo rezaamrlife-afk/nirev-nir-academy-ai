@@ -1,1 +1,195 @@
+/* ============================================================
+   NIREV AI — Animations & Micro-interactions
+   UI Modernization Pass
+   ============================================================ */
 
+/* ── Keyframes ── */
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fade-down {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.8); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes count-up {
+  from { opacity: 0; transform: translateY(8px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes reveal-bar {
+  from { width: 0; }
+  to   { width: var(--bar-width, 100%); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(224, 123, 0, 0.15); }
+  50%       { box-shadow: 0 0 20px rgba(224, 123, 0, 0.30); }
+}
+
+@keyframes gold-pulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(201, 168, 76, 0.15); }
+  50%       { box-shadow: 0 0 20px rgba(201, 168, 76, 0.30); }
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(20px) scale(0.96); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+@keyframes toast-out {
+  from { opacity: 1; transform: translateX(0) scale(1); }
+  to   { opacity: 0; transform: translateX(20px) scale(0.96); }
+}
+
+@keyframes score-reveal {
+  0%   { opacity: 0; transform: scale(0.7) translateY(20px); filter: blur(4px); }
+  60%  { transform: scale(1.04) translateY(-3px); filter: blur(0); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes celebration-ring {
+  0%   { transform: scale(0.8); opacity: 0.8; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+@keyframes stagger-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes intel-reveal {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ── Utility Animation Classes ── */
+
+.animate-fade-up    { animation: fade-up    var(--dur-slow) var(--ease-out) both; }
+.animate-fade-in    { animation: fade-in    var(--dur-base) var(--ease-out) both; }
+.animate-fade-down  { animation: fade-down  var(--dur-base) var(--ease-out) both; }
+.animate-scale-in   { animation: scale-in   var(--dur-slow) var(--ease-spring) both; }
+.animate-slide-right{ animation: slide-in-right var(--dur-base) var(--ease-out) both; }
+.animate-score      { animation: score-reveal var(--dur-slower) var(--ease-spring) both; }
+
+/* Stagger delays */
+.delay-1  { animation-delay: 0.05s; }
+.delay-2  { animation-delay: 0.10s; }
+.delay-3  { animation-delay: 0.15s; }
+.delay-4  { animation-delay: 0.20s; }
+.delay-5  { animation-delay: 0.25s; }
+.delay-6  { animation-delay: 0.30s; }
+
+/* ── Page Transition ── */
+.page-panel {
+  animation: fade-up var(--dur-page) var(--ease-out) both;
+}
+
+/* ── Skeleton Loading ── */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--black-elevated) 25%,
+    var(--black-card) 50%,
+    var(--black-elevated) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: var(--radius-md);
+  pointer-events: none;
+}
+
+.skeleton-text    { height: 14px; margin-bottom: 8px; }
+.skeleton-title   { height: 24px; width: 60%; margin-bottom: 12px; }
+.skeleton-value   { height: 40px; width: 40%; }
+.skeleton-full    { height: 100%; width: 100%; }
+
+.skeleton-card {
+  background: var(--black-surface);
+  border: 1px solid var(--black-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  overflow: hidden;
+}
+
+/* ── Card Hover Elevation ── */
+.card-hover {
+  transition: transform var(--dur-base) var(--ease-smooth),
+              box-shadow var(--dur-base) var(--ease-smooth),
+              border-color var(--dur-base) var(--ease-smooth);
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ── Intelligence Reveal ── */
+.intel-item {
+  animation: intel-reveal var(--dur-base) var(--ease-out) both;
+}
+
+.intel-item:nth-child(1) { animation-delay: 0.0s; }
+.intel-item:nth-child(2) { animation-delay: 0.07s; }
+.intel-item:nth-child(3) { animation-delay: 0.14s; }
+.intel-item:nth-child(4) { animation-delay: 0.21s; }
+
+/* ── Score Reveal Animation ── */
+.score-display {
+  animation: score-reveal 0.6s var(--ease-spring) both;
+}
+
+/* ── Celebration Ring (assessment complete) ── */
+.celebration-ring {
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  border: 2px solid var(--orange-core);
+  animation: celebration-ring 0.8s var(--ease-out) forwards;
+  pointer-events: none;
+}
+
+/* ── Reduced Motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
