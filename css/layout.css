@@ -362,10 +362,11 @@
 }
 
 .sidebar__logo-img {
-  width: 36px;
-  height: auto;
+  width: 32px;
+  height: 32px;
   border-radius: var(--radius-md);
   flex-shrink: 0;
+  object-fit: cover;
   filter: drop-shadow(0 2px 8px rgba(201, 168, 76, 0.20));
 }
 
