@@ -80,6 +80,14 @@ export function showScreen(screenName) {
   });
   const target = document.getElementById(`screen-${screenName}`);
   if (target) target.classList.add('active');
+
+  // Always sync overlay state with sidebar state on screen change
+  // Prevents stale overlay blocking clicks after refresh/resize
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  if (overlay && sidebar && !sidebar.classList.contains('open')) {
+    overlay.classList.remove('active');
+  }
 }
 
 /**
@@ -98,7 +106,7 @@ export function navigateTo(pageId) {
   });
 
   // Dispatch event for any listeners
-  document.dispatchEvent(new CustomEvent('nirev:navigate', { detail: pageId }));
+  document.dispatchEvent(new CustomEvent('nirev:navigate', { detail: { pageId } }));
 
   // Update topbar title
   const activeItem = document.querySelector(`.nav-item[data-page="${pageId}"]`);
@@ -118,19 +126,46 @@ export function navigateTo(pageId) {
 
 // ── Sidebar ───────────────────────────────────────────────────
 
+// ── Resize Handler ───────────────────────────────────────────
+// Close sidebar + overlay when viewport widens past mobile breakpoint
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 900) {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    // On desktop: sidebar is always visible, no overlay needed
+    if (overlay) overlay.classList.remove('active');
+    // Don't remove 'open' class on desktop - CSS handles visibility
+  }
+}, { passive: true });
+
 export function openSidebar() {
   const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
   if (sidebar) sidebar.classList.add('open');
+  if (overlay) overlay.classList.add('active');
 }
 
 export function closeSidebar() {
   const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
   if (sidebar) sidebar.classList.remove('open');
+  if (overlay) {
+    overlay.classList.remove('active');
+    // Explicitly remove pointer-events to prevent any click blocking
+    overlay.style.pointerEvents = 'none';
+  }
 }
 
 export function toggleSidebar() {
   const sidebar = document.getElementById('sidebar');
-  if (sidebar) sidebar.classList.toggle('open');
+  const overlay = document.getElementById('sidebar-overlay');
+  if (!sidebar) return;
+  const isOpen = sidebar.classList.toggle('open');
+  if (overlay) {
+    overlay.classList.toggle('active', isOpen);
+    // Sync pointer-events explicitly — never rely solely on CSS
+    overlay.style.pointerEvents = isOpen ? 'all' : 'none';
+  }
 }
 
 // ── Greeting ──────────────────────────────────────────────────
