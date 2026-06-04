@@ -65,7 +65,8 @@ const _state = {
 
   // ── Analytics (Phase 3) ──────────────────────────────────
   analytics: {
-    loaded:       false,
+    loaded:        false,
+    full:          null,   // Full analyticsResult object — canonical
     scoresBySkill: {},
     progressData:  [],
   },
@@ -197,7 +198,7 @@ const store = {
       assessment:  { sessionId: null, type: null, skill: null, status: 'idle', questions: [], currentIndex: 0, answers: {}, startedAt: null, completedAt: null },
       scoring:     { lastScore: null, history: [], average: null, streak: 0 },
       feedback:    { lastFeedback: null, isGenerating: false },
-      analytics:   { loaded: false, scoresBySkill: {}, progressData: [] },
+      analytics:   { loaded: false, full: null, scoresBySkill: {}, progressData: [] },
       predictions: { nextLevel: null, estimatedDays: null, confidence: null },
       ui:          { sidebarOpen: false, loaderActive: false, loaderText: '' },
     };
