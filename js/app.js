@@ -25,7 +25,7 @@
 import { SUPABASE, APP }                          from './config.js';
 import { initTheme }                              from './theme.js';
 import { showLoader, hideLoader, showScreen,
-         toggleSidebar, getInitials }             from './ui.js';
+         toggleSidebar, closeSidebar, getInitials } from './ui.js';
 import { initSupabase, onAuthStateChange,
          getSession, initAuthForms, signOut,
          getCurrentUser }                         from './auth.js';
@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // 5. Global event listeners
   _wireSignOut();
   _wireSignOutEvent();
+  _wireSidebarToggle();
 
   // 6. Auth state — drives screen transitions
   onAuthStateChange(
@@ -84,15 +85,22 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // ── Auth Event Handlers ───────────────────────────────────────
 
+// Guard: prevents re-initialization on TOKEN_REFRESH or repeated auth events
+let _appInitialized = false;
+
 function _onUserLoggedIn(user) {
   showScreen('app');
   _updateUserWidget(user);
-  restoreLastPage();
-  initDashboard();
-  initAssessmentPage();
-  initAnalyticsPage();
-  initProgressPage();
-  initReportsPage();
+
+  if (!_appInitialized) {
+    _appInitialized = true;
+    restoreLastPage();
+    initDashboard();
+    initAssessmentPage();
+    initAnalyticsPage();
+    initProgressPage();
+    initReportsPage();
+  }
 }
 
 /**
@@ -109,7 +117,26 @@ function _wireSignOut() {
  */
 function _wireSignOutEvent() {
   document.addEventListener('nirev:signout', () => {
+    _appInitialized = false; // Allow re-init on next login
     showScreen('auth');
+  });
+}
+
+// ── Sidebar Toggle ───────────────────────────────────────────
+
+function _wireSidebarToggle() {
+  // Hamburger toggle button — uses ui.js toggleSidebar (handles overlay)
+  const btn = document.getElementById('sidebar-toggle');
+  if (btn) btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleSidebar();
+  });
+
+  // Close button inside sidebar — uses ui.js closeSidebar (handles overlay)
+  const closeBtn = document.getElementById('sidebar-close');
+  if (closeBtn) closeBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeSidebar();
   });
 }
 
