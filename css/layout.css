@@ -31,6 +31,7 @@
 .sidebar {
   width: var(--sidebar-w);
   height: 100vh;
+  height: 100dvh; /* iOS dynamic viewport */
   position: fixed;
   top: 0;
   left: 0;
@@ -112,7 +113,7 @@
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  padding: 9px var(--space-3);
+  padding: 11px var(--space-3);
   border-radius: var(--radius-md);
   margin-bottom: 1px;
   color: var(--white-secondary);
@@ -259,7 +260,7 @@
   border-bottom: 1px solid var(--black-border);
   position: sticky;
   top: 0;
-  z-index: 50;
+  z-index: 160; /* Above overlay (150) so toggle button is never blocked */
   flex-shrink: 0;
 }
 
@@ -300,8 +301,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: var(--radius-md);
   background: var(--black-elevated);
   border: 1px solid var(--black-border);
@@ -321,26 +322,79 @@
   padding: var(--space-8);
   max-width: var(--content-max);
   width: 100%;
+  overflow-x: hidden;
 }
 
-/* ── Sidebar Toggle ── */
+/* ── Mobile Overlay ── */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+  z-index: 150;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-base) var(--ease-smooth);
+  cursor: pointer;
+}
+
+.sidebar-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* ── Sidebar Close Button ── */
+.sidebar__close {
+  display: none;
+  margin-left: auto;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-md);
+  background: var(--black-elevated);
+  border: 1px solid var(--black-border);
+  color: var(--white-muted);
+  font-size: var(--text-sm);
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all var(--dur-fast);
+}
+
+.sidebar__close:hover {
+  background: var(--black-card);
+  color: var(--white-primary);
+  border-color: var(--black-subtle);
+}
+
+/* ── Sidebar Toggle Button ── */
 .sidebar-toggle {
   display: none;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: var(--radius-md);
   background: var(--black-elevated);
   border: 1px solid var(--black-border);
   color: var(--white-secondary);
+  transition: all var(--dur-fast);
+}
+
+.sidebar-toggle:hover {
+  background: var(--black-card);
+  border-color: var(--black-subtle);
+  color: var(--white-primary);
 }
 
 /* ── Responsive ── */
 @media (max-width: 900px) {
+  /* Sidebar */
   .sidebar {
     transform: translateX(-100%);
     box-shadow: none;
+    z-index: 200;
   }
 
   .sidebar.open {
@@ -348,10 +402,22 @@
     box-shadow: var(--shadow-xl);
   }
 
+  .sidebar-overlay { display: block; }
+  .sidebar__close  { display: flex; }
+  .sidebar-toggle  { display: flex; }
+
+  /* Main content */
   .main-content { margin-left: 0; }
-  .sidebar-toggle { display: flex; }
-  .page-content { padding: var(--space-5) var(--space-4); }
+  .page-content { padding: var(--space-4) var(--space-4); }
   .topbar { padding: 0 var(--space-4); }
+
+  /* Hide status pill on mobile — save space */
+  .topbar__status { display: none; }
+}
+
+@media (max-width: 480px) {
+  .page-content { padding: var(--space-3) var(--space-3); }
+  .topbar__page-title { font-size: var(--text-sm); }
 }
 
 /* ── Sidebar Logo Image ── */
