@@ -17,7 +17,12 @@ import { showToast } from './ui.js';
 
 // ── Initialize ────────────────────────────────────────────────
 
+let _analyticsInitialized = false;
+
 export function initAnalyticsPage() {
+  if (_analyticsInitialized) return;
+  _analyticsInitialized = true;
+
   // Listen for analytics ready event
   document.addEventListener('nirev:analytics:ready', (e) => {
     _renderAnalytics(e.detail.analytics);
@@ -63,7 +68,12 @@ async function _loadAndRender() {
     }
 
     const analytics = buildAnalyticsResult(scores);
-    store.set('analytics', { loaded: true, full: analytics, scoresBySkill: analytics.bySkill });
+    store.set('analytics', {
+      loaded:        true,
+      full:          analytics,
+      scoresBySkill: analytics.bySkill,
+      progressData:  analytics.charts?.scoreLine?.values ?? [],
+    });
     _renderAnalytics(analytics);
 
     const feedback = store.get('feedback')?.lastFeedback;
