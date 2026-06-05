@@ -35,6 +35,7 @@ import { initAssessmentPage }                      from './assessment.js';
 import { initAnalyticsPage }                       from './analytics.js';
 import { initProgressPage }                        from './progress.js';
 import { initReportsPage }                         from './reports.js';
+import { initSettingsPage }                        from './settings.js';
 import store                                       from './store.js';
 
 // ── Bootstrap ─────────────────────────────────────────────────
@@ -149,6 +150,7 @@ function _onUserLoggedIn(user) {
     initAnalyticsPage();
     initProgressPage();
     initReportsPage();
+  initSettingsPage();
   }
 }
 
