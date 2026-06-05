@@ -1,1 +1,313 @@
+/* ============================================================
+   NIREV AI — Settings Page
+   ============================================================ */
 
+.settings-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: var(--space-8);
+}
+
+@media (max-width: 600px) {
+  .settings-page { padding: var(--space-4); }
+}
+
+/* ── Header ── */
+.settings-header {
+  margin-bottom: var(--space-8);
+  animation: fade-up var(--dur-slow) var(--ease-out) both;
+}
+
+.settings-header__eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--white-muted);
+  margin-bottom: var(--space-2);
+}
+
+.settings-header__title {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 400;
+  color: var(--white-primary);
+}
+
+.settings-header__title span {
+  background: linear-gradient(135deg, var(--gold-pure), var(--gold-bright));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Section ── */
+.settings-section {
+  background: var(--black-surface);
+  border: 1px solid var(--black-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  margin-bottom: var(--space-5);
+  animation: fade-up var(--dur-slow) var(--ease-out) both;
+}
+
+.settings-section:nth-child(2) { animation-delay: 0.05s; }
+.settings-section:nth-child(3) { animation-delay: 0.10s; }
+.settings-section:nth-child(4) { animation-delay: 0.15s; }
+
+.settings-section__title {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--white-primary);
+  margin-bottom: var(--space-5);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--black-border);
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.settings-section__icon {
+  color: var(--orange-bright);
+  font-size: var(--text-base);
+}
+
+/* ── Form Row ── */
+.settings-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+@media (max-width: 500px) {
+  .settings-row { grid-template-columns: 1fr; }
+}
+
+.settings-row--full { grid-template-columns: 1fr; }
+
+/* ── Avatar ── */
+.settings-avatar-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  margin-bottom: var(--space-6);
+}
+
+.settings-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-xl);
+  background: linear-gradient(135deg, var(--gold-dim), var(--gold-pure));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-ui);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--black-base);
+  flex-shrink: 0;
+  letter-spacing: -0.02em;
+}
+
+.settings-avatar-info { flex: 1; }
+
+.settings-avatar-name {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--white-primary);
+  margin-bottom: var(--space-1);
+  letter-spacing: -0.01em;
+}
+
+.settings-avatar-email {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--white-muted);
+  letter-spacing: 0.02em;
+}
+
+/* ── CEFR Selector ── */
+.cefr-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+@media (max-width: 500px) {
+  .cefr-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.cefr-btn {
+  padding: var(--space-3) var(--space-2);
+  background: var(--black-elevated);
+  border: 1px solid var(--black-border);
+  border-radius: var(--radius-md);
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-smooth);
+  user-select: none;
+}
+
+.cefr-btn:hover {
+  border-color: var(--gold-line);
+  background: var(--gold-ghost);
+}
+
+.cefr-btn.selected {
+  border-color: var(--gold-pure);
+  background: var(--gold-ghost);
+  box-shadow: var(--shadow-gold-sm);
+}
+
+.cefr-btn__level {
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--white-secondary);
+  display: block;
+  margin-bottom: 2px;
+  letter-spacing: -0.01em;
+}
+
+.cefr-btn.selected .cefr-btn__level { color: var(--gold-bright); }
+
+.cefr-btn__desc {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--white-subtle);
+  letter-spacing: 0.04em;
+}
+
+.cefr-btn.selected .cefr-btn__desc { color: var(--white-muted); }
+
+/* ── Goal Selector ── */
+.goal-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.goal-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--black-elevated);
+  border: 1px solid var(--black-border);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--dur-fast);
+  user-select: none;
+}
+
+.goal-btn:hover { border-color: var(--gold-line); background: var(--gold-ghost); }
+
+.goal-btn.selected {
+  border-color: var(--orange-line);
+  background: var(--orange-ghost);
+}
+
+.goal-btn__icon {
+  font-size: var(--text-lg);
+  flex-shrink: 0;
+}
+
+.goal-btn__text { flex: 1; }
+
+.goal-btn__title {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--white-primary);
+  letter-spacing: -0.01em;
+}
+
+.goal-btn.selected .goal-btn__title { color: var(--orange-bright); }
+
+.goal-btn__desc {
+  font-size: var(--text-xs);
+  color: var(--white-muted);
+  margin-top: 2px;
+}
+
+.goal-btn__check {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid var(--black-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  color: transparent;
+  flex-shrink: 0;
+  transition: all var(--dur-fast);
+}
+
+.goal-btn.selected .goal-btn__check {
+  background: var(--orange-core);
+  border-color: var(--orange-core);
+  color: var(--black-base);
+}
+
+/* ── Save Bar ── */
+.settings-save-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-6);
+  background: var(--black-surface);
+  border: 1px solid var(--black-border);
+  border-radius: var(--radius-xl);
+  margin-top: var(--space-6);
+  animation: fade-up var(--dur-slow) var(--ease-out) 0.2s both;
+}
+
+.settings-save-bar__status {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--white-muted);
+  letter-spacing: 0.06em;
+}
+
+.settings-save-bar__status.saved { color: var(--status-success); }
+.settings-save-bar__status.error { color: var(--status-danger); }
+
+/* ── Danger Zone ── */
+.settings-danger {
+  border-color: rgba(239, 68, 68, 0.20);
+}
+
+.settings-danger .settings-section__title {
+  color: var(--status-danger);
+  border-color: rgba(239, 68, 68, 0.15);
+}
+
+.danger-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid rgba(239,68,68,0.08);
+}
+
+.danger-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+.danger-item__info { flex: 1; }
+
+.danger-item__title {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--white-primary);
+  margin-bottom: 2px;
+}
+
+.danger-item__desc {
+  font-size: var(--text-xs);
+  color: var(--white-muted);
+}
