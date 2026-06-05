@@ -37,6 +37,12 @@ export function initSettingsPage() {
       _loadAndRender();
     }
   });
+
+  // If already on settings page when init runs, load immediately
+  const activePage = sessionStorage.getItem('nirev-page');
+  if (activePage === 'settings') {
+    _loadAndRender();
+  }
 }
 
 // ── Load ──────────────────────────────────────────────────────
