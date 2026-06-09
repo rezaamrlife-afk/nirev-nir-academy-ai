@@ -10,6 +10,14 @@
   padding: var(--space-8);
 }
 
+@media (max-width: 900px) {
+  .assessment-page { padding: var(--space-4) var(--space-2); }
+}
+
+@media (max-width: 480px) {
+  .assessment-page { padding: var(--space-3) var(--space-2); }
+}
+
 /* ── Start Screen ── */
 .assessment-start {
   animation: fade-up var(--dur-slow) var(--ease-out) both;
@@ -146,9 +154,19 @@
   flex-wrap: wrap;
 }
 
+@media (max-width: 600px) {
+  .type-selector { flex-direction: column; gap: var(--space-2); }
+  .type-btn { min-width: 0 !important; flex: none; width: 100%; }
+}
+
+@media (max-width: 360px) {
+  .type-btn { min-width: 0 !important; width: 100%; padding: var(--space-3) var(--space-4); }
+  .type-btn__name { font-size: var(--text-sm); }
+}
+
 .type-btn {
   flex: 1;
-  min-width: 140px;
+  min-width: 120px;
   padding: var(--space-4) var(--space-5);
   background: var(--black-surface);
   border: 1px solid var(--black-border);
@@ -281,8 +299,8 @@
   background: var(--black-surface);
   border: 1px solid var(--black-border);
   border-radius: var(--radius-2xl);
-  padding: var(--space-8);
-  margin-bottom: var(--space-6);
+  padding: var(--space-6);
+  margin-bottom: var(--space-5);
   position: relative;
   overflow: hidden;
 }
@@ -447,6 +465,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: var(--space-3);
+}
+
+@media (max-width: 480px) {
+  .quiz-actions {
+    flex-direction: column-reverse;
+    gap: var(--space-2);
+  }
+  .quiz-actions .btn { width: 100%; }
 }
 
 /* ── Results Screen ── */
@@ -504,7 +531,7 @@
 
 @media (max-width: 700px) {
   .results-grid { grid-template-columns: 1fr; }
-  .results-hero__score { font-size: 4rem; }
+  .results-hero__score { font-size: 3rem; }
 }
 
 /* Breakdown list */
@@ -557,8 +584,13 @@
 /* Results actions */
 .results-actions {
   display: flex;
-  gap: var(--space-4);
+  gap: var(--space-3);
   justify-content: center;
   margin-top: var(--space-8);
   flex-wrap: wrap;
+}
+
+@media (max-width: 480px) {
+  .results-actions { flex-direction: column; }
+  .results-actions .btn { width: 100%; }
 }
