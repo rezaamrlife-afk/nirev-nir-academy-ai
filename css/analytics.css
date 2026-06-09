@@ -80,6 +80,12 @@
   position: relative;
   height: 200px;
   width: 100%;
+  overflow: hidden;
+}
+
+@media (max-width: 600px) {
+  .chart-container { height: 160px; }
+  .analytics-page { padding: var(--space-4); }
 }
 
 .chart-svg {
@@ -208,6 +214,12 @@
   letter-spacing: 0.08em;
   min-width: 72px;
   text-align: right;
+}
+
+@media (max-width: 400px) {
+  .skill-row__trend { display: none; }
+  .skill-row__score { min-width: 36px; }
+  .skill-row__name  { width: 72px; }
 }
 
 .skill-row__trend.improving { color: var(--status-success); }
