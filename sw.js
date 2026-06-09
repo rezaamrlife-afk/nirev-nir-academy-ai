@@ -37,6 +37,8 @@ const STATIC_ASSETS = [
   '/js/analytics.js',
   '/js/progress.js',
   '/js/reports.js',
+  '/js/settings.js',
+  '/css/settings.css',
   '/js/engine/assessment-engine.js',
   '/js/domain/assessments/assessment-domain.js',
   '/js/domain/scoring/scoring-domain.js',
@@ -44,6 +46,8 @@ const STATIC_ASSETS = [
   '/js/domain/analytics/analytics-domain.js',
   '/js/domain/predictions/prediction-domain.js',
   '/manifest.json',
+  '/icons/icon-192.png',
+  '/icons/icon-512.png',
 ];
 
 // ── Install ───────────────────────────────────────────────────
