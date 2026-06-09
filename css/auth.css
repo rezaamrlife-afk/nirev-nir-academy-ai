@@ -187,11 +187,12 @@
 /* ── RIGHT: Form Panel ── */
 .auth-form-wrap {
   width: 460px;
+  max-width: 100%;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-8) var(--space-8);
+  padding: var(--space-8);
   background: var(--black-base);
   position: relative;
 }
@@ -229,4 +230,41 @@
   .auth-brand__academy { font-size: 1.25rem; }
   .auth-brand__character { max-width: 160px; }
   .auth-brand__nirev-name { font-size: 1.75rem; }
+}
+
+/* ── Landscape Mobile ── */
+@media (max-height: 500px) and (orientation: landscape) {
+  .screen--auth {
+    flex-direction: row;
+    overflow-y: auto;
+  }
+
+  .auth-brand {
+    width: 240px;
+    flex-shrink: 0;
+    padding: var(--space-4);
+    overflow-y: auto;
+  }
+
+  .auth-brand__character-wrap { display: none; }
+  .auth-brand__founder        { display: none; }
+
+  .auth-brand__logo-img { width: 48px; }
+  .auth-brand__academy  { font-size: 1rem; }
+  .auth-brand__tagline  { display: none; }
+
+  .auth-form-wrap {
+    width: auto;
+    flex: 1;
+    padding: var(--space-4);
+    overflow-y: auto;
+  }
+
+  .auth-card {
+    padding: var(--space-5) var(--space-5);
+  }
+
+  .auth-card__header { margin-bottom: var(--space-4); }
+  .auth-tabs         { margin-bottom: var(--space-4); }
+  .form-group        { margin-bottom: var(--space-3); }
 }
