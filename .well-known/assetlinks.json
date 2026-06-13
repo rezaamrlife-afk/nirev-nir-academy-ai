@@ -1,43 +1,8 @@
-{
-  "version": 2,
-  "buildCommand": "",
-  "outputDirectory": ".",
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "X-Frame-Options",
-          "value": "DENY"
-        },
-        {
-          "key": "Referrer-Policy",
-          "value": "strict-origin-when-cross-origin"
-        }
-      ]
-    },
-    {
-      "source": "/.well-known/assetlinks.json",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/json"
-        },
-        {
-          "key": "Access-Control-Allow-Origin",
-          "value": "*"
-        }
-      ]
-    }
-  ]
-}
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.niracademy.nirev",
+    "sha256_cert_fingerprints": ["7D:91:67:51:B8:BA:ED:F9:FC:85:99:0D:E1:6E:74:BD:66:35:A2:6E:0D:21:95:12:C2:62:9D:98:DF:CB:82:7B"]
+  }
+}]
