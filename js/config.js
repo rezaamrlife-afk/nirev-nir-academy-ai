@@ -38,7 +38,7 @@ export const SUPABASE = {
 
 export const GROQ = {
   API_KEY:         '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',
-  MODEL:           'llama-3.1-8b-instant',
+  MODEL:           'openai/gpt-oss-120b',
   MAX_TOKENS:      1024,
   TEMPERATURE:     0.4,
   EDGE_FN_URL:     '/functions/v1/groq-proxy',
