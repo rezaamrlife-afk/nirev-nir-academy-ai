@@ -126,17 +126,19 @@ export async function signIn(email, password) {
  * @param {string} fullName
  * @returns {{ user: User | null, error: string | null }}
  */
-export async function signUp(email, password, fullName) {
+export async function signUp(email, password, fullName, role = 'learner') {
   if (!_supabase) return { user: null, error: 'Supabase not initialized' };
+
+  const safeRole = role === 'teacher' ? 'teacher' : 'learner';
 
   const { data, error } = await _supabase.auth.signUp({
     email: email.trim(),
     password,
-    options: { data: { full_name: fullName.trim() } },
+    options: { data: { full_name: fullName.trim(), role: safeRole } },
   });
 
   if (error) return { user: null, error: error.message };
-  return { user: data.user, error: null };
+  return { user: data.user, role: safeRole, error: null };
 }
 
 // ── Sign Out ──────────────────────────────────────────────────
@@ -239,11 +241,23 @@ function _wireSignUpForm() {
   const form = document.getElementById('form-signup');
   if (!form) return;
 
+  // Wire role toggle active state
+  form.querySelectorAll('input[name="signup-role"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      form.querySelectorAll('.auth-role-btn').forEach(btn => {
+        btn.classList.remove('auth-role-btn--active');
+      });
+      radio.closest('.auth-role-btn')?.classList.add('auth-role-btn--active');
+    });
+  });
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const name     = document.getElementById('signup-name')?.value ?? '';
     const email    = document.getElementById('signup-email')?.value ?? '';
     const password = document.getElementById('signup-password')?.value ?? '';
+    const roleEl   = form.querySelector('input[name="signup-role"]:checked');
+    const role     = roleEl?.value ?? 'learner';
     const btn      = form.querySelector('.btn--primary');
 
     const pwError = validatePassword(password);
@@ -252,7 +266,7 @@ function _wireSignUpForm() {
     if (!name.trim())          { showToast('Please enter your name.', 'error'); return; }
 
     btn?.classList.add('loading');
-    const { error } = await signUp(email, password, name);
+    const { error } = await signUp(email, password, name, role);
     btn?.classList.remove('loading');
 
     if (error) {
