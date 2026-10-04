@@ -32,6 +32,7 @@
   <link rel="stylesheet" href="css/progress.css" />
   <link rel="stylesheet" href="css/reports.css" />
   <link rel="stylesheet" href="css/settings.css" />
+  <link rel="stylesheet" href="css/classroom.css" />
 
   <!-- Supabase CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -157,6 +158,21 @@
               <label class="form-label" for="signup-password">Password</label>
               <input id="signup-password" type="password" class="form-input"
                      placeholder="Minimum 8 characters" autocomplete="new-password" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">I am a:</label>
+              <div class="auth-role-selector">
+                <label class="auth-role-btn auth-role-btn--active" id="role-learner-label">
+                  <input type="radio" name="signup-role" id="signup-role-learner" value="learner" checked />
+                  <span class="auth-role-btn__icon">◈</span>
+                  <span class="auth-role-btn__text">Learner</span>
+                </label>
+                <label class="auth-role-btn" id="role-teacher-label">
+                  <input type="radio" name="signup-role" id="signup-role-teacher" value="teacher" />
+                  <span class="auth-role-btn__icon">✦</span>
+                  <span class="auth-role-btn__text">Teacher</span>
+                </label>
+              </div>
             </div>
             <button type="submit" class="btn btn--primary btn--full btn--lg">
               Create Account
@@ -538,6 +554,15 @@
           </div>
           <div id="reports-content">
             <!-- Populated by reports.js -->
+          </div>
+        </div>
+      </main>
+
+      <!-- ── PAGE: CLASSROOM ──────────────────────────────── -->
+      <main id="page-classroom" class="page-panel" style="display:none;">
+        <div class="page-content">
+          <div id="classroom-content">
+            <!-- Populated by classroom.js -->
           </div>
         </div>
       </main>
