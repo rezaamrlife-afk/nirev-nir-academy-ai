@@ -1,0 +1,482 @@
+/**
+ * NIREV AI — Classroom Page Styles
+ * Phase 7C
+ */
+
+/* ── Page Header ─────────────────────────────────────────────── */
+
+.classroom-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-6);
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.classroom-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--white-pure);
+  margin: 0 0 var(--space-1);
+  letter-spacing: -0.02em;
+}
+
+.classroom-subtitle {
+  font-size: 0.875rem;
+  color: var(--white-muted);
+  margin: 0;
+}
+
+/* ── Classes Grid ────────────────────────────────────────────── */
+
+.classes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-4);
+}
+
+/* ── Class Card ──────────────────────────────────────────────── */
+
+.class-card {
+  background: var(--black-surface);
+  border: 1px solid var(--black-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  transition: border-color 0.2s, transform 0.15s;
+}
+
+.class-card:hover {
+  border-color: var(--orange-line);
+  transform: translateY(-2px);
+}
+
+.class-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}
+
+.class-card__icon {
+  font-size: 1.5rem;
+  color: var(--gold-pure);
+}
+
+.class-card__code {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--orange-bright, #ff7828);
+  background: rgba(255, 120, 40, 0.1);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+}
+
+.class-card__name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--white-pure);
+  line-height: 1.3;
+}
+
+.class-card__meta {
+  font-size: 0.8rem;
+  color: var(--white-muted);
+  margin-bottom: var(--space-2);
+}
+
+.class-card__view-btn {
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+/* ── Empty State ─────────────────────────────────────────────── */
+
+.classroom-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: var(--space-10) var(--space-4);
+  color: var(--white-muted);
+}
+
+.classroom-empty .empty-state__icon {
+  font-size: 2.5rem;
+  margin-bottom: var(--space-3);
+  opacity: 0.4;
+}
+
+.classroom-empty .empty-state__title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--white-pure);
+  margin-bottom: var(--space-2);
+}
+
+.classroom-empty .empty-state__text {
+  font-size: 0.875rem;
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+/* ── Create Class Modal ──────────────────────────────────────── */
+
+.create-class-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.create-class-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+}
+
+.create-class-modal__box {
+  position: relative;
+  z-index: 1;
+  background: var(--black-elevated, #1a1a1a);
+  border: 1px solid var(--black-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  width: 100%;
+  max-width: 420px;
+  margin: var(--space-4);
+  animation: modal-enter 0.2s ease;
+}
+
+@keyframes modal-enter {
+  from { opacity: 0; transform: scale(0.96) translateY(8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.create-class-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-5);
+}
+
+.create-class-modal__header h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--white-pure);
+  margin: 0;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--white-muted);
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s, background 0.15s;
+}
+
+.modal-close:hover {
+  color: var(--white-pure);
+  background: var(--black-border);
+}
+
+/* ── Student Panel ───────────────────────────────────────────── */
+
+.student-panel {
+  animation: fade-in 0.2s ease;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.student-panel__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+  flex-wrap: wrap;
+}
+
+.student-panel__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--white-pure);
+  margin: 0;
+  flex: 1;
+}
+
+.btn-back {
+  background: none;
+  border: 1px solid var(--black-border);
+  color: var(--white-muted);
+  padding: 6px 14px;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.btn-back:hover {
+  border-color: var(--gold-pure);
+  color: var(--white-pure);
+}
+
+/* Class code display in student panel */
+.class-code-display {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: rgba(255, 120, 40, 0.08);
+  border: 1px solid rgba(255, 120, 40, 0.2);
+  border-radius: var(--radius-md);
+  padding: 6px 14px;
+}
+
+.code-label {
+  font-size: 0.75rem;
+  color: var(--white-muted);
+}
+
+.code-value {
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--orange-bright, #ff7828);
+}
+
+.btn-copy {
+  background: none;
+  border: none;
+  color: var(--white-muted);
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 2px 4px;
+  transition: color 0.15s;
+}
+
+.btn-copy:hover { color: var(--white-pure); }
+
+/* ── Student List ─────────────────────────────────────────────── */
+
+.student-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.student-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  background: var(--black-surface);
+  border: 1px solid var(--black-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  transition: border-color 0.15s;
+}
+
+.student-row:hover { border-color: var(--gold-muted, #7a6530); }
+
+.student-row__avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--gold-dark, #3a2e10);
+  color: var(--gold-pure);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.student-row__info { flex: 1; min-width: 0; }
+
+.student-row__name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--white-pure);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.student-row__email {
+  font-size: 0.775rem;
+  color: var(--white-muted);
+}
+
+.student-row__level {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--orange-bright, #ff7828);
+  background: rgba(255, 120, 40, 0.1);
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+
+/* ── Learner Join View ───────────────────────────────────────── */
+
+.join-class-card {
+  max-width: 480px;
+}
+
+.join-code-input {
+  font-size: 1.25rem !important;
+  letter-spacing: 0.2em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.learner-class-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.learner-class-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  background: var(--black-surface);
+  border: 1px solid var(--black-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+}
+
+.learner-class-row__icon {
+  font-size: 1.25rem;
+  color: var(--gold-pure);
+  flex-shrink: 0;
+}
+
+.learner-class-row__info { flex: 1; min-width: 0; }
+
+.learner-class-row__name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--white-pure);
+}
+
+.learner-class-row__teacher {
+  font-size: 0.775rem;
+  color: var(--white-muted);
+}
+
+.learner-class-row__code {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--orange-bright, #ff7828);
+  background: rgba(255, 120, 40, 0.1);
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Class Stats Bar ─────────────────────────────────────────── */
+
+.class-stats-bar {
+  display: flex;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+  padding: var(--space-4) var(--space-5);
+  background: var(--black-surface);
+  border: 1px solid var(--black-border);
+  border-radius: var(--radius-lg);
+}
+
+.class-stat {
+  flex: 1;
+  text-align: center;
+}
+
+.class-stat__value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--white-pure);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.class-stat__value.muted {
+  color: var(--white-muted);
+}
+
+.class-stat__label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--white-muted);
+}
+
+/* ── Rich Student Row ────────────────────────────────────────── */
+
+.student-row--rich {
+  align-items: flex-start;
+  padding: var(--space-4);
+}
+
+.student-row--rich .student-row__info {
+  padding-top: 2px;
+}
+
+.student-row__last {
+  font-size: 0.7rem;
+  color: var(--white-muted);
+  margin-top: 2px;
+}
+
+.student-row__last.muted {
+  opacity: 0.5;
+}
+
+.student-row__stats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  min-width: 80px;
+}
+
+.student-row__avg {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--white-pure);
+}
+
+/* ── Score Mini Bar ──────────────────────────────────────────── */
+
+.score-mini-bar {
+  width: 72px;
+  height: 4px;
+  background: var(--black-border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.score-mini-bar__fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.6s ease;
+}
+
+/* ── Responsive ──────────────────────────────────────────────── */
+
+@media (max-width: 600px) {
+  .classroom-header { flex-direction: column; align-items: flex-start; }
+  .classes-grid     { grid-template-columns: 1fr; }
+  .student-panel__header { flex-direction: column; align-items: flex-start; }
+}
