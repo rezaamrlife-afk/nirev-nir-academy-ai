@@ -268,3 +268,58 @@
   .auth-tabs         { margin-bottom: var(--space-4); }
   .form-group        { margin-bottom: var(--space-3); }
 }
+
+/* ── Role Selector ─────────────────────────────────────────── */
+
+.auth-role-selector {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.auth-role-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  padding: var(--space-3) var(--space-2);
+  border: 1px solid var(--black-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  background: var(--black-surface);
+}
+
+.auth-role-btn:hover {
+  border-color: var(--gold-muted, #7a6530);
+}
+
+.auth-role-btn--active {
+  border-color: var(--orange-line);
+  background: rgba(255, 120, 40, 0.06);
+}
+
+.auth-role-btn input[type="radio"] {
+  display: none;
+}
+
+.auth-role-btn__icon {
+  font-size: 1.25rem;
+  color: var(--gold-pure);
+}
+
+.auth-role-btn__text {
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--white-muted);
+}
+
+.auth-role-btn--active .auth-role-btn__text {
+  color: var(--white-pure);
+}
+
+.auth-role-btn--active .auth-role-btn__icon {
+  color: var(--orange-bright, #ff7828);
+}
