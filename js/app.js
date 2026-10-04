@@ -144,6 +144,9 @@ async function _onUserLoggedIn(user) {
   showScreen('app');
   _updateUserWidget(user);
 
+  // Store user object so pages can access user.id without re-fetching
+  store.set('user', user);
+
   // Load profile into store so all pages can access role, level, etc.
   if (user?.id) {
     const { data: profile } = await getProfile(user.id);
