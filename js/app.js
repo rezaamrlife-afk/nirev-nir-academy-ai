@@ -37,6 +37,7 @@ import { initProgressPage }                        from './progress.js';
 import { initReportsPage }                         from './reports.js';
 import { initSettingsPage }                        from './settings.js';
 import { initClassroomPage }                       from './classroom.js';
+import { getProfile }                              from './db.js';
 import store                                       from './store.js';
 
 // ── Bootstrap ─────────────────────────────────────────────────
@@ -139,9 +140,20 @@ document.addEventListener('DOMContentLoaded', async () => {
 // Guard: prevents re-initialization on TOKEN_REFRESH or repeated auth events
 let _appInitialized = false;
 
-function _onUserLoggedIn(user) {
+async function _onUserLoggedIn(user) {
   showScreen('app');
   _updateUserWidget(user);
+
+  // Load profile into store so all pages can access role, level, etc.
+  if (user?.id) {
+    const { data: profile } = await getProfile(user.id);
+    if (profile) {
+      store.set('profile', profile);
+      // Update role display in sidebar
+      const roleEl = document.getElementById('user-role');
+      if (roleEl) roleEl.textContent = profile.role === 'teacher' ? 'Teacher' : 'Learner';
+    }
+  }
 
   if (!_appInitialized) {
     _appInitialized = true;
