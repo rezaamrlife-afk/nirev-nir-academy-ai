@@ -75,6 +75,12 @@ export const NAV_SECTIONS = [
     ],
   },
   {
+    section: 'Classroom',
+    items: [
+      { id: 'classroom', label: 'Classroom', icon: '⬡', phase: null },
+    ],
+  },
+  {
     section: 'Account',
     items: [
       { id: 'settings', label: 'Settings', icon: '⚙', phase: null },
