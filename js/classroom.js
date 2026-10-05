@@ -266,16 +266,16 @@ async function _showStudentPanel(classId, className, classCode) {
 
   const sb = getSupabase();
 
-  // Fetch members + profiles
-  const { data, error } = await sb
+  // Fetch members
+  const { data: members, error } = await sb
     .from('class_members')
-    .select('joined_at, profiles(id, full_name, email, level)')
+    .select('student_id, joined_at')
     .eq('class_id', classId)
     .order('joined_at', { ascending: false });
 
   if (error) { listEl.innerHTML = _errorHTML(error.message); return; }
 
-  if (!data || data.length === 0) {
+  if (!members || members.length === 0) {
     listEl.innerHTML =
       '<div class="classroom-empty">' +
         '<div class="empty-state__icon">✦</div>' +
@@ -285,8 +285,19 @@ async function _showStudentPanel(classId, className, classCode) {
     return;
   }
 
-  // Fetch scores for all students in one query
-  const studentIds = data.map(m => m.profiles?.id).filter(Boolean);
+  const studentIds = members.map(m => m.student_id).filter(Boolean);
+
+  // Fetch profiles separately
+  const { data: profilesData } = await sb
+    .from('profiles')
+    .select('id, full_name, email, level')
+    .in('id', studentIds);
+
+  const profileMap = {};
+  (profilesData ?? []).forEach(p => { profileMap[p.id] = p; });
+
+  // Rebuild data array with profile info
+  const data = members.map(m => ({ ...m, profile: profileMap[m.student_id] ?? {} }));
   const { data: scoresData } = await sb
     .from('scores')
     .select('user_id, score, skill, cefr_level, created_at')
@@ -314,8 +325,8 @@ async function _showStudentPanel(classId, className, classCode) {
   // Build student rows
   let rows = '';
   data.forEach(m => {
-    const profile  = m.profiles ?? {};
-    const sid      = profile.id;
+    const profile  = m.profile ?? {};
+    const sid      = m.student_id;
     const scores   = scoreMap[sid] ?? [];
     const avg      = scores.length
       ? Math.round(scores.reduce((a, b) => a + b.score, 0) / scores.length)
