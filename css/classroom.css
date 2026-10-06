@@ -94,6 +94,24 @@
   align-self: flex-start;
 }
 
+.btn-delete-class {
+  background: none;
+  border: none;
+  color: var(--white-muted);
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  margin-left: auto;
+  transition: color 0.15s, background 0.15s;
+  line-height: 1;
+}
+
+.btn-delete-class:hover {
+  color: #e55;
+  background: rgba(230, 80, 80, 0.1);
+}
+
 /* ── Empty State ─────────────────────────────────────────────── */
 
 .classroom-empty {
