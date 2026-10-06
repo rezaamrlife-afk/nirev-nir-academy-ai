@@ -37,7 +37,7 @@ export const SUPABASE = {
 // This object holds only non-secret configuration.
 
 export const GROQ = {
-  API_KEY:         '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',
+  API_KEY:         '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',
   MODEL:           'openai/gpt-oss-120b',
   MAX_TOKENS:      1024,
   TEMPERATURE:     0.4,
