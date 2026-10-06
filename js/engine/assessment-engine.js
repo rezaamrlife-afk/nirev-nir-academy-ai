@@ -51,6 +51,7 @@ export async function startAssessment(input) {
       }
     }
 
+    console.log('[Engine] previousQuestions fetched:', previousQuestions.length, previousQuestions);
     // Generate questions via Groq
     let questions;
     const { data: groqText, error: groqErr } = await groq.generateQuestions({
