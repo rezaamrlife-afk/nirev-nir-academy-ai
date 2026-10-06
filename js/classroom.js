@@ -348,7 +348,7 @@ async function _showStudentPanel(classId, className, classCode) {
       : '';
 
     rows +=
-      '<div class="student-row student-row--rich">' +
+      '<div class="student-row student-row--rich" data-student-id="' + sid + '" style="cursor:pointer;" title="Click to view details">' +
         '<div class="student-row__avatar">' + _initials(profile.full_name) + '</div>' +
         '<div class="student-row__info">' +
           '<div class="student-row__name">' + (profile.full_name ?? '—') + '</div>' +
@@ -370,7 +370,86 @@ async function _showStudentPanel(classId, className, classCode) {
       '<div class="class-stat"><div class="class-stat__value' + (classAvg === null ? ' muted' : '') + '">' + (classAvg !== null ? classAvg + '%' : '—') + '</div><div class="class-stat__label">Class Avg</div></div>' +
       '<div class="class-stat"><div class="class-stat__value">' + participation + '%</div><div class="class-stat__label">Participation</div></div>' +
     '</div>' +
-    '<div class="student-list">' + rows + '</div>';
+    '<div class="student-list" id="student-rows">' + rows + '</div>' +
+    '<div id="student-detail-panel" style="display:none;"></div>';
+
+  // Wire click on each student row
+  listEl.querySelectorAll('.student-row--rich').forEach(row => {
+    row.addEventListener('click', () => {
+      const sid = row.dataset.studentId;
+      const profile = profileMap[sid] ?? {};
+      const scores  = scoreMap[sid] ?? [];
+      _showStudentDetail(sid, profile, scores);
+    });
+  });
+}
+
+// ── Student Detail Panel ──────────────────────────────────────
+
+function _showStudentDetail(sid, profile, scores) {
+  const rowsEl  = document.getElementById('student-rows');
+  const detailEl = document.getElementById('student-detail-panel');
+  if (!rowsEl || !detailEl) return;
+
+  rowsEl.style.display  = 'none';
+  detailEl.style.display = 'block';
+
+  // Group scores by skill
+  const bySkill = {};
+  scores.forEach(s => {
+    if (!bySkill[s.skill]) bySkill[s.skill] = [];
+    bySkill[s.skill].push(s);
+  });
+
+  // Build skill bars
+  const skills = Object.keys(bySkill);
+  let skillRows = '';
+  if (skills.length === 0) {
+    skillRows = '<p style="color:var(--white-muted);font-size:0.875rem;">No assessments yet.</p>';
+  } else {
+    skills.forEach(skill => {
+      const arr  = bySkill[skill];
+      const avg  = Math.round(arr.reduce((a, b) => a + b.score, 0) / arr.length);
+      const last = arr[0];
+      const color = avg >= 70 ? 'var(--gold-pure)' : avg >= 50 ? 'var(--orange-bright,#ff7828)' : '#e55';
+      skillRows +=
+        '<div class="skill-detail-row">' +
+          '<div class="skill-detail-row__label">' + skill.charAt(0).toUpperCase() + skill.slice(1) + '</div>' +
+          '<div class="skill-detail-row__bar">' +
+            '<div class="skill-detail-row__fill" style="width:' + avg + '%;background:' + color + ';"></div>' +
+          '</div>' +
+          '<div class="skill-detail-row__score">' + avg + '%</div>' +
+          '<div class="skill-detail-row__meta">' + arr.length + ' session' + (arr.length !== 1 ? 's' : '') +
+            (last?.cefr_level ? ' · ' + last.cefr_level : '') + '</div>' +
+        '</div>';
+    });
+  }
+
+  // Overall stats
+  const overallAvg = scores.length
+    ? Math.round(scores.reduce((a, b) => a + b.score, 0) / scores.length)
+    : null;
+  const level = profile.level ?? scores[0]?.cefr_level ?? null;
+
+  detailEl.innerHTML =
+    '<div class="student-detail">' +
+      '<button class="btn-back" id="btn-back-to-list">← Back to Students</button>' +
+      '<div class="student-detail__header">' +
+        '<div class="student-row__avatar" style="width:48px;height:48px;font-size:1rem;">' + _initials(profile.full_name) + '</div>' +
+        '<div>' +
+          '<div style="font-size:1.1rem;font-weight:700;color:var(--white-pure);">' + (profile.full_name ?? '—') + '</div>' +
+          '<div style="font-size:0.8rem;color:var(--white-muted);">' + (profile.email ?? '') + '</div>' +
+        '</div>' +
+        (level ? '<div class="student-row__level" style="margin-left:auto;">' + level + '</div>' : '') +
+        (overallAvg !== null ? '<div style="font-size:1.25rem;font-weight:700;color:var(--white-pure);margin-left:var(--space-3);">' + overallAvg + '%</div>' : '') +
+      '</div>' +
+      '<div class="skill-detail-list">' + skillRows + '</div>' +
+    '</div>';
+
+  document.getElementById('btn-back-to-list')?.addEventListener('click', () => {
+    detailEl.style.display = 'none';
+    rowsEl.style.display   = 'block';
+  });
 }
 
 // ── Learner Events ────────────────────────────────────────────
