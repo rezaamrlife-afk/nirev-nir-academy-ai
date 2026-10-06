@@ -76,6 +76,7 @@ Make questions appropriate for ${level ?? 'B1'} level learners.
 Vary difficulty between ${Math.max(1, (level === 'A1' ? 1 : level === 'A2' ? 2 : level === 'B1' ? 2 : level === 'B2' ? 3 : 4))}-${Math.min(5, (level === 'C1' || level === 'C2' ? 5 : 4))}.
 IMPORTANT: Generate completely unique and different questions each time. Use a wide variety of topics, contexts, and scenarios. Never repeat the same question or topic twice. Session seed: ${Date.now()}-${Math.random().toString(36).slice(2)}.${previousQuestions.length > 0 ? `\n\nDo NOT repeat or closely paraphrase any of these questions the learner has already seen:\n${previousQuestions.map((q, i) => `${i + 1}. ${q}`).join('\n')}` : ''}`;
 
+  console.log('[Groq] previousQuestions count:', previousQuestions.length, previousQuestions);
   return _call([{ role: 'user', content: prompt }], { temperature: 0.7 });
 }
 
