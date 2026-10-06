@@ -38,13 +38,27 @@ export async function startAssessment(input) {
     store.reset('assessment');
     _emit('nirev:assessment:loading', { message: 'Generating questions...' });
 
+    // Fetch recent question texts to avoid repetition
+    const userId = store.get('user')?.id;
+    let previousQuestions = [];
+    if (userId) {
+      const { data: recentScores } = await db.getScores(userId, { skill: input.skill, limit: 5 });
+      if (recentScores?.length) {
+        previousQuestions = recentScores
+          .flatMap(s => s.details?.questions ?? [])
+          .filter(Boolean)
+          .slice(0, 20);
+      }
+    }
+
     // Generate questions via Groq
     let questions;
     const { data: groqText, error: groqErr } = await groq.generateQuestions({
-      skill: input.skill,
-      level: input.level ?? null,
-      type:  input.type,
-      count: input.questionCount ?? 5,
+      skill:             input.skill,
+      level:             input.level ?? null,
+      type:              input.type,
+      count:             input.questionCount ?? 5,
+      previousQuestions,
     });
 
     if (groqErr || !groqText) {
@@ -55,7 +69,6 @@ export async function startAssessment(input) {
     }
 
     // Persist to DB
-    const userId = store.get('user')?.id;
     let sessionId = `local-${Date.now()}`;
 
     if (userId) {
@@ -199,13 +212,14 @@ async function _triggerScoring(sessionId, answers, ctx) {
     // Persist to DB
     if (userId !== 'guest') {
       await db.completeAssessment(sessionId);
+      const questionTexts = ctx.questions.map(q => q.question).filter(Boolean);
       await db.saveScore({
         user_id:       userId,
         assessment_id: sessionId,
         skill:         ctx.skill,
         score:         sessionScore.totalScore,
         cefr_level:    sessionScore.cefrLevel,
-        details:       sessionScore.breakdown,
+        details:       { ...sessionScore.breakdown, questions: questionTexts },
       });
     }
 
