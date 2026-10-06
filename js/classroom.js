@@ -120,6 +120,7 @@ function _classCardHTML(cls) {
       <div class="class-card__top">
         <div class="class-card__icon">◈</div>
         <div class="class-card__code">${cls.code}</div>
+        <button class="btn-delete-class" data-class-id="${cls.id}" data-class-name="${cls.name}" title="Delete class">✕</button>
       </div>
       <div class="class-card__name">${cls.name}</div>
       <div class="class-card__meta">${count} student${count !== 1 ? 's' : ''}</div>
@@ -197,15 +198,54 @@ function _wireTeacherEvents() {
   });
 
   document.getElementById('classes-grid')?.addEventListener('click', (e) => {
-    const btn = e.target.closest('.class-card__view-btn');
-    if (!btn) return;
-    _showStudentPanel(btn.dataset.classId, btn.dataset.className, btn.dataset.classCode);
+    const viewBtn = e.target.closest('.class-card__view-btn');
+    if (viewBtn) {
+      _showStudentPanel(viewBtn.dataset.classId, viewBtn.dataset.className, viewBtn.dataset.classCode);
+      return;
+    }
+    const delBtn = e.target.closest('.btn-delete-class');
+    if (delBtn) {
+      e.stopPropagation();
+      _deleteClass(delBtn.dataset.classId, delBtn.dataset.className);
+    }
   });
 
   document.getElementById('btn-back-classes')?.addEventListener('click', () => {
     document.getElementById('student-panel').style.display = 'none';
     document.getElementById('classes-grid').style.display  = 'grid';
   });
+}
+
+// ── Delete Class ──────────────────────────────────────────────
+
+async function _deleteClass(classId, className) {
+  if (!confirm('Delete "' + className + '"?\n\nThis will remove all students from the class. This cannot be undone.')) return;
+
+  const sb = getSupabase();
+
+  // Delete members first (FK constraint)
+  await sb.from('class_members').delete().eq('class_id', classId);
+
+  // Delete class
+  const { error } = await sb.from('classes').delete().eq('id', classId);
+
+  if (error) {
+    showToast('Could not delete class: ' + error.message, 'error');
+    return;
+  }
+
+  showToast('Class deleted.', 'success');
+
+  // Remove card from DOM
+  const card = document.querySelector('.class-card[data-class-id="' + classId + '"]');
+  if (card) {
+    card.remove();
+    // Show empty state if no more cards
+    const grid = document.getElementById('classes-grid');
+    if (grid && !grid.querySelector('.class-card')) {
+      grid.innerHTML = _emptyClassesHTML();
+    }
+  }
 }
 
 // ── Create Class ──────────────────────────────────────────────
