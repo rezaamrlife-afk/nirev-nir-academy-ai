@@ -51,7 +51,7 @@ async function _call(messages, options = {}) {
  * @param {{ skill, level, type, count }} params
  */
 export async function generateQuestions(params) {
-  const { skill, level, type, count = 5 } = params;
+  const { skill, level, type, count = 5, previousQuestions = [] } = params;
 
   const prompt = `You are an expert English language assessment designer.
 Generate ${count} assessment questions for the following:
@@ -74,7 +74,7 @@ For multiple-choice questions, always include 4 options labeled A) B) C) D).
 For short-answer and essay, set options to null.
 Make questions appropriate for ${level ?? 'B1'} level learners.
 Vary difficulty between ${Math.max(1, (level === 'A1' ? 1 : level === 'A2' ? 2 : level === 'B1' ? 2 : level === 'B2' ? 3 : 4))}-${Math.min(5, (level === 'C1' || level === 'C2' ? 5 : 4))}.
-IMPORTANT: Generate completely unique and different questions each time. Use a wide variety of topics, contexts, and scenarios. Never repeat the same question or topic twice. Session seed: ${Date.now()}-${Math.random().toString(36).slice(2)}.`;
+IMPORTANT: Generate completely unique and different questions each time. Use a wide variety of topics, contexts, and scenarios. Never repeat the same question or topic twice. Session seed: ${Date.now()}-${Math.random().toString(36).slice(2)}.${previousQuestions.length > 0 ? `\n\nDo NOT repeat or closely paraphrase any of these questions the learner has already seen:\n${previousQuestions.map((q, i) => `${i + 1}. ${q}`).join('\n')}` : ''}`;
 
   return _call([{ role: 'user', content: prompt }], { temperature: 0.7 });
 }
