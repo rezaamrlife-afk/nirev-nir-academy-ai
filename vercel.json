@@ -4,6 +4,10 @@
   "outputDirectory": ".",
   "routes": [
     {
+      "src": "/api/groq",
+      "dest": "/api/groq.js"
+    },
+    {
       "src": "/(.*)",
       "dest": "/$1"
     }
