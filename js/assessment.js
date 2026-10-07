@@ -124,11 +124,14 @@ function _wireStartButton() {
       userId:        user.id,
       type:          _state.selectedType,
       skill:         _state.selectedSkill,
-      level:         store.get('profile.level') ?? null,
+      level:         store.get('assignedLevel') ?? store.get('profile')?.level ?? null,
       questionCount: TYPE_QUESTION_COUNT[_state.selectedType] ?? 5,
     });
 
     btn.classList.remove('loading');
+
+    // Clear assigned level after use
+    store.set('assignedLevel', null);
 
     if (error) {
       showToast(error, 'error');
