@@ -448,28 +448,31 @@ async function _renderPendingAssignments(userId) {
       // Navigate to assessment with pre-filled params
       window.NIREV?.navigateTo('assessment');
 
-      // After navigation, auto-select skill and start immediately
+      // Remove assignment from UI immediately
+      btn.closest('.assignment-item')?.remove();
+      const list = container.querySelector('.assignment-list');
+      if (list && !list.querySelector('.assignment-item')) {
+        container.innerHTML = '';
+      }
+
+      // Store assigned level BEFORE navigation
+      store.set('assignedLevel', level);
+
+      // Navigate to assessment
+      window.NIREV?.navigateTo('assessment');
+
+      // Wait for page to render, then select skill and start
       setTimeout(() => {
-        // Store assigned level so engine uses it
-        store.set('assignedLevel', level);
-
-        // Click skill card
         const skillCard = document.querySelector(`.skill-card[data-skill="${skill}"]`);
-        if (skillCard) skillCard.click();
+        if (!skillCard) return;
+        skillCard.click(); // sets _state.selectedSkill inside assessment.js
 
-        // Auto-click Start Assessment
+        // Give click handler time to update _state, then start
         setTimeout(() => {
           const startBtn = document.getElementById('btn-start-assessment');
           if (startBtn) startBtn.click();
-        }, 150);
-
-        // Remove from UI
-        btn.closest('.assignment-item')?.remove();
-        const list = container.querySelector('.assignment-list');
-        if (list && !list.querySelector('.assignment-item')) {
-          container.innerHTML = '';
-        }
-      }, 400);
+        }, 200);
+      }, 500);
     });
   });
 }
