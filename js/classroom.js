@@ -484,11 +484,89 @@ function _showStudentDetail(sid, profile, scores) {
         (overallAvg !== null ? '<div style="font-size:1.25rem;font-weight:700;color:var(--white-pure);margin-left:var(--space-3);">' + overallAvg + '%</div>' : '') +
       '</div>' +
       '<div class="skill-detail-list">' + skillRows + '</div>' +
+      '<button class="btn btn--primary" id="btn-assign-assessment" style="margin-top:var(--space-4);width:100%;">✦ Assign Assessment</button>' +
+    '</div>' +
+
+    // Assign modal
+    '<div id="assign-modal" style="display:none;position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;">' +
+      '<div style="position:absolute;inset:0;background:rgba(0,0,0,0.7);" id="assign-modal-backdrop"></div>' +
+      '<div style="position:relative;background:var(--surface-2,#1a1a2e);border:1px solid var(--border-subtle,rgba(255,255,255,0.1));border-radius:12px;padding:var(--space-6);width:min(420px,90vw);z-index:1;">' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-5);">' +
+          '<h3 style="margin:0;color:var(--white-pure);">Assign Assessment</h3>' +
+          '<button id="assign-modal-close" style="background:none;border:none;color:var(--white-muted);font-size:1.2rem;cursor:pointer;">✕</button>' +
+        '</div>' +
+        '<div style="font-size:0.85rem;color:var(--white-muted);margin-bottom:var(--space-4);">Assigning to: <strong style="color:var(--white-pure);">' + (profile.full_name ?? 'Student') + '</strong></div>' +
+        '<div class="form-group">' +
+          '<label class="form-label">Skill</label>' +
+          '<select class="form-input" id="assign-skill">' +
+            '<option value="grammar">Grammar</option>' +
+            '<option value="vocabulary">Vocabulary</option>' +
+            '<option value="writing">Writing</option>' +
+            '<option value="reading">Reading</option>' +
+            '<option value="listening">Listening</option>' +
+            '<option value="speaking">Speaking</option>' +
+          '</select>' +
+        '</div>' +
+        '<div class="form-group">' +
+          '<label class="form-label">Target Level (CEFR)</label>' +
+          '<select class="form-input" id="assign-level">' +
+            '<option value="A1">A1 — Beginner</option>' +
+            '<option value="A2">A2 — Elementary</option>' +
+            '<option value="B1" selected>B1 — Intermediate</option>' +
+            '<option value="B2">B2 — Upper Intermediate</option>' +
+            '<option value="C1">C1 — Advanced</option>' +
+            '<option value="C2">C2 — Proficient</option>' +
+          '</select>' +
+        '</div>' +
+        '<div class="form-group">' +
+          '<label class="form-label">Message (optional)</label>' +
+          '<input type="text" class="form-input" id="assign-message" placeholder="e.g. Focus on verb tenses" maxlength="120" />' +
+        '</div>' +
+        '<button class="btn btn--primary btn--full" id="btn-confirm-assign">Send Assignment</button>' +
+      '</div>' +
     '</div>';
 
   document.getElementById('btn-back-to-list')?.addEventListener('click', () => {
     detailEl.style.display = 'none';
     rowsEl.style.display   = 'block';
+  });
+
+  // Assign modal logic
+  const assignModal    = document.getElementById('assign-modal');
+  const openAssign     = () => { assignModal.style.display = 'flex'; };
+  const closeAssign    = () => { assignModal.style.display = 'none'; };
+
+  document.getElementById('btn-assign-assessment')?.addEventListener('click', openAssign);
+  document.getElementById('assign-modal-close')?.addEventListener('click', closeAssign);
+  document.getElementById('assign-modal-backdrop')?.addEventListener('click', closeAssign);
+
+  document.getElementById('btn-confirm-assign')?.addEventListener('click', async () => {
+    const skill   = document.getElementById('assign-skill')?.value;
+    const level   = document.getElementById('assign-level')?.value;
+    const message = document.getElementById('assign-message')?.value?.trim() || null;
+    const btn     = document.getElementById('btn-confirm-assign');
+    const sb      = getSupabase();
+    const teacherId = store.get('user')?.id;
+
+    btn?.classList.add('loading');
+
+    const { error } = await sb.from('assignments').insert({
+      teacher_id: teacherId,
+      student_id: sid,
+      skill,
+      level,
+      message,
+      status: 'pending',
+    });
+
+    btn?.classList.remove('loading');
+
+    if (error) {
+      showToast('Could not send assignment: ' + error.message, 'error');
+    } else {
+      showToast('Assignment sent to ' + (profile.full_name ?? 'student') + '!', 'success');
+      closeAssign();
+    }
   });
 }
 
