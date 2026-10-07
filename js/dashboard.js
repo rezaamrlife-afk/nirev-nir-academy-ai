@@ -448,12 +448,20 @@ async function _renderPendingAssignments(userId) {
       // Navigate to assessment with pre-filled params
       window.NIREV?.navigateTo('assessment');
 
-      // After navigation, prefill assessment form
+      // After navigation, auto-select skill and start immediately
       setTimeout(() => {
-        const skillEl = document.getElementById('skill-select') ?? document.querySelector('[data-field="skill"]');
-        const levelEl = document.getElementById('level-select') ?? document.querySelector('[data-field="level"]');
-        if (skillEl) { skillEl.value = skill; skillEl.dispatchEvent(new Event('change')); }
-        if (levelEl) { levelEl.value = level; levelEl.dispatchEvent(new Event('change')); }
+        // Store assigned level so engine uses it
+        store.set('assignedLevel', level);
+
+        // Click skill card
+        const skillCard = document.querySelector(`.skill-card[data-skill="${skill}"]`);
+        if (skillCard) skillCard.click();
+
+        // Auto-click Start Assessment
+        setTimeout(() => {
+          const startBtn = document.getElementById('btn-start-assessment');
+          if (startBtn) startBtn.click();
+        }, 150);
 
         // Remove from UI
         btn.closest('.assignment-item')?.remove();
@@ -461,7 +469,7 @@ async function _renderPendingAssignments(userId) {
         if (list && !list.querySelector('.assignment-item')) {
           container.innerHTML = '';
         }
-      }, 300);
+      }, 400);
     });
   });
 }
