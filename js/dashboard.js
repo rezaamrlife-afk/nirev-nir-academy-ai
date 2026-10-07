@@ -16,6 +16,7 @@ import store from './store.js';
 import { getScores } from './db.js';
 import { buildAnalyticsResult } from './domain/analytics/analytics-domain.js';
 import { buildPredictionResult } from './domain/predictions/prediction-domain.js';
+import { getSupabase } from './auth.js';
 
 // ── Initialize ────────────────────────────────────────────────
 
@@ -90,6 +91,9 @@ async function _loadAndRenderDashboard() {
   const userId = store.get('user')?.id;
   if (!userId) return;
 
+  // Render pending assignments (function handles role-gating internally)
+  _renderPendingAssignments(userId);
+
   try {
     // Load scores from DB
     const { data: scores } = await getScores(userId, { limit: 50 });
@@ -138,6 +142,7 @@ async function _loadAndRenderDashboard() {
     _renderStats(analytics, prediction, streak);
     _renderRecentActivity(scores);
     _renderInsights(analytics, prediction);
+
 
   } catch (err) {
     console.error('[Dashboard] load error:', err);
@@ -365,4 +370,98 @@ function _relativeDate(dateStr) {
 
 function _trajectoryLabel(trajectory) {
   return { improving: '↑ Improving', plateauing: '→ Stable', declining: '↓ Declining' }[trajectory] ?? '—';
+}
+
+// ── Pending Assignments (Learner) ─────────────────────────────
+
+async function _renderPendingAssignments(userId) {
+  // Skip for teachers
+  const sb = getSupabase();
+  if (!sb) return;
+
+  const profileData = store.get('profile');
+  if (profileData?.role === 'teacher') return;
+
+  // Find or create the container in DOM
+  let container = document.getElementById('pending-assignments-section');
+  if (!container) {
+    // Insert before recent activity section
+    const activitySection = document.querySelector('.dashboard-section--activity') ??
+                            document.getElementById('recent-activity-list')?.closest('.dashboard-section') ??
+                            document.getElementById('recent-activity-list')?.parentElement;
+    if (!activitySection) return;
+
+    container = document.createElement('div');
+    container.id = 'pending-assignments-section';
+    container.style.cssText = 'margin-bottom:var(--space-6);';
+    activitySection.parentElement?.insertBefore(container, activitySection);
+  }
+
+  const { data: assignments, error } = await sb
+    .from('assignments')
+    .select('id, skill, level, message, created_at, status')
+    .eq('student_id', userId)
+    .eq('status', 'pending')
+    .order('created_at', { ascending: false });
+
+  if (error || !assignments || assignments.length === 0) {
+    container.innerHTML = '';
+    return;
+  }
+
+  const rows = assignments.map(a => {
+    const skill = a.skill?.charAt(0).toUpperCase() + a.skill?.slice(1);
+    const date  = _relativeDate(a.created_at);
+    return `
+      <div class="assignment-item" data-assignment-id="${a.id}" data-skill="${a.skill}" data-level="${a.level}">
+        <div class="assignment-item__icon">✦</div>
+        <div class="assignment-item__info">
+          <div class="assignment-item__title">${skill} · ${a.level}</div>
+          ${a.message ? `<div class="assignment-item__message">"${a.message}"</div>` : ''}
+          <div class="assignment-item__meta">${date}</div>
+        </div>
+        <button class="btn btn--primary btn--sm assignment-item__go" data-skill="${a.skill}" data-level="${a.level}" data-assignment-id="${a.id}">
+          Start →
+        </button>
+      </div>`;
+  }).join('');
+
+  container.innerHTML = `
+    <div class="dashboard-card">
+      <div class="dashboard-card__header">
+        <div class="dashboard-card__title">Assigned to You</div>
+        <div class="dashboard-card__badge" style="background:var(--gold-pure);color:#000;border-radius:999px;padding:2px 10px;font-size:0.75rem;font-weight:700;">${assignments.length}</div>
+      </div>
+      <div class="assignment-list">${rows}</div>
+    </div>`;
+
+  // Wire Start buttons
+  container.querySelectorAll('.assignment-item__go').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const skill        = btn.dataset.skill;
+      const level        = btn.dataset.level;
+      const assignmentId = btn.dataset.assignmentId;
+
+      // Mark as completed
+      await sb.from('assignments').update({ status: 'completed' }).eq('id', assignmentId);
+
+      // Navigate to assessment with pre-filled params
+      window.NIREV?.navigateTo('assessment');
+
+      // After navigation, prefill assessment form
+      setTimeout(() => {
+        const skillEl = document.getElementById('skill-select') ?? document.querySelector('[data-field="skill"]');
+        const levelEl = document.getElementById('level-select') ?? document.querySelector('[data-field="level"]');
+        if (skillEl) { skillEl.value = skill; skillEl.dispatchEvent(new Event('change')); }
+        if (levelEl) { levelEl.value = level; levelEl.dispatchEvent(new Event('change')); }
+
+        // Remove from UI
+        btn.closest('.assignment-item')?.remove();
+        const list = container.querySelector('.assignment-list');
+        if (list && !list.querySelector('.assignment-item')) {
+          container.innerHTML = '';
+        }
+      }, 300);
+    });
+  });
 }
