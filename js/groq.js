@@ -8,17 +8,16 @@
  * ─────────────────────────────────────────────────────────────
  */
 
-import { GROQ } from './config.js';
+import { GROQ } from './config.js'; // MODEL, MAX_TOKENS, TEMPERATURE only — key is server-side
 
 // ── Internal Transport ────────────────────────────────────────
 
 async function _call(messages, options = {}) {
   try {
-    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    const response = await fetch('/api/groq', {
       method: 'POST',
       headers: {
-        'Content-Type':  'application/json',
-        'Authorization': `Bearer ${GROQ.API_KEY}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         model:       options.model       ?? GROQ.MODEL,
