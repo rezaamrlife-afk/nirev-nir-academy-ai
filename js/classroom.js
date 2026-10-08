@@ -24,8 +24,67 @@ export function initClassroomPage() {
   document.addEventListener('nirev:navigate', (e) => {
     if (e.detail?.pageId === 'classroom') {
       _loadClassroomPage();
+      _clearClassroomBadge(); // teacher opened classroom — clear badge
     }
   });
+
+  // Check for completed assignments on load (teacher only)
+  _checkCompletedAssignments();
+
+  // Re-check every 60 seconds
+  setInterval(_checkCompletedAssignments, 60000);
+}
+
+// ── Notification Badge ────────────────────────────────────────
+
+const BADGE_KEY = 'nirev-classroom-badge-seen';
+
+async function _checkCompletedAssignments() {
+  const profile = store.get('profile');
+  if (profile?.role !== 'teacher') return;
+
+  const sb        = getSupabase();
+  const teacherId = store.get('user')?.id;
+  if (!sb || !teacherId) return;
+
+  // Get last-seen timestamp from localStorage
+  const lastSeen = localStorage.getItem(BADGE_KEY) ?? '1970-01-01';
+
+  const { data, error } = await sb
+    .from('assignments')
+    .select('id', { count: 'exact' })
+    .eq('teacher_id', teacherId)
+    .eq('status', 'completed')
+    .gt('updated_at', lastSeen);
+
+  if (error || !data) return;
+
+  const count = data.length;
+  _setClassroomBadge(count);
+}
+
+function _setClassroomBadge(count) {
+  const navItem = document.querySelector('.nav-item[data-page="classroom"]');
+  if (!navItem) return;
+
+  let badge = navItem.querySelector('.nav-notification-badge');
+
+  if (count <= 0) {
+    badge?.remove();
+    return;
+  }
+
+  if (!badge) {
+    badge = document.createElement('span');
+    badge.className = 'nav-notification-badge';
+    navItem.appendChild(badge);
+  }
+  badge.textContent = count > 9 ? '9+' : count;
+}
+
+function _clearClassroomBadge() {
+  localStorage.setItem(BADGE_KEY, new Date().toISOString());
+  _setClassroomBadge(0);
 }
 
 // ── Load ──────────────────────────────────────────────────────
@@ -485,6 +544,10 @@ function _showStudentDetail(sid, profile, scores) {
       '</div>' +
       '<div class="skill-detail-list">' + skillRows + '</div>' +
       '<button class="btn btn--primary" id="btn-assign-assessment" style="margin-top:var(--space-4);width:100%;">✦ Assign Assessment</button>' +
+      '<div id="assignment-history-section" style="margin-top:var(--space-5);">' +
+        '<div style="font-size:0.75rem;font-weight:700;letter-spacing:0.08em;color:var(--white-muted);text-transform:uppercase;margin-bottom:var(--space-3);">Assignment History</div>' +
+        '<div id="assignment-history-list"><div class="assessment-loading"><div class="assessment-loading__ring"></div></div></div>' +
+      '</div>' +
     '</div>' +
 
     // Assign modal
@@ -566,8 +629,56 @@ function _showStudentDetail(sid, profile, scores) {
     } else {
       showToast('Assignment sent to ' + (profile.full_name ?? 'student') + '!', 'success');
       closeAssign();
+      _loadAssignmentHistory(sid); // refresh history after sending
     }
   });
+
+  // Load assignment history
+  _loadAssignmentHistory(sid);
+}
+
+// ── Assignment History ────────────────────────────────────────
+
+async function _loadAssignmentHistory(studentId) {
+  const listEl = document.getElementById('assignment-history-list');
+  if (!listEl) return;
+
+  const sb        = getSupabase();
+  const teacherId = store.get('user')?.id;
+
+  const { data, error } = await sb
+    .from('assignments')
+    .select('id, skill, level, message, status, created_at')
+    .eq('teacher_id', teacherId)
+    .eq('student_id', studentId)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    listEl.innerHTML = '<p style="color:var(--white-muted);font-size:0.8rem;">Could not load history.</p>';
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    listEl.innerHTML = '<p style="color:var(--white-muted);font-size:0.8rem;">No assignments sent yet.</p>';
+    return;
+  }
+
+  listEl.innerHTML = data.map(a => {
+    const skill      = a.skill?.charAt(0).toUpperCase() + a.skill?.slice(1);
+    const date       = _formatDate(a.created_at);
+    const isPending  = a.status === 'pending';
+    const statusColor = isPending ? 'var(--orange-bright,#ff7828)' : 'var(--status-success,#4caf50)';
+    const statusLabel = isPending ? 'Pending' : 'Completed';
+
+    return '<div style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-2) 0;border-bottom:1px solid rgba(255,255,255,0.06);">' +
+      '<div style="flex:1;min-width:0;">' +
+        '<div style="font-size:0.85rem;font-weight:600;color:var(--white-pure);">' + skill + ' · ' + a.level + '</div>' +
+        (a.message ? '<div style="font-size:0.75rem;color:var(--white-muted);font-style:italic;margin-top:2px;">"' + a.message + '"</div>' : '') +
+        '<div style="font-size:0.72rem;color:var(--white-muted);margin-top:2px;">' + date + '</div>' +
+      '</div>' +
+      '<div style="font-size:0.72rem;font-weight:700;color:' + statusColor + ';background:' + statusColor + '18;border-radius:999px;padding:2px 8px;flex-shrink:0;">' + statusLabel + '</div>' +
+    '</div>';
+  }).join('');
 }
 
 // ── Learner Events ────────────────────────────────────────────
