@@ -1,1 +1,225 @@
+/* ============================================================
+   NIREV AI — Premium Light Mode
+   Loaded LAST (after classroom.css). Everything is scoped to
+   html[data-theme="light"], so Dark Mode (:root in theme.css)
+   is untouched.
 
+   Strategy
+   1. Redefine the real tokens from theme.css → every stylesheet that
+      uses var(--black-*), var(--white-*), var(--gold-*), … re-themes.
+   2. Override only literals that cannot follow a token (hardcoded
+      colours in layout/components/auth/classroom/dashboard CSS and
+      inline styles emitted by JS).
+
+   Token semantics in this codebase
+   - --black-*  = surfaces & borders      - --white-* = text colours
+   - --black-base is ALSO used as the text colour on gold/orange fills
+     (avatars, check marks, milestone dots), so in Light it stays DARK
+     and the two places that use it as a background are overridden §4.
+   - --gold-bright / --orange-bright / --orange-light are used as TEXT
+     colours → darkened here for WCAG AA on white.
+   ============================================================ */
+
+/* ══ 1. TOKENS ═════════════════════════════════════════════ */
+html[data-theme="light"] {
+  color-scheme: light;
+
+  /* Surfaces */
+  --black-void:     #F5F4F0;   /* page */
+  --black-deep:     #F0EEE8;
+  --black-base:     #1A1814;   /* DARK on purpose — see header */
+  --black-surface:  #FFFFFF;   /* cards */
+  --black-elevated: #F7F5F0;   /* inset rows, inputs, pills */
+  --black-card:     #EFECE4;   /* hover */
+  --black-border:   #E2DED4;
+  --black-muted:    #D3CEC2;
+  --black-subtle:   #BDB7A8;   /* hover borders */
+
+  /* Gold — fills keep brand #C9A84C; text-use tokens are AA-safe */
+  --gold-pure:      #C9A84C;
+  --gold-bright:    #7F6414;
+  --gold-light:     #B8942E;
+  --gold-dim:       #A8852A;
+  --gold-ghost:     rgba(201,168,76,0.12);
+  --gold-glow:      rgba(201,168,76,0.25);
+  --gold-line:      rgba(201,168,76,0.35);
+
+  /* Orange */
+  --orange-core:    #E07B00;
+  --orange-bright:  #9C4C00;
+  --orange-light:   #823F00;
+  --orange-glow:    rgba(224,123,0,0.18);
+  --orange-ghost:   rgba(224,123,0,0.09);
+  --orange-line:    rgba(224,123,0,0.30);
+
+  /* Text */
+  --white-primary:  #1A1814;
+  --white-secondary:#4A453F;
+  --white-muted:    #6B6560;
+  --white-subtle:   #726C66;
+  --white-ghost:    rgba(26,24,20,0.05);
+
+  /* Status (AA as text on white) */
+  --status-success: #15803D;
+  --status-warning: #A16207;
+  --status-danger:  #B91C1C;
+  --status-info:    #1D4ED8;
+
+  /* Shadows */
+  --shadow-xs:      0 1px 2px rgba(26,24,20,0.06);
+  --shadow-sm:      0 1px 3px rgba(26,24,20,0.07), 0 2px 8px rgba(26,24,20,0.04);
+  --shadow-md:      0 2px 6px rgba(26,24,20,0.06), 0 8px 24px rgba(26,24,20,0.07);
+  --shadow-lg:      0 4px 12px rgba(26,24,20,0.08), 0 16px 40px rgba(26,24,20,0.08);
+  --shadow-xl:      0 8px 24px rgba(26,24,20,0.12), 0 24px 56px rgba(26,24,20,0.12);
+  --shadow-gold-sm: 0 0 0 1px var(--gold-line), 0 4px 16px rgba(201,168,76,0.18);
+  --shadow-gold-md: 0 0 0 1px var(--gold-line), 0 8px 32px rgba(201,168,76,0.22);
+  --shadow-orange:  0 0 0 1px var(--orange-line), 0 4px 16px rgba(224,123,0,0.14);
+  --shadow-card:    0 1px 2px rgba(26,24,20,0.05), 0 4px 16px rgba(26,24,20,0.04);
+
+  /* Glass / intelligence */
+  --glass-bg:     rgba(255,255,255,0.85);
+  --glass-border: rgba(201,168,76,0.25);
+  --intel-bg:     rgba(224,123,0,0.06);
+  --intel-border: rgba(224,123,0,0.22);
+  --intel-glow:   0 2px 16px rgba(224,123,0,0.06);
+
+  /* Tokens referenced in CSS/JS but never defined in theme.css:
+     they currently fall back to hardcoded DARK values (classroom.css
+     student avatar, classroom.js assign modal). Defined for Light only.
+     (--white-pure is intentionally left undefined: an invalid var()
+     falls back to inherited text colour, which is correct here.) */
+  --gold-dark:      #F6EFD8;
+  --gold-muted:     #D9C07A;
+  --surface-2:      #FFFFFF;
+  --border-subtle:  rgba(26,24,20,0.12);
+}
+
+/* ══ 2. PAGE BASE ══════════════════════════════════════════ */
+html[data-theme="light"] ::selection {
+  background: rgba(201,168,76,0.28);
+  color: var(--white-primary);
+}
+html[data-theme="light"] :focus-visible {
+  outline: 2px solid #7F6414;           /* AA on page bg */
+  outline-offset: 3px;
+}
+/* base.css vignette is rgba(0,0,0,.4) — far too heavy on light */
+html[data-theme="light"] body::after {
+  background: radial-gradient(ellipse 100% 100% at 50% 0%, transparent 55%, rgba(26,24,20,0.05) 100%);
+}
+
+/* ══ 3. SHELL: sidebar / topbar / overlay (layout.css) ═════ */
+html[data-theme="light"] .sidebar        { background: rgba(255,255,255,0.94); }
+html[data-theme="light"] .topbar         { background: rgba(255,255,255,0.88); }
+html[data-theme="light"] .sidebar-overlay{ background: rgba(26,24,20,0.38); }
+html[data-theme="light"] .sidebar__logo-text,
+html[data-theme="light"] .auth-card__logo-text,
+html[data-theme="light"] .gold-text {
+  /* gold-pure→gold-light gradient is ~2.5:1 on white; use deeper golds */
+  background-image: linear-gradient(135deg, #8A6D1B 0%, #B8942E 55%, #8A6D1B 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+html[data-theme="light"] .sidebar__logo-dot  { box-shadow: 0 0 6px rgba(224,123,0,0.4); }
+html[data-theme="light"] .sidebar__logo-img  { filter: drop-shadow(0 2px 6px rgba(26,24,20,0.15)); }
+html[data-theme="light"] .nav-item.active::before { box-shadow: 0 0 4px rgba(224,123,0,0.5); }
+html[data-theme="light"] .user-avatar { color: #1A1814; }
+
+/* ══ 3b. Opacity-dimmed text/icons that fall below AA on light ═ */
+html[data-theme="light"] .nav-item__icon  { opacity: 0.9; }   /* layout.css: 0.6 */
+html[data-theme="light"] .section-link    { opacity: 1; }     /* dashboard/components: 0.8 */
+/* decorative gold glyphs use --gold-pure (fill colour, ~2.3:1 as text) */
+html[data-theme="light"] .class-card__icon,
+html[data-theme="light"] .auth-role-btn__icon { color: var(--gold-bright); }
+
+/* ══ 4. AUTH (auth.css, components.css) ════════════════════ */
+html[data-theme="light"] .auth-brand {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,168,76,0.14) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(224,123,0,0.07) 0%, transparent 50%),
+    linear-gradient(180deg, #FDFCF8 0%, #F3F0E6 100%);
+}
+html[data-theme="light"] .auth-form-wrap { background: #FAF9F6; }          /* was var(--black-base) */
+html[data-theme="light"] .auth-tabs      { background: var(--black-elevated); } /* was var(--black-base) */
+html[data-theme="light"] .auth-brand__academy,
+html[data-theme="light"] .auth-brand__nirev-name {
+  background-image: linear-gradient(135deg, #8A6D1B, #B8942E, #8A6D1B);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+html[data-theme="light"] .auth-brand__logo-img { filter: drop-shadow(0 6px 18px rgba(201,168,76,0.30)); }
+
+/* ══ 5. BUTTONS (components.css) — fixed brand fills, dark text ═ */
+/* Their gradients end on --gold-bright/--orange-bright, which are text
+   tokens in Light, so the fills are restated with literal brand colours. */
+html[data-theme="light"] .btn--primary {
+  background: linear-gradient(160deg, #B8942A 0%, #C9A84C 45%, #DDB96A 100%);
+  color: #1A1814;
+  border-color: rgba(138,109,27,0.45);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.35) inset, 0 2px 8px rgba(201,168,76,0.30), 0 1px 2px rgba(26,24,20,0.15);
+}
+html[data-theme="light"] .btn--primary:hover {
+  box-shadow: 0 1px 0 rgba(255,255,255,0.35) inset, 0 4px 16px rgba(201,168,76,0.40), 0 2px 4px rgba(26,24,20,0.15);
+}
+html[data-theme="light"] .btn--accent {
+  background: linear-gradient(160deg, #D47500 0%, #E07B00 50%, #F59020 100%);
+  color: #1A1814;
+  border-color: rgba(168,84,0,0.45);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.3) inset, 0 2px 8px rgba(224,123,0,0.28), 0 1px 2px rgba(26,24,20,0.15);
+}
+html[data-theme="light"] .btn--accent:hover {
+  box-shadow: 0 1px 0 rgba(255,255,255,0.3) inset, 0 4px 16px rgba(224,123,0,0.38), 0 2px 4px rgba(26,24,20,0.15);
+}
+html[data-theme="light"] .btn--secondary { box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset; }
+
+/* ══ 6. TOASTS (components.css: backgrounds hard-wired to --black-card) ═ */
+html[data-theme="light"] .toast            { background: var(--black-surface); }
+html[data-theme="light"] .toast--success   { background: linear-gradient(135deg, rgba(21,128,61,0.08),  var(--black-surface)); border-color: rgba(21,128,61,0.30); }
+html[data-theme="light"] .toast--error     { background: linear-gradient(135deg, rgba(185,28,28,0.08),  var(--black-surface)); border-color: rgba(185,28,28,0.30); }
+html[data-theme="light"] .toast--warning   { background: linear-gradient(135deg, rgba(161,98,7,0.09),   var(--black-surface)); border-color: rgba(161,98,7,0.30); }
+html[data-theme="light"] .toast--info      { background: linear-gradient(135deg, rgba(29,78,216,0.08),  var(--black-surface)); border-color: rgba(29,78,216,0.30); }
+
+/* ══ 7. DASHBOARD (dashboard.css) ══════════════════════════ */
+html[data-theme="light"] .dashboard-hero {
+  background:
+    linear-gradient(135deg, rgba(201,168,76,0.12) 0%, rgba(224,123,0,0.05) 40%, transparent 70%),
+    var(--black-surface);
+  box-shadow: var(--shadow-card);
+}
+html[data-theme="light"] .dashboard-hero__title span {
+  background-image: linear-gradient(135deg, #8A6D1B 0%, #A8852A 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+html[data-theme="light"] .dashboard-hero__cta {
+  background: linear-gradient(135deg, #E07B00, #F59020);
+  color: #1A1814;
+  box-shadow: 0 2px 10px rgba(224,123,0,0.30);
+}
+html[data-theme="light"] .dashboard-hero__cta:hover { box-shadow: 0 4px 18px rgba(224,123,0,0.40); }
+/* nirev-character.png is opaque on black: present it as framed artwork */
+html[data-theme="light"] .dashboard-hero__character img,
+html[data-theme="light"] .auth-brand__character {
+  filter: none;
+  border-radius: var(--radius-xl);
+  box-shadow: 0 1px 2px rgba(26,24,20,0.10), 0 12px 32px rgba(26,24,20,0.18);
+}
+html[data-theme="light"] .intel-panel {
+  background: linear-gradient(var(--intel-bg), var(--intel-bg)), var(--black-surface);
+}
+html[data-theme="light"] .insight-item       { border-bottom-color: rgba(26,24,20,0.07); }
+html[data-theme="light"] .insight-bar-wrap   { background: rgba(26,24,20,0.08); }
+
+/* ══ 8. CLASSROOM (classroom.css + inline styles in classroom.js) ═ */
+html[data-theme="light"] .create-class-modal__backdrop { background: rgba(26,24,20,0.45); }
+/* inline style="background:rgba(0,0,0,0.7)" in classroom.js */
+html[data-theme="light"] #assign-modal-backdrop { background: rgba(26,24,20,0.45) !important; }
+html[data-theme="light"] .btn-delete-class:hover { color: var(--status-danger); background: rgba(185,28,28,0.08); }
+
+/* ══ 9. THEME TOGGLE (new topbar button; works in both themes) ═ */
+.theme-toggle .theme-toggle__sun  { display: none; }
+html[data-theme="dark"] .theme-toggle .theme-toggle__moon { display: none; }
+html[data-theme="dark"] .theme-toggle .theme-toggle__sun  { display: block; }
