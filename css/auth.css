@@ -562,3 +562,22 @@ html[data-theme="light"] .screen--auth {
 @media (prefers-reduced-motion: reduce) {
   .auth-brand__hero-logo-img { animation: none; }
 }
+/* Auth logo visibility fix */
+.auth-brand__logo-img {
+  display: block;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  object-fit: contain;
+  opacity: 1;
+  visibility: visible;
+  position: relative;
+  z-index: 2;
+}
+
+.auth-brand__logo-wrap {
+  display: flex;
+  align-items: center;
+  visibility: visible;
+  opacity: 1;
+}
