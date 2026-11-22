@@ -18,6 +18,7 @@
  * ─────────────────────────────────────────────────────────────
  */
 
+
 // ── Environment Detection ─────────────────────────────────────
 
 export const ENV = {
@@ -32,14 +33,15 @@ export const ENV = {
 
 
 // ── Supabase ──────────────────────────────────────────────────
-// Public Supabase anon key.
+// Public Supabase Publishable Key.
 // Access must always be protected by Supabase RLS policies.
+// NEVER expose the Supabase Secret Key in frontend code.
 
 export const SUPABASE = {
   URL: 'https://odzuzbazeysyxlwczjax.supabase.co',
 
   ANON_KEY:
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXAiLCJyZWYiOiJvZHp1emJhemV5c3l4bHdjemF4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0ODUyODcsImV4cCI6MjA5NjA2MTI4N30.r8JajCWeUZcMpt1ZdoNT-DAfFTbRMzY_tdSclKndrjs',
+    'sb_publishable_CKMZ3EEdqPjgDMKO6gQuUQ_jIQtD2qO',
 };
 
 
