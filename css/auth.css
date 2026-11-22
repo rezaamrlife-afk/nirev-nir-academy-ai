@@ -1,7 +1,7 @@
 /* ============================================================
-   NIREV AI — Auth Page  [v5 — Premium Redesign]
-   Inspired by NIRVE / NIRVO layout quality.
-   Colors: NIREV gold / orange palette — unchanged.
+   NIREV AI — Auth Page  [v6 — NIRVE-inspired layout]
+   Bold product name · NIR Academy logo as hero · clean layout
+   Colors: NIREV gold / orange — unchanged
    ============================================================ */
 
 /* ── Panel visibility ─────────────────────────────────────── */
@@ -26,195 +26,218 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: var(--space-12) var(--space-10) var(--space-10);
+  padding: var(--space-10) var(--space-12);
   background:
-    radial-gradient(ellipse 100% 55% at 50% -5%,  rgba(201,168,76,0.14)  0%, transparent 65%),
-    radial-gradient(ellipse  55% 40% at 95%  95%,  rgba(224,123,0,0.08)   0%, transparent 55%),
-    radial-gradient(ellipse  40% 35% at  0% 100%,  rgba(201,168,76,0.06)  0%, transparent 55%),
-    linear-gradient(170deg, #0E0C09 0%, #080604 100%);
+    radial-gradient(ellipse 80% 50% at 50% 0%,   rgba(201,168,76,0.10) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 40% at 100% 100%, rgba(224,123,0,0.07)  0%, transparent 55%),
+    linear-gradient(170deg, #0E0C09 0%, #070503 100%);
   border-right: 1px solid var(--black-border);
   overflow: hidden;
 }
 
-/* Thin gold top rule — like NIRVE header line */
+/* Top gold line */
 .auth-brand::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
-  height: 2px;
+  height: 3px;
   background: linear-gradient(90deg,
     transparent 0%,
-    rgba(201,168,76,0.0) 10%,
+    var(--gold-dim)  20%,
     var(--gold-pure) 50%,
-    rgba(201,168,76,0.0) 90%,
+    var(--gold-dim)  80%,
     transparent 100%);
-  opacity: 0.55;
+  opacity: 0.6;
 }
 
-/* Subtle bottom-right warm glow */
-.auth-brand::after {
-  content: '';
-  position: absolute;
-  bottom: -60px; right: -60px;
-  width: 320px; height: 320px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(224,123,0,0.07) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-/* ── Top: Logo + Academy name ─────────────────────────────── */
+/* ── Top: Logo + name in one row ──────────────────────────── */
 .auth-brand__logo-wrap {
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  margin-bottom: var(--space-8);
+  margin-bottom: var(--space-10);
   animation: fade-up var(--dur-slow) var(--ease-out) 0.05s both;
 }
 
 .auth-brand__logo-img {
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   border-radius: var(--radius-md);
   flex-shrink: 0;
-  box-shadow: 0 4px 16px rgba(201,168,76,0.22);
 }
 
-.auth-brand__text {
-  animation: fade-up var(--dur-slow) var(--ease-out) 0.1s both;
-}
+.auth-brand__text { line-height: 1; }
 
 .auth-brand__academy {
   font-family: var(--font-display);
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  background: linear-gradient(135deg, var(--gold-pure), var(--gold-light));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  line-height: 1.2;
-  margin-bottom: 2px;
+  color: var(--gold-pure);
+  margin-bottom: 3px;
 }
 
 .auth-brand__tagline {
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--white-muted);
-  line-height: 1.4;
 }
 
-/* ── Middle: Hero block — big NIREV name + character ──────── */
+/* ── Hero block ───────────────────────────────────────────── */
 .auth-brand__hero {
   flex: 1;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  gap: var(--space-6);
-  animation: fade-up var(--dur-slow) var(--ease-out) 0.18s both;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
 }
 
-/* Large product name — like NIRVE's big bold left-aligned name */
+/* ── Left: big NIREV text ─────────────────────────────────── */
+.auth-brand__hero-text {
+  flex: 1;
+  animation: fade-up var(--dur-slow) var(--ease-out) 0.15s both;
+}
+
+/* Big bold product name — like NIRVE */
 .auth-brand__product-name {
   font-family: var(--font-display);
-  font-size: clamp(3.5rem, 7vw, 6rem);
-  font-weight: 300;
-  letter-spacing: 0.08em;
-  line-height: 0.95;
+  font-size: clamp(4rem, 8vw, 7.5rem);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 0.9;
+  color: var(--gold-pure);
+  margin: 0 0 var(--space-3);
+  /* Subtle gradient like NIRVE's teal — but gold for NIREV */
   background: linear-gradient(
-    145deg,
-    var(--gold-light)   0%,
-    var(--gold-pure)   40%,
-    var(--orange-core) 75%,
+    160deg,
+    var(--gold-light) 0%,
+    var(--gold-pure)  50%,
     var(--gold-dim)   100%
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin: 0;
 }
 
 .auth-brand__product-sub {
   font-family: var(--font-mono);
   font-size: 0.72rem;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--white-muted);
-  margin-top: var(--space-2);
+  margin-bottom: var(--space-3);
 }
 
-/* Character image — elevated, centered floating card */
-.auth-brand__character-wrap {
-  position: relative;
-  align-self: center;
-  animation: fade-up var(--dur-slower) var(--ease-spring) 0.28s both;
-}
-
-.auth-brand__character {
-  width: 100%;
-  max-width: 300px;
-  height: auto;
-  display: block;
-  filter:
-    drop-shadow(0 24px 56px rgba(201,168,76,0.18))
-    drop-shadow(0  8px 24px rgba(0,0,0,0.75));
-}
-
-/* Floating glow ring behind character */
-.auth-brand__character-wrap::before {
+/* Short divider line — like NIRVE's teal line */
+.auth-brand__hero-text::after {
   content: '';
-  position: absolute;
-  inset: 10% 15%;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(201,168,76,0.09) 0%, transparent 70%);
-  filter: blur(24px);
-  pointer-events: none;
+  display: block;
+  width: 48px;
+  height: 2px;
+  background: var(--gold-pure);
+  margin: var(--space-3) 0;
+  opacity: 0.7;
 }
 
-/* Pills row */
+.auth-brand__tagline-long {
+  font-size: var(--text-md);
+  font-weight: 600;
+  color: var(--white-secondary);
+  line-height: 1.4;
+  margin-bottom: 0;
+}
+
+.auth-brand__tagline-long span {
+  color: var(--gold-bright);
+}
+
 .auth-brand__pills {
   display: flex;
   gap: var(--space-2);
   flex-wrap: wrap;
-  animation: fade-up var(--dur-slow) var(--ease-out) 0.25s both;
+  animation: fade-up var(--dur-slow) var(--ease-out) 0.22s both;
 }
 
 .auth-brand__pill {
   font-family: var(--font-mono);
   font-size: 0.65rem;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--white-muted);
-  padding: 4px 11px;
-  border: 1px solid rgba(201,168,76,0.14);
+  padding: 5px 12px;
+  border: 1px solid rgba(201,168,76,0.18);
   border-radius: var(--radius-pill);
-  background: rgba(201,168,76,0.04);
-  backdrop-filter: blur(8px);
+  background: rgba(201,168,76,0.05);
 }
 
-/* Old layout helper — now hidden; character is in hero block */
-.auth-brand__character-caption { display: none; }
-.auth-brand__nirev-name        { display: none; }
-.auth-brand__nirev-sub         { display: none; }
-.auth-brand__divider           { display: none; }
+/* ── Right: NIR Academy logo as hero image — like NIRVE's logo card ── */
+.auth-brand__hero-logo {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  animation: fade-up var(--dur-slower) var(--ease-spring) 0.25s both;
+}
+
+.auth-brand__hero-logo-img {
+  width: 220px;
+  height: 220px;
+  object-fit: contain;
+  border-radius: var(--radius-2xl);
+  background: rgba(201,168,76,0.04);
+  border: 1px solid rgba(201,168,76,0.12);
+  padding: var(--space-4);
+  box-shadow:
+    0 0 0 1px rgba(201,168,76,0.08),
+    0 20px 60px rgba(0,0,0,0.6),
+    0 4px 20px rgba(201,168,76,0.12);
+  /* Floating effect */
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+
+.auth-brand__hero-badge {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-pure);
+  background: rgba(201,168,76,0.08);
+  border: 1px solid rgba(201,168,76,0.18);
+  border-radius: var(--radius-pill);
+  padding: 4px 14px;
+}
+
+/* Hidden old elements */
+.auth-brand__character-wrap,
+.auth-brand__character-caption,
+.auth-brand__nirev-name,
+.auth-brand__nirev-sub,
+.auth-brand__divider { display: none; }
 
 /* ── Bottom: Founder card ─────────────────────────────────── */
 .auth-brand__founder {
   display: flex;
   align-items: center;
   gap: var(--space-3);
+  margin-top: var(--space-8);
   padding: var(--space-3) var(--space-4);
   background: rgba(255,245,210,0.03);
   border: 1px solid rgba(201,168,76,0.10);
   border-radius: var(--radius-lg);
-  animation: fade-up var(--dur-slow) var(--ease-out) 0.35s both;
-  margin-top: var(--space-6);
+  animation: fade-up var(--dur-slow) var(--ease-out) 0.3s both;
+  max-width: 400px;
 }
 
-/* Small avatar circle */
 .auth-brand__founder::before {
   content: 'N';
   flex-shrink: 0;
@@ -224,7 +247,7 @@
   background: linear-gradient(135deg, var(--gold-dim), var(--gold-pure));
   color: var(--black-void);
   font-family: var(--font-display);
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -238,7 +261,7 @@
   font-weight: 600;
   color: var(--gold-bright);
   letter-spacing: -0.01em;
-  line-height: 1.2;
+  margin-bottom: 2px;
 }
 
 .auth-brand__founder-title {
@@ -247,14 +270,13 @@
   color: var(--white-muted);
   letter-spacing: 0.04em;
   line-height: 1.4;
-  margin-top: 1px;
 }
 
 /* ════════════════════════════════════════════════════════════
    RIGHT FORM PANEL
    ════════════════════════════════════════════════════════════ */
 .auth-form-wrap {
-  width: 480px;
+  width: 460px;
   max-width: 100%;
   flex-shrink: 0;
   display: flex;
@@ -267,18 +289,18 @@
   overflow-y: auto;
 }
 
-/* Subtle left-edge separator glow */
+/* Left separator */
 .auth-form-wrap::before {
   content: '';
   position: absolute;
-  top: 15%; bottom: 15%; left: 0;
+  top: 20%; bottom: 20%; left: 0;
   width: 1px;
   background: linear-gradient(
     180deg,
-    transparent 0%,
-    rgba(201,168,76,0.18) 40%,
-    rgba(201,168,76,0.18) 60%,
-    transparent 100%
+    transparent,
+    rgba(201,168,76,0.15) 40%,
+    rgba(201,168,76,0.15) 60%,
+    transparent
   );
 }
 
@@ -289,9 +311,7 @@
 }
 
 /* ── Auth Card Header ─────────────────────────────────────── */
-.auth-card__header {
-  margin-bottom: var(--space-6);
-}
+.auth-card__header { margin-bottom: var(--space-6); }
 
 .auth-card__logo {
   display: flex;
@@ -348,8 +368,7 @@
   color: var(--white-muted);
   border-radius: calc(var(--radius-lg) - 3px);
   cursor: pointer;
-  transition: background var(--dur-fast) var(--ease-smooth),
-              color     var(--dur-fast) var(--ease-smooth);
+  transition: background var(--dur-fast), color var(--dur-fast);
   user-select: none;
 }
 
@@ -359,10 +378,7 @@
 }
 
 .auth-tab.active {
-  background: linear-gradient(135deg,
-    rgba(201,168,76,0.14),
-    rgba(224,123,0,0.08)
-  );
+  background: linear-gradient(135deg, rgba(201,168,76,0.14), rgba(224,123,0,0.08));
   color: var(--gold-bright);
   border: 1px solid rgba(201,168,76,0.18);
   font-weight: 600;
@@ -385,8 +401,7 @@
   border: 1px solid var(--black-border);
   border-radius: var(--radius-md);
   cursor: pointer;
-  transition: border-color var(--dur-base),
-              background   var(--dur-base);
+  transition: border-color var(--dur-base), background var(--dur-base);
   background: var(--black-surface);
 }
 
@@ -415,19 +430,19 @@
   color: var(--white-muted);
 }
 
-.auth-role-btn--active .auth-role-btn__text  { color: var(--white-primary); }
-.auth-role-btn--active .auth-role-btn__icon  { color: var(--orange-bright); }
+.auth-role-btn--active .auth-role-btn__text { color: var(--white-primary); }
+.auth-role-btn--active .auth-role-btn__icon { color: var(--orange-bright); }
 
 /* ════════════════════════════════════════════════════════════
    RESPONSIVE
    ════════════════════════════════════════════════════════════ */
+@media (max-width: 1100px) {
+  .auth-brand__hero-logo-img { width: 180px; height: 180px; }
+  .auth-brand { padding: var(--space-8) var(--space-8); }
+}
 
-/* Tablet: stack vertically */
 @media (max-width: 900px) {
-  .screen--auth {
-    flex-direction: column;
-    overflow-y: auto;
-  }
+  .screen--auth { flex-direction: column; overflow-y: auto; }
 
   .auth-brand {
     border-right: none;
@@ -435,79 +450,53 @@
     padding: var(--space-8) var(--space-6);
   }
 
-  .auth-brand__hero {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-6);
-  }
-
-  .auth-brand__product-name  { font-size: clamp(2.5rem, 8vw, 4rem); }
-  .auth-brand__character     { max-width: 180px; }
+  .auth-brand__hero { gap: var(--space-5); }
+  .auth-brand__hero-logo-img { width: 150px; height: 150px; }
+  .auth-brand__product-name  { font-size: clamp(3rem, 10vw, 5rem); }
 
   .auth-form-wrap {
     width: 100%;
-    padding: var(--space-6) var(--space-6);
+    padding: var(--space-6);
   }
-
   .auth-form-wrap::before { display: none; }
 }
 
-/* Mobile */
 @media (max-width: 600px) {
-  .auth-brand {
-    padding: var(--space-6) var(--space-5);
-  }
-
-  .auth-brand__logo-img  { width: 36px; height: 36px; }
-  .auth-brand__academy   { font-size: 0.9rem; }
+  .auth-brand { padding: var(--space-6) var(--space-5); }
 
   .auth-brand__hero {
     flex-direction: column;
     align-items: flex-start;
-    gap: var(--space-4);
+    gap: var(--space-5);
   }
 
-  .auth-brand__product-name { font-size: clamp(2.75rem, 14vw, 3.5rem); }
-  .auth-brand__character    { max-width: 160px; align-self: center; }
-
-  .auth-form-wrap { padding: var(--space-5) var(--space-4); }
-  .auth-card      { max-width: 100%; }
-
-  .auth-brand__founder { display: none; }
+  .auth-brand__hero-logo { align-self: center; }
+  .auth-brand__hero-logo-img { width: 130px; height: 130px; }
+  .auth-brand__product-name  { font-size: clamp(3.5rem, 16vw, 4.5rem); }
+  .auth-brand__founder       { display: none; }
+  .auth-form-wrap            { padding: var(--space-5) var(--space-4); }
 }
 
-/* Landscape mobile — keep side-by-side, compact */
 @media (max-height: 500px) and (orientation: landscape) {
-  .screen--auth {
-    flex-direction: row;
-    overflow-y: auto;
-  }
+  .screen--auth { flex-direction: row; overflow-y: auto; }
 
   .auth-brand {
-    width: 220px;
+    width: 240px;
     flex-shrink: 0;
-    padding: var(--space-4) var(--space-4);
-    overflow-y: auto;
-    border-right: 1px solid var(--black-border);
-    border-bottom: none;
-  }
-
-  .auth-brand__hero       { flex: 0; gap: var(--space-3); }
-  .auth-brand__character  { max-width: 100px; }
-  .auth-brand__pills      { display: none; }
-  .auth-brand__founder    { display: none; }
-
-  .auth-brand__product-name { font-size: 2rem; }
-  .auth-brand__logo-img     { width: 32px; height: 32px; }
-
-  .auth-form-wrap {
-    flex: 1;
-    padding: var(--space-4);
+    padding: var(--space-4) var(--space-5);
     overflow-y: auto;
   }
 
-  .auth-card__header    { margin-bottom: var(--space-3); }
-  .auth-tabs            { margin-bottom: var(--space-3); }
-  .form-group           { margin-bottom: var(--space-3); }
+  .auth-brand__logo-wrap    { margin-bottom: var(--space-4); }
+  .auth-brand__hero         { flex-direction: column; gap: var(--space-3); }
+  .auth-brand__hero-logo    { display: none; }
+  .auth-brand__pills        { display: none; }
+  .auth-brand__founder      { display: none; }
+  .auth-brand__product-name { font-size: 2.5rem; }
+  .auth-brand__tagline-long { font-size: var(--text-sm); }
+
+  .auth-form-wrap { flex: 1; padding: var(--space-4); overflow-y: auto; }
+  .auth-card__header { margin-bottom: var(--space-3); }
+  .auth-tabs         { margin-bottom: var(--space-3); }
+  .form-group        { margin-bottom: var(--space-3); }
 }
