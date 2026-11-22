@@ -136,21 +136,21 @@
 }
 
 .nav-item.active {
-  background: rgba(224, 123, 0, 0.08);
-  color: var(--orange-bright);
-  border-color: rgba(224, 123, 0, 0.15);
+  background: rgba(201, 168, 76, 0.08);
+  color: var(--gold-bright);
+  border-color: rgba(201, 168, 76, 0.16);
 }
 
 .nav-item.active::before {
   content: '';
   position: absolute;
   left: -1px;
-  top: 25%;
-  height: 50%;
+  top: 22%;
+  height: 56%;
   width: 2px;
-  background: var(--orange-core);
+  background: linear-gradient(180deg, var(--gold-dim), var(--gold-pure));
   border-radius: var(--radius-pill);
-  box-shadow: 0 0 6px var(--orange-core);
+  box-shadow: 0 0 7px rgba(201,168,76,0.55);
 }
 
 .nav-item__icon {
