@@ -1,44 +1,46 @@
 /* ============================================================
-   NIREV AI — Theme System  [v3 — Vivid & Premium]
+   NIREV AI — Theme System  [v4 — Premium Redesign]
    ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&family=Cormorant+Garamond:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
-  /* ── Blacks — slightly lighter for better contrast ── */
-  --black-void:     #050505;
-  --black-deep:     #080808;
-  --black-base:     #0C0C0C;
-  --black-surface:  #141414;
-  --black-elevated: #1A1A1A;
-  --black-card:     #202020;
-  --black-border:   #2C2C2C;
-  --black-muted:    #383838;
-  --black-subtle:   #444444;
+  /* ── Blacks / Dark surfaces ── */
+  --black-void:     #0A0906;
+  --black-deep:     #0D0C09;
+  --black-base:     #111009;
+  --black-surface:  #18160F;
+  --black-elevated: #1E1C13;
+  --black-card:     #252210;  /* slightly warmer hover */
+  --black-border:   rgba(255,245,210,0.08);
+  --black-muted:    rgba(255,245,210,0.13);
+  --black-subtle:   rgba(255,245,210,0.18);
 
   /* ── Golds ── */
   --gold-pure:      #C9A84C;
   --gold-bright:    #DDB96A;
   --gold-light:     #EDD090;
   --gold-dim:       #8A6F28;
-  --gold-ghost:     rgba(201, 168, 76, 0.10);
-  --gold-glow:      rgba(201, 168, 76, 0.22);
-  --gold-line:      rgba(201, 168, 76, 0.16);
+  --gold-dark:      #F6EFD8;   /* light-mode tint bg */
+  --gold-muted:     #D9C07A;
+  --gold-ghost:     rgba(201,168,76,0.09);
+  --gold-glow:      rgba(201,168,76,0.22);
+  --gold-line:      rgba(201,168,76,0.18);
 
-  /* ── Orange — stronger presence ── */
+  /* ── Orange ── */
   --orange-core:    #E07B00;
   --orange-bright:  #F59020;
   --orange-light:   #FFAA44;
-  --orange-glow:    rgba(224, 123, 0, 0.20);
-  --orange-ghost:   rgba(224, 123, 0, 0.10);
-  --orange-line:    rgba(224, 123, 0, 0.22);
+  --orange-glow:    rgba(224,123,0,0.20);
+  --orange-ghost:   rgba(224,123,0,0.09);
+  --orange-line:    rgba(224,123,0,0.22);
 
-  /* ── White — higher contrast ── */
-  --white-primary:  #F2F2EE;
-  --white-secondary:#C8C8C2;
-  --white-muted:    #8A8A84;
-  --white-subtle:   #606060;
-  --white-ghost:    rgba(242, 242, 238, 0.08);
+  /* ── Text ── */
+  --white-primary:  #F0EDE4;
+  --white-secondary:#BDB59E;
+  --white-muted:    #7A7265;
+  --white-subtle:   #5A5248;
+  --white-ghost:    rgba(240,237,228,0.06);
 
   /* ── Status ── */
   --status-success: #22C55E;
@@ -51,17 +53,17 @@
   --font-ui:      'Inter', -apple-system, sans-serif;
   --font-mono:    'JetBrains Mono', monospace;
 
-  /* ── Type Scale — larger for readability ── */
-  --text-xs:   0.75rem;    /* 12px */
-  --text-sm:   0.875rem;   /* 14px */
-  --text-base: 0.9375rem;  /* 15px */
-  --text-md:   1rem;       /* 16px */
-  --text-lg:   1.125rem;   /* 18px */
-  --text-xl:   1.375rem;   /* 22px */
-  --text-2xl:  1.75rem;    /* 28px */
-  --text-3xl:  2.25rem;    /* 36px */
-  --text-4xl:  3.5rem;     /* 56px */
-  --text-5xl:  4.5rem;     /* 72px */
+  /* ── Type Scale ── */
+  --text-xs:   0.75rem;
+  --text-sm:   0.875rem;
+  --text-base: 0.9375rem;
+  --text-md:   1rem;
+  --text-lg:   1.125rem;
+  --text-xl:   1.375rem;
+  --text-2xl:  1.75rem;
+  --text-3xl:  2.25rem;
+  --text-4xl:  3.5rem;
+  --text-5xl:  4.5rem;
 
   /* ── Spacing ── */
   --space-1:  4px;  --space-2:  8px;  --space-3:  12px;
@@ -70,40 +72,52 @@
   --space-16: 64px; --space-20: 80px; --space-24: 96px;
 
   /* ── Radii ── */
-  --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px;
-  --radius-xl: 16px; --radius-2xl: 20px; --radius-pill: 999px;
+  --radius-sm:  4px;
+  --radius-md:  10px;
+  --radius-lg:  14px;
+  --radius-xl:  20px;
+  --radius-2xl: 24px;
+  --radius-pill: 999px;
 
-  /* ── Shadows ── */
-  --shadow-xs:      0 1px 2px rgba(0,0,0,0.5);
-  --shadow-sm:      0 2px 8px rgba(0,0,0,0.6), 0 1px 2px rgba(0,0,0,0.4);
-  --shadow-md:      0 4px 16px rgba(0,0,0,0.7), 0 2px 4px rgba(0,0,0,0.5);
-  --shadow-lg:      0 8px 32px rgba(0,0,0,0.8), 0 2px 8px rgba(0,0,0,0.6);
-  --shadow-xl:      0 16px 48px rgba(0,0,0,0.9), 0 4px 16px rgba(0,0,0,0.7);
-  --shadow-gold-sm: 0 0 0 1px var(--gold-line), 0 4px 16px rgba(201,168,76,0.14);
-  --shadow-gold-md: 0 0 0 1px var(--gold-line), 0 8px 32px rgba(201,168,76,0.18);
-  --shadow-orange:  0 0 0 1px var(--orange-line), 0 4px 16px rgba(224,123,0,0.16);
-  --shadow-card:    0 1px 0 rgba(255,255,255,0.04) inset, 0 2px 8px rgba(0,0,0,0.6);
+  /* ── Shadows — warm-tinted for dark ── */
+  --shadow-xs:      0 1px 2px rgba(0,0,0,0.6);
+  --shadow-sm:      0 1px 3px rgba(0,0,0,0.5), 0 4px 16px rgba(0,0,0,0.4);
+  --shadow-md:      0 2px 8px rgba(0,0,0,0.6), 0 12px 32px rgba(0,0,0,0.5);
+  --shadow-lg:      0 4px 16px rgba(0,0,0,0.7), 0 20px 48px rgba(0,0,0,0.6);
+  --shadow-xl:      0 8px 24px rgba(0,0,0,0.8), 0 32px 64px rgba(0,0,0,0.7);
+  --shadow-gold-sm: 0 0 0 1px var(--gold-line), 0 4px 20px rgba(201,168,76,0.18);
+  --shadow-gold-md: 0 0 0 1px var(--gold-line), 0 8px 36px rgba(201,168,76,0.22);
+  --shadow-orange:  0 0 0 1px var(--orange-line), 0 4px 20px rgba(224,123,0,0.18);
+  --shadow-card:    0 1px 0 rgba(255,255,255,0.03) inset, 0 2px 8px rgba(0,0,0,0.5);
 
   /* ── Transitions ── */
   --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-out:    cubic-bezier(0, 0, 0.2, 1);
   --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  --dur-instant: 80ms; --dur-fast: 140ms; --dur-base: 220ms;
-  --dur-slow: 380ms; --dur-slower: 520ms; --dur-page: 300ms;
+  --dur-instant: 80ms;
+  --dur-fast:    140ms;
+  --dur-base:    220ms;
+  --dur-slow:    380ms;
+  --dur-slower:  520ms;
+  --dur-page:    300ms;
 
   /* ── Layout ── */
-  --sidebar-w: 256px;
-  --topbar-h:  56px;
+  --sidebar-w:   252px;
+  --topbar-h:    56px;
   --content-max: 1320px;
 
   /* ── Glass ── */
-  --glass-bg:     rgba(12, 12, 12, 0.85);
-  --glass-border: rgba(201, 168, 76, 0.09);
+  --glass-bg:     rgba(14,12,8,0.88);
+  --glass-border: rgba(201,168,76,0.10);
   --glass-blur:   blur(24px) saturate(160%);
 
   /* ── Intelligence accent ── */
-  --intel-bg:     rgba(224, 123, 0, 0.07);
-  --intel-border: rgba(224, 123, 0, 0.18);
-  --intel-glow:   0 0 32px rgba(224, 123, 0, 0.10);
+  --intel-bg:     rgba(224,123,0,0.06);
+  --intel-border: rgba(224,123,0,0.18);
+  --intel-glow:   0 0 32px rgba(224,123,0,0.10);
+
+  /* ── Extra tokens for consistency ── */
+  --surface-2:    var(--black-elevated);
+  --border-subtle: var(--black-border);
 }
