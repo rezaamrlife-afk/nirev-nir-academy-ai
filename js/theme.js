@@ -52,7 +52,7 @@ export const NIREV_THEME = {
 };
 
 const THEME_KEY    = 'nirev-theme';
-const THEME_COLORS = { light: '#F5F4F0', dark: '#080808' };
+const THEME_COLORS = { light: '#F4F2EA', dark: '#080808' };
 
 function _readSavedTheme() {
   try { return localStorage.getItem(THEME_KEY); } catch (e) { return null; }
