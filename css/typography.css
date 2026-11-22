@@ -22,17 +22,18 @@
    These replace the ones in theme.css for the whole document.
 */
 :root {
-  /* Minimum floor: nothing below 0.75rem (12px) */
-  --text-xs:   0.75rem;    /* 12px  — absolute minimum */
-  --text-sm:   0.8125rem;  /* 13px  — was 0.875rem, slightly tightened for density */
-  --text-base: 0.9375rem;  /* 15px  — unchanged */
-  --text-md:   1rem;       /* 16px  — unchanged */
-  --text-lg:   1.0625rem;  /* 17px  — was 1.125rem, slightly reduced */
-  --text-xl:   1.25rem;    /* 20px  — was 1.375rem */
-  --text-2xl:  1.5rem;     /* 24px  — was 1.75rem */
-  --text-3xl:  1.875rem;   /* 30px  — was 2.25rem */
-  --text-4xl:  2.75rem;    /* 44px  — was 3.5rem */
-  --text-5xl:  3.5rem;     /* 56px  — was 4.5rem */
+  /* ── Mobile-first scale (≤599px) ── */
+  /* Floor: 12px minimum. Standard UI: 14px. Body: 15px. */
+  --text-xs:   0.75rem;    /* 12px  — labels, captions, badges  */
+  --text-sm:   0.875rem;   /* 14px  — standard UI text (nav, metadata) */
+  --text-base: 0.9375rem;  /* 15px  — body / input text */
+  --text-md:   1rem;       /* 16px  — slightly prominent UI */
+  --text-lg:   1.0625rem;  /* 17px  — sub-headings */
+  --text-xl:   1.25rem;    /* 20px  — card headings */
+  --text-2xl:  1.5rem;     /* 24px  — section headings */
+  --text-3xl:  1.875rem;   /* 30px  — page headings */
+  --text-4xl:  2.75rem;    /* 44px  — hero display */
+  --text-5xl:  3.5rem;     /* 56px  — large display */
 
   /* Shared line-height tokens */
   --lh-tight:  1.15;
@@ -69,8 +70,8 @@ body {
 /* Section labels */
 .nav-section__label,
 .sidebar__tagline {
-  font-size: 0.6875rem;    /* 11px — ALL-CAPS so tracking is kept */
-  letter-spacing: 0.10em;  /* was 0.14em */
+  font-size: 0.75rem;      /* 12px — raised from 11px for readability */
+  letter-spacing: 0.08em;  /* was 0.14em */
   line-height: 1.4;
 }
 
@@ -97,8 +98,8 @@ body {
 }
 
 .user-info__role {
-  font-size: 0.6875rem;   /* 11px ALL-CAPS mono */
-  letter-spacing: 0.08em; /* was 0.1em */
+  font-size: 0.75rem;     /* 12px — raised from 11px */
+  letter-spacing: 0.07em; /* was 0.1em */
   line-height: 1.4;
 }
 
@@ -148,8 +149,8 @@ body {
 
 /* Stat card label */
 .stat-card__label {
-  font-size: 0.6875rem;   /* 11px ALL-CAPS */
-  letter-spacing: 0.08em; /* was 0.12em */
+  font-size: 0.75rem;     /* 12px — raised from 11px */
+  letter-spacing: 0.07em; /* was 0.12em */
   line-height: 1.4;
   font-weight: 500;
 }
@@ -219,8 +220,8 @@ body {
 }
 
 .insight-item__label {
-  font-size: 0.6875rem;   /* 11px ALL-CAPS */
-  letter-spacing: 0.08em; /* was 0.10em */
+  font-size: 0.75rem;     /* 12px — raised from 11px */
+  letter-spacing: 0.07em; /* was 0.10em */
   line-height: 1.4;
 }
 
@@ -681,15 +682,17 @@ body {
    At ≥600px we open up. At ≥900px we go full desktop.
 */
 
+/* ── Tablet (600px–899px) ── */
 @media (min-width: 600px) {
   :root {
-    --text-sm:   0.875rem;   /* 14px */
+    --text-xs:   0.75rem;    /* 12px — same */
+    --text-sm:   0.875rem;   /* 14px — same as mobile (already 14px) */
     --text-base: 0.9375rem;  /* 15px — same */
-    --text-md:   1rem;
-    --text-lg:   1.125rem;
-    --text-xl:   1.375rem;
-    --text-2xl:  1.75rem;
-    --text-3xl:  2.25rem;
+    --text-md:   1rem;       /* 16px */
+    --text-lg:   1.125rem;   /* 18px */
+    --text-xl:   1.375rem;   /* 22px */
+    --text-2xl:  1.75rem;    /* 28px */
+    --text-3xl:  2.25rem;    /* 36px */
   }
 
   .dashboard-hero__title   { font-size: 2.75rem; }
@@ -703,22 +706,79 @@ body {
   .report-heading          { font-size: 2rem; }
 }
 
+/* ── Desktop (≥900px) ── */
 @media (min-width: 900px) {
   :root {
-    --text-sm:   0.875rem;
-    --text-base: 1rem;       /* 16px on full desktop */
-    --text-md:   1.0625rem;
-    --text-lg:   1.125rem;
-    --text-xl:   1.375rem;
+    --text-xs:   0.75rem;    /* 12px */
+    --text-sm:   0.875rem;   /* 14px */
+    --text-base: 1rem;       /* 16px — full desktop body */
+    --text-md:   1.0625rem;  /* 17px */
+    --text-lg:   1.125rem;   /* 18px */
+    --text-xl:   1.375rem;   /* 22px */
+    --text-2xl:  1.75rem;    /* 28px */
   }
 
   .dashboard-hero__title   { font-size: 3rem; }
   .assessment-start__title { font-size: 2.5rem; }
   .stat-card__value        { font-size: 2.5rem; }
   .sidebar__logo-text      { font-size: 1.5rem; }
+  .stat-card__label        { font-size: 0.75rem; } /* stays 12px — not scaled up */
 }
 
-/* ══ 14. BUTTONS — CONSISTENT LABEL SIZE ════════════════════ */
+/* ══ 14. OVERRIDES — Sub-12px in other CSS files ════════════
+   These selectors exist in layout.css / analytics.css /
+   classroom.css / settings.css with hardcoded sizes below 12px.
+   Typography.css loads after them, so these win.
+   ═══════════════════════════════════════════════════════════ */
+
+/* layout.css: .sidebar__tagline 0.72rem → 12px */
+.sidebar__tagline {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+}
+
+/* layout.css: .nav-section__label 0.72rem → 12px */
+.nav-section__label {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+}
+
+/* layout.css: .nav-item__badge 0.68rem → 12px */
+.nav-item__badge {
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+}
+
+/* layout.css: .user-info__role 0.72rem → 12px */
+.user-info__role {
+  font-size: 0.75rem;
+  letter-spacing: 0.07em;
+}
+
+/* analytics.css: .chart-label 11px → 12px */
+.chart-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+}
+
+/* analytics.css: .radar-label 11px → 12px */
+.radar-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+}
+
+/* classroom.css: .nav-notification-badge 0.65rem → 12px */
+.nav-notification-badge {
+  font-size: 0.75rem;
+}
+
+/* settings.css: .cefr-btn__desc 0.62rem → 12px */
+.cefr-btn__desc {
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+}
+
+/* ══ 15. BUTTONS — CONSISTENT LABEL SIZE ════════════════════ */
 .btn {
   font-size: var(--text-sm);
   font-weight: 600;
