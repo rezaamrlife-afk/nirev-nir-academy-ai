@@ -1,13 +1,14 @@
 
 /* ============================================================
-   NIREV AI — PREMIUM UI COMPONENTS
-   Version 4.0 | Responsive SaaS Design System
+   NIREV AI — PREMIUM UI COMPONENT SYSTEM
+   Version 5.0
+   NIR Black & Orange Signature
    Desktop • Tablet • Mobile
    ============================================================ */
 
-/* ────────────────────────────────────────────────────────────
-   1. GLOBAL COMPONENT BASE
-   ──────────────────────────────────────────────────────────── */
+/* ============================================================
+   01. GLOBAL COMPONENT BASE
+   ============================================================ */
 
 button,
 input,
@@ -26,18 +27,18 @@ input:focus-visible,
 select:focus-visible,
 textarea:focus-visible,
 [tabindex]:focus-visible {
-  outline: 2px solid var(--gold-pure);
+  outline: 2px solid var(--brand-primary);
   outline-offset: 3px;
 }
 
 ::selection {
-  background: rgba(201, 168, 76, 0.28);
+  background: var(--brand-soft);
   color: var(--white-primary);
 }
 
-/* ────────────────────────────────────────────────────────────
-   2. BUTTON SYSTEM
-   ──────────────────────────────────────────────────────────── */
+/* ============================================================
+   02. BUTTON SYSTEM
+   ============================================================ */
 
 .btn {
   position: relative;
@@ -45,15 +46,15 @@ textarea:focus-visible,
   align-items: center;
   justify-content: center;
   gap: 9px;
-  min-height: 44px;
+  min-height: 46px;
   padding: 11px 20px;
   border: 1px solid transparent;
   border-radius: var(--radius-md);
   font-family: var(--font-ui);
-  font-size: 14px;
-  font-weight: 650;
+  font-size: 15px;
+  font-weight: var(--weight-semibold);
   line-height: 1.4;
-  letter-spacing: 0.01em;
+  letter-spacing: 0;
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
@@ -61,13 +62,12 @@ textarea:focus-visible,
   overflow: hidden;
   isolation: isolate;
   transition:
-    transform 180ms ease,
-    box-shadow 220ms ease,
-    background 220ms ease,
-    border-color 220ms ease,
-    color 180ms ease,
-    opacity 180ms ease;
-  -webkit-tap-highlight-color: transparent;
+    transform var(--dur-fast) var(--ease-smooth),
+    box-shadow var(--dur-base) var(--ease-smooth),
+    background var(--dur-base) ease,
+    border-color var(--dur-base) ease,
+    color var(--dur-fast) ease,
+    opacity var(--dur-fast) ease;
 }
 
 .btn::before {
@@ -75,9 +75,9 @@ textarea:focus-visible,
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: rgba(255, 255, 255, 0.09);
+  background: rgba(255,255,255,.09);
   opacity: 0;
-  transition: opacity 180ms ease;
+  transition: opacity var(--dur-fast) ease;
 }
 
 .btn:hover::before {
@@ -85,102 +85,91 @@ textarea:focus-visible,
 }
 
 .btn:active {
-  transform: scale(0.975);
+  transform: scale(.98);
 }
 
-.btn:active::before {
-  opacity: 0.15;
-}
-
-/* Primary */
+/* Primary — Main brand action */
 
 .btn--primary {
-  color: #101010;
+  color: #17100A;
   background: linear-gradient(
-    145deg,
-    #B8942A 0%,
-    var(--gold-pure) 48%,
-    var(--gold-bright) 100%
+    135deg,
+    var(--brand-hover),
+    var(--brand-primary)
   );
-  border-color: rgba(201, 168, 76, 0.55);
+  border-color: var(--brand-primary);
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.25),
-    0 3px 10px rgba(201,168,76,0.19),
-    0 1px 3px rgba(0,0,0,0.25);
+    inset 0 1px 0 rgba(255,255,255,.20),
+    0 3px 10px var(--brand-glow);
 }
 
 .btn--primary:hover {
   transform: translateY(-2px);
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.25),
-    0 7px 20px rgba(201,168,76,0.28),
-    0 2px 5px rgba(0,0,0,0.25);
+    inset 0 1px 0 rgba(255,255,255,.22),
+    0 7px 20px var(--brand-glow);
 }
 
 /* Accent */
 
 .btn--accent {
-  color: #101010;
+  color: #17100A;
   background: linear-gradient(
-    145deg,
-    #C06800 0%,
-    var(--orange-core) 50%,
-    var(--orange-bright) 100%
+    135deg,
+    var(--orange-bright),
+    var(--orange-core)
   );
-  border-color: rgba(224,123,0,0.5);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.2),
-    0 3px 10px rgba(224,123,0,0.18);
+  border-color: var(--orange-line);
+  box-shadow: 0 3px 12px var(--orange-glow);
 }
 
 .btn--accent:hover {
   transform: translateY(-2px);
-  box-shadow: 0 7px 20px rgba(224,123,0,0.27);
+  box-shadow: 0 7px 22px var(--orange-glow);
 }
 
 /* Secondary */
 
 .btn--secondary {
-  color: var(--white-secondary);
-  background: var(--black-elevated);
-  border-color: var(--black-border);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.035);
+  color: var(--white-primary);
+  background: var(--surface-2);
+  border-color: var(--border-default);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.035);
 }
 
 .btn--secondary:hover {
-  color: var(--white-primary);
-  background: var(--black-card);
-  border-color: var(--gold-line);
+  background: var(--surface-3);
+  border-color: var(--brand-border);
 }
 
 /* Ghost */
 
 .btn--ghost {
-  color: var(--white-secondary);
+  color: var(--text-secondary);
   background: transparent;
   border-color: transparent;
 }
 
 .btn--ghost:hover {
-  color: var(--gold-bright);
-  background: var(--white-ghost);
-  border-color: var(--black-border);
+  color: var(--brand-hover);
+  background: var(--brand-subtle);
+  border-color: var(--brand-border);
 }
 
 /* Danger */
 
 .btn--danger {
   color: var(--status-danger);
-  background: rgba(239,68,68,0.08);
-  border-color: rgba(239,68,68,0.22);
+  background: var(--status-danger-bg);
+  border-color: rgba(239,100,100,.24);
 }
 
 .btn--danger:hover {
-  background: rgba(239,68,68,0.15);
-  border-color: rgba(239,68,68,0.38);
+  background: rgba(239,100,100,.16);
+  border-color: rgba(239,100,100,.42);
 }
 
-/* Sizes */
+/* Button sizes */
 
 .btn--xs {
   min-height: 36px;
@@ -195,8 +184,8 @@ textarea:focus-visible,
 }
 
 .btn--lg {
-  min-height: 50px;
-  padding: 13px 25px;
+  min-height: 52px;
+  padding: 14px 25px;
   font-size: 16px;
 }
 
@@ -208,7 +197,7 @@ textarea:focus-visible,
 
 .btn:disabled,
 .btn[disabled] {
-  opacity: 0.45;
+  opacity: .45;
   cursor: not-allowed;
   pointer-events: none;
   transform: none;
@@ -225,17 +214,18 @@ textarea:focus-visible,
 .btn.loading::after {
   content: "";
   position: absolute;
-  width: 17px;
-  height: 17px;
-  border: 2px solid rgba(10,10,10,0.2);
-  border-top-color: #101010;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(20,15,10,.2);
+  border-top-color: currentColor;
+  border-top-color: var(--black-base);
   border-radius: 50%;
-  animation: spin 0.7s linear infinite;
+  animation: spin .7s linear infinite;
 }
 
-/* ────────────────────────────────────────────────────────────
-   3. FORM CONTROLS
-   ──────────────────────────────────────────────────────────── */
+/* ============================================================
+   03. FORM CONTROLS
+   ============================================================ */
 
 .form-group {
   display: flex;
@@ -246,46 +236,45 @@ textarea:focus-visible,
 }
 
 .form-label {
-  color: var(--white-secondary);
+  color: var(--text-secondary);
   font-family: var(--font-ui);
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.015em;
+  font-size: 15px;
+  font-weight: var(--weight-semibold);
   line-height: 1.5;
 }
 
 .form-input {
   width: 100%;
-  min-height: 46px;
-  padding: 11px 15px;
-  color: var(--white-primary);
-  background: var(--black-elevated);
-  border: 1px solid var(--black-border);
+  min-height: 50px;
+  padding: 12px 15px;
+  color: var(--text-primary);
+  background: var(--surface-2);
+  border: 1px solid var(--border-default);
   border-radius: var(--radius-md);
   font-family: var(--font-ui);
   font-size: 16px;
-  font-weight: 450;
+  font-weight: var(--weight-regular);
   line-height: 1.5;
   transition:
-    border-color 180ms ease,
-    box-shadow 180ms ease,
-    background 180ms ease;
+    border-color var(--dur-fast) ease,
+    box-shadow var(--dur-fast) ease,
+    background var(--dur-fast) ease;
 }
 
 .form-input:hover:not(:focus) {
-  border-color: var(--black-subtle);
+  border-color: var(--border-strong);
 }
 
 .form-input:focus {
   outline: none;
-  border-color: var(--gold-pure);
-  background: var(--black-card);
-  box-shadow: 0 0 0 3px rgba(201,168,76,0.12);
+  border-color: var(--brand-primary);
+  background: var(--surface-3);
+  box-shadow: var(--focus-ring);
 }
 
 .form-input::placeholder {
-  color: var(--white-muted);
-  opacity: 0.8;
+  color: var(--text-muted);
+  opacity: .85;
 }
 
 textarea.form-input {
@@ -306,37 +295,38 @@ select.form-input {
 
 .form-group.has-error .form-input {
   border-color: var(--status-danger);
-  box-shadow: 0 0 0 3px rgba(239,68,68,0.08);
+  box-shadow: 0 0 0 3px var(--status-danger-bg);
 }
 
 .form-group.has-error .form-error {
   display: block;
 }
 
-/* ────────────────────────────────────────────────────────────
-   4. CARD SYSTEM
-   ──────────────────────────────────────────────────────────── */
+/* ============================================================
+   04. CARD SYSTEM
+   ============================================================ */
 
 .card {
   position: relative;
   min-width: 0;
   padding: var(--space-6);
-  background: var(--black-surface);
-  border: 1px solid var(--black-border);
+  background: var(--surface-1);
+  border: 1px solid var(--border-default);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-card);
   transition:
-    border-color 220ms ease,
-    box-shadow 220ms ease,
-    transform 220ms ease;
+    border-color var(--dur-base) ease,
+    box-shadow var(--dur-base) ease,
+    transform var(--dur-base) var(--ease-smooth);
 }
 
 .card:hover {
-  border-color: rgba(201,168,76,0.2);
+  border-color: var(--brand-border);
 }
 
 .card--glass {
   background: var(--glass-bg);
+  border-color: var(--glass-border);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
 }
@@ -344,15 +334,15 @@ select.form-input {
 .card--gold {
   background: linear-gradient(
     145deg,
-    rgba(201,168,76,0.075),
-    rgba(201,168,76,0.018)
+    var(--gold-ghost),
+    var(--surface-1) 75%
   );
   border-color: var(--gold-line);
 }
 
 .card--gold:hover {
-  border-color: rgba(201,168,76,0.3);
-  box-shadow: 0 8px 28px rgba(201,168,76,0.07);
+  border-color: var(--gold-bright);
+  box-shadow: var(--shadow-gold-sm);
 }
 
 .card--intel {
@@ -367,7 +357,7 @@ select.form-input {
 
 .card--interactive:hover {
   transform: translateY(-3px);
-  border-color: rgba(201,168,76,0.25);
+  border-color: var(--brand-border);
   box-shadow: var(--shadow-md);
 }
 
@@ -375,9 +365,9 @@ select.form-input {
   transform: translateY(-1px);
 }
 
-/* ────────────────────────────────────────────────────────────
-   5. AUTH CARD
-   ──────────────────────────────────────────────────────────── */
+/* ============================================================
+   05. AUTH CARD
+   ============================================================ */
 
 .auth-card {
   position: relative;
@@ -385,8 +375,8 @@ select.form-input {
   max-width: 440px;
   padding: var(--space-10) var(--space-8);
   overflow: hidden;
-  background: var(--black-surface);
-  border: 1px solid var(--black-border);
+  background: var(--surface-1);
+  border: 1px solid var(--border-default);
   border-radius: var(--radius-2xl);
   box-shadow: var(--shadow-xl);
   animation: scale-in var(--dur-slow) var(--ease-spring) both;
@@ -403,10 +393,10 @@ select.form-input {
   background: linear-gradient(
     90deg,
     transparent,
-    var(--gold-pure),
+    var(--brand-primary),
     transparent
   );
-  opacity: 0.65;
+  opacity: .8;
 }
 
 .auth-card__header {
@@ -422,12 +412,12 @@ select.form-input {
 }
 
 .auth-card__logo-text {
-  color: var(--gold-bright);
+  color: var(--brand-primary);
   background: linear-gradient(
     135deg,
-    var(--gold-pure),
-    var(--gold-light),
-    var(--gold-pure)
+    var(--brand-hover),
+    var(--brand-primary),
+    var(--gold-bright)
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -435,7 +425,7 @@ select.form-input {
   font-family: var(--font-display);
   font-size: 2.25rem;
   font-weight: 650;
-  letter-spacing: 0.12em;
+  letter-spacing: .12em;
   line-height: 1.1;
 }
 
@@ -443,63 +433,63 @@ select.form-input {
   width: 7px;
   height: 7px;
   margin-bottom: 3px;
-  background: var(--orange-core);
+  background: var(--brand-primary);
   border-radius: 50%;
-  box-shadow: 0 0 10px var(--orange-core);
+  box-shadow: 0 0 10px var(--brand-glow);
 }
 
 .auth-card__subtitle {
-  color: var(--white-secondary);
+  color: var(--text-secondary);
   font-family: var(--font-ui);
   font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
+  font-weight: var(--weight-medium);
+  letter-spacing: .08em;
   line-height: 1.7;
   text-transform: uppercase;
 }
 
-/* ────────────────────────────────────────────────────────────
-   6. AUTH TABS
-   ──────────────────────────────────────────────────────────── */
+/* ============================================================
+   06. AUTH TABS
+   ============================================================ */
 
 .auth-tabs {
   display: flex;
-  gap: 3px;
+  gap: 4px;
   padding: 4px;
   margin-bottom: var(--space-6);
-  background: var(--black-base);
-  border: 1px solid var(--black-border);
+  background: var(--background);
+  border: 1px solid var(--border-default);
   border-radius: var(--radius-md);
 }
 
 .auth-tab {
   flex: 1;
-  min-height: 42px;
+  min-height: 44px;
   padding: 9px 12px;
-  color: var(--white-secondary);
+  color: var(--text-secondary);
   background: transparent;
   border: 1px solid transparent;
   border-radius: calc(var(--radius-md) - 2px);
   font-family: var(--font-ui);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: var(--weight-semibold);
   text-align: center;
   cursor: pointer;
   transition:
-    color 180ms ease,
-    background 180ms ease,
-    border-color 180ms ease;
+    color var(--dur-fast) ease,
+    background var(--dur-fast) ease,
+    border-color var(--dur-fast) ease;
 }
 
 .auth-tab:hover {
-  color: var(--white-primary);
+  color: var(--text-primary);
   background: var(--white-ghost);
 }
 
 .auth-tab.active {
-  color: var(--gold-bright);
-  background: var(--black-elevated);
-  border-color: var(--gold-line);
+  color: var(--brand-primary);
+  background: var(--surface-2);
+  border-color: var(--brand-border);
   box-shadow: var(--shadow-xs);
 }
 
@@ -515,20 +505,20 @@ select.form-input {
 .auth-divider__line {
   flex: 1;
   height: 1px;
-  background: var(--black-border);
+  background: var(--border-default);
 }
 
 .auth-divider__text {
-  color: var(--white-secondary);
+  color: var(--text-secondary);
   font-family: var(--font-ui);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: var(--weight-medium);
   white-space: nowrap;
 }
 
-/* ────────────────────────────────────────────────────────────
-   7. TOAST NOTIFICATIONS
-   ──────────────────────────────────────────────────────────── */
+/* ============================================================
+   07. TOAST NOTIFICATIONS
+   ============================================================ */
 
 #toast-container {
   position: fixed;
@@ -548,29 +538,29 @@ select.form-input {
   gap: 12px;
   min-width: 0;
   padding: 14px 16px;
-  color: var(--white-primary);
-  background: var(--black-card);
-  border: 1px solid var(--black-border);
+  color: var(--text-primary);
+  background: var(--surface-3);
+  border: 1px solid var(--border-default);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
-  font-size: 14px;
-  font-weight: 550;
+  font-size: 15px;
+  font-weight: var(--weight-medium);
   line-height: 1.5;
   pointer-events: auto;
   animation: toast-in var(--dur-slow) var(--ease-spring) both;
 }
 
 .toast.removing {
-  animation: toast-out var(--dur-base) var(--ease-in) both;
+  animation: toast-out var(--dur-base) ease-in both;
 }
 
 .toast__icon-wrap {
   display: flex;
-  flex: 0 0 34px;
+  flex: 0 0 36px;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   border-radius: var(--radius-md);
   font-size: 16px;
 }
@@ -578,71 +568,51 @@ select.form-input {
 .toast__message {
   flex: 1;
   min-width: 0;
-  color: var(--white-primary);
+  color: var(--text-primary);
   font-size: 14px;
-  font-weight: 550;
+  font-weight: var(--weight-medium);
   line-height: 1.55;
 }
 
 .toast--success {
-  background: linear-gradient(
-    135deg,
-    rgba(34,197,94,0.09),
-    var(--black-card)
-  );
-  border-color: rgba(34,197,94,0.25);
+  border-color: rgba(53,201,138,.28);
 }
 
 .toast--success .toast__icon-wrap {
   color: var(--status-success);
-  background: rgba(34,197,94,0.13);
+  background: var(--status-success-bg);
 }
 
 .toast--error {
-  background: linear-gradient(
-    135deg,
-    rgba(239,68,68,0.09),
-    var(--black-card)
-  );
-  border-color: rgba(239,68,68,0.25);
+  border-color: rgba(239,100,100,.28);
 }
 
 .toast--error .toast__icon-wrap {
   color: var(--status-danger);
-  background: rgba(239,68,68,0.13);
+  background: var(--status-danger-bg);
 }
 
 .toast--warning {
-  background: linear-gradient(
-    135deg,
-    rgba(234,179,8,0.09),
-    var(--black-card)
-  );
-  border-color: rgba(234,179,8,0.25);
+  border-color: rgba(234,179,8,.28);
 }
 
 .toast--warning .toast__icon-wrap {
   color: var(--status-warning);
-  background: rgba(234,179,8,0.13);
+  background: var(--status-warning-bg);
 }
 
 .toast--info {
-  background: linear-gradient(
-    135deg,
-    rgba(59,130,246,0.09),
-    var(--black-card)
-  );
-  border-color: rgba(59,130,246,0.25);
+  border-color: rgba(112,169,245,.28);
 }
 
 .toast--info .toast__icon-wrap {
   color: var(--status-info);
-  background: rgba(59,130,246,0.13);
+  background: var(--status-info-bg);
 }
 
-/* ────────────────────────────────────────────────────────────
-   8. LOADER
-   ──────────────────────────────────────────────────────────── */
+/* ============================================================
+   08. LOADER
+   ============================================================ */
 
 .loader-overlay {
   position: fixed;
@@ -666,25 +636,25 @@ select.form-input {
 .loader-ring {
   width: 48px;
   height: 48px;
-  border: 2px solid var(--black-border);
-  border-top-color: var(--gold-pure);
-  border-right-color: var(--orange-core);
+  border: 2px solid var(--border-default);
+  border-top-color: var(--brand-primary);
+  border-right-color: var(--orange-bright);
   border-radius: 50%;
-  animation: spin 0.85s linear infinite;
+  animation: spin .85s linear infinite;
 }
 
 .loader-text {
-  color: var(--white-secondary);
+  color: var(--text-secondary);
   font-family: var(--font-ui);
   font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  font-weight: var(--weight-semibold);
+  letter-spacing: .10em;
   text-transform: uppercase;
 }
 
-/* ────────────────────────────────────────────────────────────
-   9. GOLD DIVIDER
-   ──────────────────────────────────────────────────────────── */
+/* ============================================================
+   09. BRAND DIVIDER
+   ============================================================ */
 
 .gold-divider {
   width: 100%;
@@ -699,53 +669,53 @@ select.form-input {
   );
 }
 
-/* ────────────────────────────────────────────────────────────
+/* ============================================================
    10. BADGES
-   ──────────────────────────────────────────────────────────── */
+   ============================================================ */
 
 .badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  min-height: 27px;
+  min-height: 28px;
   padding: 4px 10px;
   border: 1px solid transparent;
   border-radius: var(--radius-pill);
   font-family: var(--font-ui);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: var(--weight-semibold);
   line-height: 1.35;
   white-space: nowrap;
 }
 
 .badge--gold {
   color: var(--gold-bright);
-  background: rgba(201,168,76,0.11);
-  border-color: rgba(201,168,76,0.23);
+  background: var(--gold-ghost);
+  border-color: var(--gold-line);
 }
 
 .badge--orange {
-  color: var(--orange-bright);
-  background: var(--orange-ghost);
-  border-color: var(--orange-line);
+  color: var(--brand-hover);
+  background: var(--brand-subtle);
+  border-color: var(--brand-border);
 }
 
 .badge--success {
   color: var(--status-success);
-  background: rgba(34,197,94,0.09);
-  border-color: rgba(34,197,94,0.2);
+  background: var(--status-success-bg);
+  border-color: rgba(53,201,138,.22);
 }
 
 .badge--muted {
-  color: var(--white-secondary);
+  color: var(--text-secondary);
   background: var(--white-ghost);
-  border-color: var(--black-border);
+  border-color: var(--border-default);
 }
 
-/* ────────────────────────────────────────────────────────────
+/* ============================================================
    11. SECTION HEADERS
-   ──────────────────────────────────────────────────────────── */
+   ============================================================ */
 
 .section-header {
   display: flex;
@@ -757,126 +727,122 @@ select.form-input {
 }
 
 .section-title {
-  color: var(--white-primary);
+  color: var(--text-primary);
   font-family: var(--font-ui);
-  font-size: 17px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-size: 18px;
+  font-weight: var(--weight-bold);
+  letter-spacing: -.02em;
   line-height: 1.4;
 }
 
 .section-link {
   flex-shrink: 0;
-  color: var(--orange-bright);
+  color: var(--brand-hover);
   font-family: var(--font-ui);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: var(--weight-semibold);
   line-height: 1.5;
   text-decoration: none;
-  opacity: 0.9;
-  transition:
-    color 180ms ease,
-    opacity 180ms ease;
+  transition: color var(--dur-fast) ease;
 }
 
 .section-link:hover {
   color: var(--orange-light);
-  opacity: 1;
 }
 
-/* ────────────────────────────────────────────────────────────
+/* ============================================================
    12. EMPTY STATE
-   ──────────────────────────────────────────────────────────── */
+   ============================================================ */
 
 .empty-state {
   padding: clamp(32px, 5vw, 56px) 24px;
-  color: var(--white-secondary);
+  color: var(--text-secondary);
   text-align: center;
 }
 
 .empty-state__icon {
   margin-bottom: 18px;
-  color: var(--gold-bright);
-  font-size: 36px;
+  color: var(--brand-primary);
+  font-size: 38px;
   line-height: 1.3;
-  opacity: 0.75;
+  opacity: .85;
 }
 
 .empty-state__title {
   margin-bottom: 10px;
-  color: var(--white-primary);
+  color: var(--text-primary);
   font-family: var(--font-ui);
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-size: 19px;
+  font-weight: var(--weight-bold);
+  letter-spacing: -.02em;
   line-height: 1.4;
 }
 
 .empty-state__text {
-  max-width: 360px;
+  max-width: 380px;
   margin: 0 auto 24px;
-  color: var(--white-secondary);
+  color: var(--text-secondary);
   font-family: var(--font-ui);
-  font-size: 14px;
-  line-height: 1.75;
+  font-size: 15px;
+  line-height: 1.7;
 }
 
-/* ────────────────────────────────────────────────────────────
+/* ============================================================
    13. STATUS DOT
-   ──────────────────────────────────────────────────────────── */
+   ============================================================ */
 
 .status-dot {
   display: inline-block;
-  flex: 0 0 7px;
-  width: 7px;
-  height: 7px;
+  flex: 0 0 8px;
+  width: 8px;
+  height: 8px;
   background: var(--status-success);
   border-radius: 50%;
   box-shadow: 0 0 8px var(--status-success);
   animation: pulse-dot 2.5s ease-in-out infinite;
 }
 
-/* ────────────────────────────────────────────────────────────
+/* ============================================================
    14. TRAJECTORY BADGES
-   ──────────────────────────────────────────────────────────── */
+   ============================================================ */
 
 .trajectory-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  min-height: 27px;
+  min-height: 28px;
   padding: 4px 10px;
   border: 1px solid transparent;
   border-radius: var(--radius-pill);
   font-family: var(--font-ui);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: var(--weight-semibold);
   line-height: 1.35;
   white-space: nowrap;
 }
 
 .trajectory-badge.improving {
   color: var(--status-success);
-  background: rgba(34,197,94,0.09);
-  border-color: rgba(34,197,94,0.2);
+  background: var(--status-success-bg);
+  border-color: rgba(53,201,138,.22);
 }
 
 .trajectory-badge.declining {
   color: var(--status-danger);
-  background: rgba(239,68,68,0.09);
-  border-color: rgba(239,68,68,0.2);
+  background: var(--status-danger-bg);
+  border-color: rgba(239,100,100,.22);
 }
 
 .trajectory-badge.plateauing {
-  color: var(--white-secondary);
+  color: var(--text-secondary);
   background: var(--white-ghost);
-  border-color: var(--black-border);
+  border-color: var(--border-default);
 }
 
-/* ────────────────────────────────────────────────────────────
+/* ============================================================
    15. RESPONSIVE — TABLET
-   ──────────────────────────────────────────────────────────── */
+   ============================================================ */
 
 @media (max-width: 900px) {
   .card {
@@ -888,18 +854,18 @@ select.form-input {
   }
 }
 
-/* ────────────────────────────────────────────────────────────
+/* ============================================================
    16. RESPONSIVE — MOBILE
-   ──────────────────────────────────────────────────────────── */
+   ============================================================ */
 
 @media (max-width: 600px) {
   .btn {
-    min-height: 44px;
+    min-height: 46px;
     padding: 11px 15px;
   }
 
   .btn--lg {
-    min-height: 48px;
+    min-height: 50px;
     padding: 12px 19px;
   }
 
@@ -923,7 +889,7 @@ select.form-input {
   }
 
   .form-input {
-    min-height: 48px;
+    min-height: 50px;
   }
 
   .section-header {
@@ -932,7 +898,7 @@ select.form-input {
   }
 
   .section-title {
-    font-size: 16px;
+    font-size: 17px;
   }
 
   #toast-container {
@@ -950,9 +916,9 @@ select.form-input {
   }
 }
 
-/* ────────────────────────────────────────────────────────────
+/* ============================================================
    17. SMALL MOBILE
-   ──────────────────────────────────────────────────────────── */
+   ============================================================ */
 
 @media (max-width: 360px) {
   .card {
@@ -974,9 +940,9 @@ select.form-input {
   }
 }
 
-/* ────────────────────────────────────────────────────────────
+/* ============================================================
    18. TOUCH DEVICES
-   ──────────────────────────────────────────────────────────── */
+   ============================================================ */
 
 @media (hover: none) {
   .btn:hover,
@@ -989,17 +955,17 @@ select.form-input {
   }
 
   .btn:active {
-    transform: scale(0.975);
+    transform: scale(.98);
   }
 
   .card--interactive:active {
-    transform: scale(0.99);
+    transform: scale(.99);
   }
 }
 
-/* ────────────────────────────────────────────────────────────
+/* ============================================================
    19. REDUCED MOTION
-   ──────────────────────────────────────────────────────────── */
+   ============================================================ */
 
 @media (prefers-reduced-motion: reduce) {
   .btn,
