@@ -1,8 +1,7 @@
-
 /**
  * NIREV AI — Dashboard Page Module
  * ─────────────────────────────────────────────────────────────
- * Version: 6.1.0 — Real Data Dashboard + Homework Empty State
+ * Version: 6.2.0 — Real Data Dashboard + Homework (styled)
  *
  * Reads real data from:
  *   - db.js                    (getScores)
@@ -10,13 +9,12 @@
  *   - analytics-domain.js      (buildAnalyticsResult)
  *   - prediction-domain.js     (buildPredictionResult)
  *
- * Features:
- *   - Real assessment statistics
- *   - Recent assessment activity
- *   - Intelligence insights
- *   - Learner homework assignments
- *   - Professional homework empty state
- *   - Teacher role gating
+ * Changes in 6.2:
+ *   - All user/teacher text is HTML-escaped (XSS-safe)
+ *   - Homework loading / empty / error states use real CSS classes
+ *   - Homework section is always placed inside .dashboard-grid
+ *   - Detailed error logging (code + message + hint)
+ *   - Stale-render guard: slow responses can't overwrite newer ones
  * ─────────────────────────────────────────────────────────────
  */
 
@@ -27,24 +25,39 @@ import { buildAnalyticsResult } from './domain/analytics/analytics-domain.js';
 import { buildPredictionResult } from './domain/predictions/prediction-domain.js';
 import { getSupabase } from './auth.js';
 
+// ── Security helper ───────────────────────────────────────────
+
+const _ESC_MAP = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;'
+};
+
+function _esc(value) {
+  return String(value ?? '').replace(/[&<>"']/g, c => _ESC_MAP[c]);
+}
+
+function _cap(value, fallback = '') {
+  const s = String(value ?? '');
+  return s ? s.charAt(0).toUpperCase() + s.slice(1) : fallback;
+}
+
 // ── Count-up Animation ────────────────────────────────────────
 
 function _countUp(element, target, duration = 800) {
   if (!element) return;
 
   const isFloat = typeof target === 'number' && !Number.isInteger(target);
-  const start = 0;
   const startTime = performance.now();
 
   function update(currentTime) {
-    const elapsed = currentTime - startTime;
-    const progress = Math.min(elapsed / duration, 1);
+    const progress = Math.min((currentTime - startTime) / duration, 1);
     const ease = 1 - Math.pow(1 - progress, 3);
-    const current = start + (target - start) * ease;
+    const current = target * ease;
 
-    element.textContent = isFloat
-      ? current.toFixed(1)
-      : Math.round(current);
+    element.textContent = isFloat ? current.toFixed(1) : Math.round(current);
 
     if (progress < 1) {
       requestAnimationFrame(update);
@@ -59,13 +72,13 @@ function _countUp(element, target, duration = 800) {
 // ── Initialization ────────────────────────────────────────────
 
 let _dashboardInitialized = false;
+let _renderToken = 0; // stale-render guard
 
 export function initDashboard() {
   _renderWelcome();
   _loadAndRenderDashboard();
 
   if (_dashboardInitialized) return;
-
   _dashboardInitialized = true;
 
   // Re-render when a new assessment is completed
@@ -97,27 +110,25 @@ function _renderWelcome() {
   const greetingEl = document.getElementById('dashboard-greeting');
   const nameEl = document.getElementById('dashboard-name');
 
-  if (greetingEl) {
-    greetingEl.textContent = `${getGreeting()},`;
-  }
-
-  if (nameEl) {
-    nameEl.textContent = firstName;
-  }
+  if (greetingEl) greetingEl.textContent = `${getGreeting()},`;
+  if (nameEl) nameEl.textContent = firstName;
 }
 
 // ── Main Dashboard Load ───────────────────────────────────────
 
 async function _loadAndRenderDashboard() {
   const userId = store.get('user')?.id;
-
   if (!userId) return;
 
-  // Render learner homework independently of assessment history
-  await _renderPendingAssignments(userId);
+  const token = ++_renderToken;
+
+  // Homework renders independently of assessment history
+  _renderPendingAssignments(userId, token);
 
   try {
     const { data: scores } = await getScores(userId, { limit: 50 });
+
+    if (token !== _renderToken) return;
 
     // No assessment history
     if (!scores || scores.length === 0) {
@@ -131,7 +142,6 @@ async function _loadAndRenderDashboard() {
     const analytics = buildAnalyticsResult(scores);
     const prediction = buildPredictionResult(analytics);
 
-    // Update analytics store
     store.set('analytics', {
       loaded: true,
       full: analytics,
@@ -139,7 +149,6 @@ async function _loadAndRenderDashboard() {
       progressData: analytics.charts.scoreLine.values
     });
 
-    // Update predictions store
     store.set('predictions', {
       full: prediction,
       nextLevel: prediction.targetLevel,
@@ -147,10 +156,8 @@ async function _loadAndRenderDashboard() {
       confidence: prediction.confidenceLabel
     });
 
-    // Compute learning streak
     const streak = _computeStreak(scores);
 
-    // Update scoring store
     store.set('scoring', {
       ...store.get('scoring'),
       average: analytics.summary.averageScore,
@@ -164,7 +171,6 @@ async function _loadAndRenderDashboard() {
       }))
     });
 
-    // Render dashboard sections
     _renderStats(analytics, prediction, streak);
     _renderRecentActivity(scores);
     _renderInsights(analytics, prediction);
@@ -172,17 +178,19 @@ async function _loadAndRenderDashboard() {
   } catch (err) {
     console.error('[Dashboard] load error:', err);
 
+    if (token !== _renderToken) return;
+
     _renderEmptyStats();
-    _renderEmptyActivity();
     _renderEmptyInsights();
 
     const container = document.getElementById('recent-activity-list');
-
     if (container) {
       container.innerHTML = `
-        <div style="padding:var(--space-4);text-align:center;">
-          <div style="font-size:0.875rem;color:var(--text-muted);">
-            Could not load data. Please refresh.
+        <div class="empty-state">
+          <div class="empty-state__icon">!</div>
+          <div class="empty-state__title">Could not load your data</div>
+          <div class="empty-state__text">
+            Check your connection and refresh the page.
           </div>
         </div>
       `;
@@ -202,11 +210,8 @@ function _renderStats(analytics, prediction, streak) {
   _setStatCard(
     'stat-assessments',
     summary.totalSessions,
-    summary.totalSessions === 1
-      ? '1 session'
-      : `${summary.totalSessions} sessions`
+    summary.totalSessions === 1 ? '1 session' : `${summary.totalSessions} sessions`
   );
-
   _countUp(assessEl, summary.totalSessions, 600);
 
   _setStatCard(
@@ -214,7 +219,6 @@ function _renderStats(analytics, prediction, streak) {
     Math.round(summary.averageScore),
     `Best: ${summary.bestScore}/100`
   );
-
   _countUp(avgEl, Math.round(summary.averageScore), 800);
 
   _setStatCard(
@@ -222,10 +226,7 @@ function _renderStats(analytics, prediction, streak) {
     streak > 0 ? streak : '—',
     streak > 0 ? `${streak} day streak 🔥` : 'Start today'
   );
-
-  if (streak > 0) {
-    _countUp(streakEl, streak, 600);
-  }
+  if (streak > 0) _countUp(streakEl, streak, 600);
 
   _setStatCard(
     'stat-level',
@@ -238,18 +239,10 @@ function _renderStats(analytics, prediction, streak) {
 
 function _setStatCard(id, value, trend) {
   const valueEl = document.getElementById(id);
+  const trendEl = valueEl?.closest('.stat-card')?.querySelector('.stat-card__trend');
 
-  const trendEl = valueEl
-    ?.closest('.stat-card')
-    ?.querySelector('.stat-card__trend');
-
-  if (valueEl) {
-    valueEl.textContent = value;
-  }
-
-  if (trendEl) {
-    trendEl.textContent = trend;
-  }
+  if (valueEl) valueEl.textContent = value;
+  if (trendEl) trendEl.textContent = trend;
 }
 
 function _renderEmptyStats() {
@@ -263,8 +256,13 @@ function _renderEmptyStats() {
 
 function _renderRecentActivity(scores) {
   const container = document.getElementById('recent-activity-list');
-
   if (!container) return;
+
+  const colors = {
+    high: 'var(--status-success)',
+    medium: 'var(--gold-bright)',
+    low: 'var(--status-danger)'
+  };
 
   const recent = scores.slice(0, 5);
 
@@ -272,49 +270,34 @@ function _renderRecentActivity(scores) {
     <div class="activity-list">
       ${recent.map(score => {
         const s = Math.round(parseFloat(score.score ?? 0));
-
-        const cls =
-          s >= 70 ? 'high' :
-          s >= 40 ? 'medium' :
-          'low';
-
-        const colors = {
-          high: 'var(--status-success)',
-          medium: 'var(--gold-bright)',
-          low: 'var(--status-danger)'
-        };
+        const tone = s >= 70 ? 'high' : s >= 40 ? 'medium' : 'low';
+        const color = colors[tone];
 
         const date = _relativeDate(score.created_at);
-        const skill = score.skill ?? '—';
-        const cefr = score.cefr_level ?? '—';
+        const skill = _esc(score.skill ?? '—');
+        const cefr = _esc(score.cefr_level ?? '—');
 
         return `
           <div
             class="activity-item"
+            role="button"
+            tabindex="0"
             onclick="window.NIREV.navigateTo('reports')"
-            style="cursor:pointer;"
+            onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.NIREV.navigateTo('reports')}"
           >
             <div class="activity-item__left">
 
               <div
                 class="activity-item__icon"
-                style="
-                  background:${colors[cls]}22;
-                  color:${colors[cls]};
-                  border:1px solid ${colors[cls]}44;
-                "
+                style="background:color-mix(in srgb, ${color} 14%, transparent);color:${color};border-color:color-mix(in srgb, ${color} 28%, transparent);"
               >
                 ${s}
               </div>
 
               <div class="activity-item__info">
-                <div
-                  class="activity-item__title"
-                  style="text-transform:capitalize"
-                >
+                <div class="activity-item__title" style="text-transform:capitalize">
                   ${skill} Assessment
                 </div>
-
                 <div class="activity-item__meta">
                   ${cefr} · ${date}
                 </div>
@@ -322,10 +305,7 @@ function _renderRecentActivity(scores) {
 
             </div>
 
-            <div
-              class="activity-item__score"
-              style="color:${colors[cls]}"
-            >
+            <div class="activity-item__score" style="color:${color}">
               ${s}/100
             </div>
           </div>
@@ -337,21 +317,15 @@ function _renderRecentActivity(scores) {
 
 function _renderEmptyActivity() {
   const container = document.getElementById('recent-activity-list');
-
   if (!container) return;
 
   container.innerHTML = `
     <div class="empty-state">
       <div class="empty-state__icon">◈</div>
-
-      <div class="empty-state__title">
-        No assessments yet
-      </div>
-
+      <div class="empty-state__title">No assessments yet</div>
       <div class="empty-state__text">
         Complete your first assessment to begin tracking your performance.
       </div>
-
       <button
         class="btn btn--primary"
         onclick="window.NIREV.navigateTo('assessment')"
@@ -367,7 +341,6 @@ function _renderEmptyActivity() {
 
 function _renderInsights(analytics, prediction) {
   const container = document.getElementById('dashboard-insights');
-
   if (!container) return;
 
   const { summary, skillGaps } = analytics;
@@ -376,125 +349,69 @@ function _renderInsights(analytics, prediction) {
     ? [...skillGaps].sort((a, b) => b.gap - a.gap)[0]
     : null;
 
+  const consistency = Math.max(0, Math.min(100, Number(summary.consistencyIndex) || 0));
+
   container.innerHTML = `
     <div class="insights-list">
 
-      <!-- Performance Trajectory -->
       <div class="insight-item">
-
         <div class="insight-item__icon">◉</div>
-
         <div class="insight-item__content">
-
-          <div class="insight-item__label">
-            Performance Trajectory
-          </div>
-
+          <div class="insight-item__label">Performance Trajectory</div>
           <div class="insight-item__value">
-            <span class="trajectory-badge ${summary.trajectory}">
-              ${summary.trajectory}
+            <span class="trajectory-badge ${_esc(summary.trajectory)}">
+              ${_esc(summary.trajectory)}
             </span>
           </div>
-
         </div>
       </div>
 
-      <!-- Next Level Prediction -->
       ${prediction.estimatedDays ? `
         <div class="insight-item">
-
           <div class="insight-item__icon">✦</div>
-
           <div class="insight-item__content">
-
-            <div class="insight-item__label">
-              Next Level Prediction
-            </div>
-
+            <div class="insight-item__label">Next Level Prediction</div>
             <div class="insight-item__value">
-
               <span style="color:var(--gold-bright)">
-                ${prediction.currentLevel} → ${prediction.targetLevel}
+                ${_esc(prediction.currentLevel)} → ${_esc(prediction.targetLevel)}
               </span>
-
-              <span
-                style="
-                  color:var(--text-muted);
-                  font-size:0.875rem;
-                  margin-left:8px;
-                "
-              >
-                ~${prediction.estimatedDays} days
+              <span style="color:var(--text-muted);font-size:0.875rem;">
+                ~${_esc(prediction.estimatedDays)} days
               </span>
-
             </div>
           </div>
         </div>
       ` : ''}
 
-      <!-- Consistency -->
       <div class="insight-item">
-
         <div class="insight-item__icon">⬡</div>
-
         <div class="insight-item__content">
-
-          <div class="insight-item__label">
-            Consistency Index
-          </div>
-
+          <div class="insight-item__label">Consistency Index</div>
           <div class="insight-item__value">
-
             <div class="insight-bar-wrap">
-              <div
-                class="insight-bar"
-                style="width:${Math.max(0, Math.min(100, summary.consistencyIndex))}%"
-              ></div>
+              <div class="insight-bar" style="width:${consistency}%"></div>
             </div>
-
-            <span
-              style="
-                color:var(--text-muted);
-                font-size:0.875rem;
-                margin-left:8px;
-              "
-            >
-              ${summary.consistencyIndex}%
+            <span style="color:var(--text-muted);font-size:0.875rem;">
+              ${consistency}%
             </span>
-
           </div>
         </div>
       </div>
 
-      <!-- Priority Skill -->
       ${topGap ? `
         <div class="insight-item">
-
           <div class="insight-item__icon">⚡</div>
-
           <div class="insight-item__content">
-
-            <div class="insight-item__label">
-              Priority Skill
-            </div>
-
+            <div class="insight-item__label">Priority Skill</div>
             <div
               class="insight-item__value"
               style="text-transform:capitalize;color:var(--orange-bright)"
             >
-              ${topGap.skill}
-
-              <span
-                style="
-                  color:var(--text-muted);
-                  font-size:0.875rem;
-                  margin-left:8px;
-                "
-              >
+              ${_esc(topGap.skill)}
+              <span style="color:var(--text-muted);font-size:0.875rem;text-transform:none;">
                 +${Math.round(topGap.gap)} pts needed
               </span>
             </div>
-
           </div>
         </div>
       ` : ''}
@@ -505,114 +422,100 @@ function _renderInsights(analytics, prediction) {
 
 function _renderEmptyInsights() {
   const container = document.getElementById('dashboard-insights');
-
   if (!container) return;
 
   container.innerHTML = `
-    <div
-      style="
-        padding:var(--space-6);
-        text-align:center;
-        color:var(--text-muted);
-        font-size:0.875rem;
-      "
-    >
+    <div style="padding:var(--space-6);text-align:center;color:var(--text-muted);font-size:0.9375rem;">
       Complete an assessment to unlock intelligence insights.
     </div>
   `;
 }
 
-// ── Homework Empty State ───────────────────────────────────────
+// ── Homework: states ───────────────────────────────────────────
 
-function _renderEmptyAssignments(container, message = null, isError = false) {
-  if (!container) return;
-
-  container.innerHTML = `
-    <div class="dashboard-card dashboard-card--assignments-empty">
-
-      <div class="dashboard-card__header">
-
-        <div class="dashboard-card__title">
-          Assigned to You
-        </div>
-
-        <div class="dashboard-card__badge">
-          0 Pending
-        </div>
-
-      </div>
-
-      <div class="assignment-empty">
-
-        <div class="assignment-empty__icon">
-          ${isError ? '!' : '✦'}
-        </div>
-
-        <div class="assignment-empty__title">
-          ${isError
-            ? 'Homework temporarily unavailable'
-            : 'No homework assigned yet'}
-        </div>
-
-        <div class="assignment-empty__text">
-          ${message ||
-            "Your teacher hasn't assigned any homework at the moment. When a new assignment is available, it will appear here."}
-        </div>
-
-      </div>
-    </div>
-  `;
-}
-
-// ── Pending Assignments (Learner) ─────────────────────────────
-
-async function _renderPendingAssignments(userId) {
-  const sb = getSupabase();
-
-  if (!sb) return;
-
-  const profileData = store.get('profile');
-
-  // Hide homework for teachers
-  if (profileData?.role === 'teacher') {
-    document.getElementById('pending-assignments-section')?.remove();
-    return;
-  }
-
-  // Find or create homework container
-  let container = document.getElementById('pending-assignments-section');
-
-  if (!container) {
-    const activitySection =
-      document.querySelector('.dashboard-section--activity') ??
-      document.getElementById('recent-activity-list')?.closest('.dashboard-section') ??
-      document.getElementById('recent-activity-list')?.parentElement;
-
-    if (!activitySection?.parentElement) return;
-
-    container = document.createElement('div');
-    container.id = 'pending-assignments-section';
-    container.style.cssText = 'margin-bottom:var(--space-6);';
-
-    activitySection.parentElement.insertBefore(
-      container,
-      activitySection
-    );
-  }
-
-  // Loading state
+function _renderAssignmentsLoading(container) {
   container.innerHTML = `
     <div class="dashboard-card">
       <div class="dashboard-card__header">
         <div class="dashboard-card__title">Assigned to You</div>
       </div>
-      <div class="assignment-empty__text" style="padding:var(--space-4);">
-        Loading your assignments...
-      </div>
+      <div class="assignment-loading">Loading your assignments…</div>
     </div>
   `;
+}
 
-  // Fetch real pending assignments
+function _renderEmptyAssignments(container, message = null, isError = false) {
+  if (!container) return;
+
+  container.innerHTML = `
+    <div class="dashboard-card ${isError ? 'dashboard-card--assignments-error' : 'dashboard-card--assignments-empty'}">
+
+      <div class="dashboard-card__header">
+        <div class="dashboard-card__title">Assigned to You</div>
+        <div class="dashboard-card__badge">0 Pending</div>
+      </div>
+
+      <div class="assignment-empty">
+        <div class="assignment-empty__icon">${isError ? '!' : '✦'}</div>
+
+        <div class="assignment-empty__title">
+          ${isError ? 'Homework is unavailable right now' : 'No homework assigned yet'}
+        </div>
+
+        <div class="assignment-empty__text">
+          ${_esc(
+            message ||
+            "Your teacher hasn't assigned any homework. New assignments will appear here."
+          )}
+        </div>
+      </div>
+
+    </div>
+  `;
+}
+
+// ── Homework: container placement ──────────────────────────────
+
+function _ensureAssignmentsContainer() {
+  let container = document.getElementById('pending-assignments-section');
+  if (container) return container;
+
+  const activitySection =
+    document.querySelector('.dashboard-section--activity') ??
+    document.getElementById('recent-activity-list')?.closest('.dashboard-section') ??
+    document.getElementById('recent-activity-list')?.closest('.dashboard-grid > *') ??
+    document.getElementById('recent-activity-list')?.parentElement;
+
+  if (!activitySection?.parentElement) return null;
+
+  container = document.createElement('div');
+  container.id = 'pending-assignments-section';
+
+  // Inserted before Activity, inside the same parent (.dashboard-grid)
+  activitySection.parentElement.insertBefore(container, activitySection);
+
+  return container;
+}
+
+// ── Pending Assignments (Learner) ─────────────────────────────
+
+async function _renderPendingAssignments(userId, token = _renderToken) {
+  const sb = getSupabase();
+  if (!sb) return;
+
+  const profileData = store.get('profile');
+
+  // Teachers don't see homework
+  if (profileData?.role === 'teacher') {
+    document.getElementById('pending-assignments-section')?.remove();
+    return;
+  }
+
+  const container = _ensureAssignmentsContainer();
+  if (!container) return;
+
+  _renderAssignmentsLoading(container);
+
   const { data: assignments, error } = await sb
     .from('assignments')
     .select('id, skill, level, message, created_at, status')
@@ -620,106 +523,76 @@ async function _renderPendingAssignments(userId) {
     .eq('status', 'pending')
     .order('created_at', { ascending: false });
 
-  // Handle database errors
+  if (token !== _renderToken) return;
+
   if (error) {
-    console.error('[Dashboard] assignments error:', error);
+    // code 42P01 = missing table · 42703 = missing column · 42501 = RLS denied
+    console.error('[Dashboard] assignments error:', {
+      code: error.code,
+      message: error.message,
+      details: error.details,
+      hint: error.hint
+    });
 
     _renderEmptyAssignments(
       container,
-      'We could not load your assignments. Please refresh the page and try again.',
+      'We could not load your assignments. Refresh the page to try again.',
       true
     );
-
     return;
   }
 
-  // No assignments: show professional empty state
   if (!assignments || assignments.length === 0) {
     _renderEmptyAssignments(container);
     return;
   }
 
-  // Build assignment rows
   const rows = assignments.map(a => {
-    const skill = a.skill
-      ? a.skill.charAt(0).toUpperCase() + a.skill.slice(1)
-      : 'Assessment';
-
+    const skill = _cap(a.skill, 'Assessment');
     const date = _relativeDate(a.created_at);
 
     return `
-      <div
-        class="assignment-item"
-        data-assignment-id="${a.id}"
-        data-skill="${a.skill || ''}"
-        data-level="${a.level || ''}"
-      >
+      <div class="assignment-item" data-assignment-id="${_esc(a.id)}">
 
-        <div class="assignment-item__icon">
-          ✦
-        </div>
+        <div class="assignment-item__icon">✦</div>
 
         <div class="assignment-item__info">
-
           <div class="assignment-item__title">
-            ${skill} · ${a.level || '—'}
+            ${_esc(skill)} · ${_esc(a.level || '—')}
           </div>
 
           ${a.message ? `
-            <div class="assignment-item__message">
-              "${a.message}"
-            </div>
+            <div class="assignment-item__message">“${_esc(a.message)}”</div>
           ` : ''}
 
-          <div class="assignment-item__meta">
-            ${date}
-          </div>
-
+          <div class="assignment-item__meta">${date}</div>
         </div>
 
         <button
-          class="btn btn--primary btn--sm assignment-item__go"
+          class="assignment-item__go"
           type="button"
-          data-skill="${a.skill || ''}"
-          data-level="${a.level || ''}"
-          data-assignment-id="${a.id}"
+          data-skill="${_esc(a.skill || '')}"
+          data-level="${_esc(a.level || '')}"
+          data-assignment-id="${_esc(a.id)}"
         >
-          Start →
+          Start
         </button>
 
       </div>
     `;
   }).join('');
 
-  // Render assignments
   container.innerHTML = `
     <div class="dashboard-card">
 
       <div class="dashboard-card__header">
-
-        <div class="dashboard-card__title">
-          Assigned to You
-        </div>
-
-        <div
-          class="dashboard-card__badge"
-          style="
-            background:var(--gold-pure);
-            color:#000;
-            border-radius:999px;
-            padding:2px 10px;
-            font-size:0.75rem;
-            font-weight:700;
-          "
-        >
+        <div class="dashboard-card__title">Assigned to You</div>
+        <div class="dashboard-card__badge dashboard-card__badge--active">
           ${assignments.length} Pending
         </div>
-
       </div>
 
-      <div class="assignment-list">
-        ${rows}
-      </div>
+      <div class="assignment-list">${rows}</div>
 
     </div>
   `;
@@ -727,13 +600,10 @@ async function _renderPendingAssignments(userId) {
   // Wire Start buttons
   container.querySelectorAll('.assignment-item__go').forEach(btn => {
     btn.addEventListener('click', async () => {
-      const skill = btn.dataset.skill;
-      const level = btn.dataset.level;
-      const assignmentId = btn.dataset.assignmentId;
+      const { skill, level, assignmentId } = btn.dataset;
 
       btn.disabled = true;
 
-      // Mark assignment as completed
       const { error: updateError } = await sb
         .from('assignments')
         .update({ status: 'completed' })
@@ -745,51 +615,31 @@ async function _renderPendingAssignments(userId) {
         return;
       }
 
-      // Remove completed assignment from UI
       btn.closest('.assignment-item')?.remove();
 
-      const list = container.querySelector('.assignment-list');
-
       const remaining =
-        list?.querySelectorAll('.assignment-item').length ?? 0;
+        container.querySelectorAll('.assignment-item').length;
 
-      // Update empty state or remaining count
       if (remaining === 0) {
         _renderEmptyAssignments(container);
       } else {
         const badge = container.querySelector('.dashboard-card__badge');
-
-        if (badge) {
-          badge.textContent = `${remaining} Pending`;
-        }
+        if (badge) badge.textContent = `${remaining} Pending`;
       }
 
-      // Store assigned level
       store.set('assignedLevel', level);
-
-      // Navigate to assessment
       window.NIREV?.navigateTo('assessment');
 
       // Select skill and start assessment
       setTimeout(() => {
-        const skillCard = document.querySelector(
-          `.skill-card[data-skill="${skill}"]`
-        );
-
+        const skillCard = document.querySelector(`.skill-card[data-skill="${CSS.escape(skill)}"]`);
         if (!skillCard) return;
 
         skillCard.click();
 
         setTimeout(() => {
-          const startBtn = document.getElementById(
-            'btn-start-assessment'
-          );
-
-          if (startBtn) {
-            startBtn.click();
-          }
+          document.getElementById('btn-start-assessment')?.click();
         }, 200);
-
       }, 500);
     });
   });
@@ -801,17 +651,14 @@ function _computeStreak(scores) {
   if (!scores || scores.length === 0) return 0;
 
   const days = [
-    ...new Set(
-      scores.map(s => new Date(s.created_at).toDateString())
-    )
+    ...new Set(scores.map(s => new Date(s.created_at).toDateString()))
   ].sort((a, b) => new Date(b) - new Date(a));
 
   let streak = 0;
   const today = new Date();
 
   for (let i = 0; i < days.length; i++) {
-    const d = new Date(days[i]);
-    const diff = Math.floor((today - d) / 86400000);
+    const diff = Math.floor((today - new Date(days[i])) / 86400000);
 
     if (diff === i || diff === i + 1) {
       streak++;
@@ -833,11 +680,9 @@ function _relativeDate(dateStr) {
   if (min < 60) return `${min}m ago`;
 
   const hrs = Math.floor(min / 60);
-
   if (hrs < 24) return `${hrs}h ago`;
 
   const days = Math.floor(hrs / 24);
-
   if (days === 1) return 'yesterday';
   if (days < 7) return `${days} days ago`;
 
