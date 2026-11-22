@@ -70,7 +70,6 @@ html[data-theme="light"] .screen--auth {
 
 /* ── Screen: full-viewport two-column ────────────────────── */
 .screen--auth {
-  display: flex;
   flex-direction: row;
   align-items: stretch;
   padding: 0;
@@ -562,15 +561,4 @@ html[data-theme="light"] .screen--auth {
 /* ── Accessibility ────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .auth-brand__hero-logo-img { animation: none; }
-}
-.auth-brand__logo-img {
-  display: block;
-  width: 40px;
-  height: 40px;
-  min-width: 40px;
-  object-fit: contain;
-  opacity: 1;
-  visibility: visible;
-  position: relative;
-  z-index: 2;
 }
