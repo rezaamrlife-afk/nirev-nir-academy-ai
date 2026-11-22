@@ -106,7 +106,7 @@
   font-family: var(--font-ui);
   font-size: var(--text-xl);
   font-weight: 700;
-  color: var(--black-base);
+  color: var(--text-on-accent);
   flex-shrink: 0;
   letter-spacing: -0.02em;
 }
@@ -250,7 +250,7 @@
 .goal-btn.selected .goal-btn__check {
   background: var(--orange-core);
   border-color: var(--orange-core);
-  color: var(--black-base);
+  color: var(--text-on-accent);
 }
 
 /* ── Save Bar ── */

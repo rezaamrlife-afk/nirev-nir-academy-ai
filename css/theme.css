@@ -86,6 +86,7 @@
   --white-muted: #918879;
   --white-subtle: #71695D;
   --white-ghost: rgba(244, 240, 230, 0.06);
+  --white-pure: #FFFFFF;      /* was referenced but never defined */
 
   /* ----------------------------------------------------------
      STATUS COLORS
@@ -286,11 +287,84 @@
   --text-primary: var(--white-primary);
   --text-secondary: var(--white-secondary);
   --text-muted: var(--white-muted);
+
+  /* ----------------------------------------------------------
+     SEMANTIC COMPONENT TOKENS
+     Components must use these instead of hardcoded colors.
+     Light theme redefines them in section 02.
+     ---------------------------------------------------------- */
+
+  /* Text on filled accent surfaces (orange / gold buttons, avatars) */
+  --text-on-accent: #17100A;
+
+  /* Brand fills (gradients, bars, dots). Never use for small text. */
+  --orange-fill-a: #E87500;
+  --orange-fill-b: #FF922E;
+  --gold-fill-a: #B99A4A;
+  --gold-fill-b: #D2B66D;
+
+  /* Buttons */
+  --btn-primary-bg: linear-gradient(135deg, var(--brand-hover), var(--brand-primary));
+  --btn-primary-border: var(--brand-primary);
+  --btn-primary-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.20),
+    0 3px 10px var(--brand-glow);
+  --btn-primary-shadow-hover:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 7px 20px var(--brand-glow);
+
+  --btn-cta-bg: linear-gradient(135deg, #F28A1C, #E87500 58%, #CF6500);
+  --btn-cta-border: rgba(255, 255, 255, 0.16);
+  --btn-cta-shadow:
+    0 7px 20px rgba(232, 117, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24);
+  --btn-cta-shadow-hover:
+    0 11px 28px rgba(232, 117, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.27);
+  --btn-cta-shadow-sm:
+    0 6px 16px rgba(232, 117, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24);
+
+  /* Dashboard hero */
+  --hero-base: linear-gradient(125deg, #17130E 0%, #100E0B 56%, #0C0A08 100%);
+  --hero-glow: rgba(232, 117, 0, 0.18);
+  --hero-glow-gold: rgba(185, 154, 74, 0.08);
+  --hero-border: rgba(232, 117, 0, 0.25);
+  --hero-shadow:
+    0 18px 48px rgba(0, 0, 0, 0.20),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055);
+  --hero-orb-opacity: 1;
+  --hero-accent-gradient: linear-gradient(110deg, #FF922E 0%, #E87500 62%, #D2B66D 100%);
+  --hero-link-text: #E5DED1;
+  --hero-link-bg: rgba(255, 255, 255, 0.035);
+  --hero-link-border: rgba(255, 255, 255, 0.13);
+
+  /* Card washes and hover depth */
+  --wash-orange: rgba(232, 117, 0, 0.12);
+  --wash-orange-faint: rgba(232, 117, 0, 0.055);
+  --card-orb-opacity: 1;
+  --shadow-hover:
+    0 14px 32px rgba(0, 0, 0, 0.17),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
+  /* Auth brand panel */
+  --auth-brand-from: #0C0B08;
+  --auth-brand-to: #080705;
+
+  /* Report score circles */
+  --score-high-bg: linear-gradient(135deg, #27AE60, #2ECC71);
+  --score-low-bg: linear-gradient(135deg, #C0392B, #E74C3C);
+  --score-text: #FFFFFF;
 }
 
 
 /* ============================================================
-   02. LIGHT THEME — WARM WHITE & ORANGE
+   02. LIGHT THEME — WARM PAPER, ORANGE + GOLD
+   Single source of truth for light colors.
+   Text tokens meet WCAG AA (4.5:1) on #FFFFFF and on the page
+   background #F4F2EA. Fill tokens (orange-core, gold-pure,
+   *-fill-*) are for backgrounds only and always carry
+   --text-on-accent.
    ============================================================ */
 
 html[data-theme="light"] {
@@ -298,120 +372,112 @@ html[data-theme="light"] {
 
   /* Surfaces */
 
-  --black-void: #F5F2EB;
-  --black-deep: #F8F6F1;
-  --black-base: #F4F1EA;
-  --black-surface: #FFFFFF;
-  --black-elevated: #FAF8F3;
+  --black-void: #F4F2EA;       /* page */
+  --black-deep: #EEEBE1;
+  --black-base: #F4F2EA;       /* page (same as void) */
+  --black-surface: #FFFFFF;    /* cards */
+  --black-elevated: #F7F5EE;   /* inset rows, inputs */
   --black-card: #FFFFFF;
-  --black-hover: #F5F0E6;
+  --black-hover: #F0ECE0;
 
   /* Borders */
 
-  --black-border: rgba(40, 33, 22, 0.09);
-  --black-muted: rgba(40, 33, 22, 0.14);
-  --black-subtle: rgba(40, 33, 22, 0.20);
+  --black-border: rgba(26, 21, 16, 0.09);
+  --black-muted: rgba(26, 21, 16, 0.14);
+  --black-subtle: rgba(26, 21, 16, 0.20);
 
-  /* Brand */
+  /* Brand — text-safe values (fills use *-fill-* tokens) */
 
-  --brand-primary: #C65F00;
-  --brand-hover: #E87500;
-  --brand-active: #A94F00;
+  --brand-primary: #AD5200;
+  --brand-hover: #8C4100;
+  --brand-active: #7A3900;
 
-  --brand-soft: rgba(198, 95, 0, 0.14);
-  --brand-subtle: rgba(198, 95, 0, 0.08);
-  --brand-border: rgba(198, 95, 0, 0.26);
-  --brand-glow: rgba(198, 95, 0, 0.15);
+  --brand-soft: rgba(224, 123, 0, 0.14);
+  --brand-subtle: rgba(224, 123, 0, 0.08);
+  --brand-border: rgba(224, 123, 0, 0.28);
+  --brand-glow: rgba(224, 123, 0, 0.16);
 
-  /* Orange */
+  /* Orange: core = fill, bright = text */
 
-  --orange-core: #C65F00;
-  --orange-bright: #E87500;
-  --orange-light: #A94F00;
+  --orange-core: #E07B00;
+  --orange-bright: #9C4C00;
+  --orange-light: #823F00;
   --orange-dark: #8C4100;
 
-  --orange-glow: rgba(198, 95, 0, 0.16);
-  --orange-ghost: rgba(198, 95, 0, 0.09);
-  --orange-line: rgba(198, 95, 0, 0.24);
+  --orange-glow: rgba(224, 123, 0, 0.15);
+  --orange-ghost: rgba(224, 123, 0, 0.08);
+  --orange-line: rgba(224, 123, 0, 0.28);
 
-  /* Gold */
+  /* Gold: pure = fill, bright/light = text */
 
-  --gold-pure: #98752E;
-  --gold-bright: #A78336;
-  --gold-light: #785A20;
-  --gold-dim: #B79A5C;
-  --gold-dark: #F5EEDC;
-  --gold-muted: #8C7138;
+  --gold-pure: #C9A84C;
+  --gold-bright: #7F6414;
+  --gold-light: #7A5F12;
+  --gold-dim: #A8852A;
+  --gold-dark: #F6EFD8;
+  --gold-muted: #D9C07A;
 
-  --gold-ghost: rgba(152, 117, 46, 0.08);
-  --gold-glow: rgba(152, 117, 46, 0.12);
-  --gold-line: rgba(152, 117, 46, 0.20);
+  --gold-ghost: rgba(201, 168, 76, 0.10);
+  --gold-glow: rgba(201, 168, 76, 0.22);
+  --gold-line: rgba(201, 168, 76, 0.30);
 
   /* Text */
 
-  --white-primary: #282219;
-  --white-secondary: #51483A;
-  --white-muted: #756B5C;
-  --white-subtle: #918778;
-  --white-ghost: rgba(40, 34, 25, 0.045);
+  --white-primary: #1A1510;     /* 16:1 */
+  --white-secondary: #4A4238;   /* 9.9:1 */
+  --white-muted: #6B6358;       /* 5.9:1 */
+  --white-subtle: #6A645B;      /* 5.9:1 */
+  --white-ghost: rgba(26, 21, 16, 0.04);
+  --white-pure: #1A1510;      /* strongest text colour in light */
 
-  /* Status */
+  /* Status — AA on white */
 
-  --status-success: #16845A;
-  --status-success-bg: rgba(22, 132, 90, 0.09);
+  --status-success: #15803D;
+  --status-success-bg: rgba(21, 128, 61, 0.09);
 
-  --status-warning: #A96B12;
-  --status-warning-bg: rgba(169, 107, 18, 0.09);
+  --status-warning: #9A5B06;
+  --status-warning-bg: rgba(154, 91, 6, 0.09);
 
-  --status-danger: #C43E4A;
-  --status-danger-bg: rgba(196, 62, 74, 0.08);
+  --status-danger: #B91C1C;
+  --status-danger-bg: rgba(185, 28, 28, 0.08);
 
-  --status-info: #2867B2;
-  --status-info-bg: rgba(40, 103, 178, 0.08);
+  --status-info: #1D4ED8;
+  --status-info-bg: rgba(29, 78, 216, 0.08);
 
   /* Shadows */
 
-  --shadow-xs:
-    0 1px 2px rgba(40, 33, 22, 0.04);
-
-  --shadow-sm:
-    0 2px 8px rgba(40, 33, 22, 0.06);
-
-  --shadow-md:
-    0 8px 24px rgba(40, 33, 22, 0.08);
-
-  --shadow-lg:
-    0 16px 40px rgba(40, 33, 22, 0.10);
-
-  --shadow-xl:
-    0 24px 64px rgba(40, 33, 22, 0.12);
+  --shadow-xs: 0 1px 2px rgba(26, 21, 16, 0.05);
+  --shadow-sm: 0 1px 3px rgba(26, 21, 16, 0.06), 0 4px 14px rgba(26, 21, 16, 0.04);
+  --shadow-md: 0 2px 8px rgba(26, 21, 16, 0.06), 0 10px 28px rgba(26, 21, 16, 0.06);
+  --shadow-lg: 0 4px 14px rgba(26, 21, 16, 0.08), 0 18px 44px rgba(26, 21, 16, 0.07);
+  --shadow-xl: 0 8px 24px rgba(26, 21, 16, 0.10), 0 26px 58px rgba(26, 21, 16, 0.10);
 
   --shadow-card:
-    0 1px 2px rgba(40, 33, 22, 0.035),
-    0 5px 18px rgba(40, 33, 22, 0.045);
+    0 1px 2px rgba(26, 21, 16, 0.04),
+    0 4px 14px rgba(26, 21, 16, 0.035);
 
   --shadow-orange:
     0 0 0 1px var(--orange-line),
-    0 6px 22px rgba(198, 95, 0, 0.14);
+    0 4px 18px rgba(224, 123, 0, 0.14);
 
   --shadow-gold-sm:
     0 0 0 1px var(--gold-line),
-    0 5px 20px rgba(152, 117, 46, 0.08);
+    0 4px 18px rgba(201, 168, 76, 0.16);
 
   --shadow-gold-md:
     0 0 0 1px var(--gold-line),
-    0 10px 32px rgba(152, 117, 46, 0.10);
+    0 8px 30px rgba(201, 168, 76, 0.20);
 
   /* Glass */
 
-  --glass-bg: rgba(255, 255, 255, 0.88);
-  --glass-border: rgba(40, 33, 22, 0.08);
+  --glass-bg: rgba(255, 255, 255, 0.90);
+  --glass-border: rgba(26, 21, 16, 0.08);
 
   /* Surface aliases */
 
   --surface-1: var(--black-surface);
   --surface-2: var(--black-elevated);
-  --surface-3: var(--black-card);
+  --surface-3: #EFECE2;
   --surface-hover: var(--black-hover);
 
   --surface: var(--black-surface);
@@ -420,26 +486,79 @@ html[data-theme="light"] {
   /* Border aliases */
 
   --border-default: var(--black-border);
-  --border-subtle: var(--black-border);
+  --border-subtle: rgba(26, 21, 16, 0.10);
   --border-strong: var(--black-muted);
 
   /* Focus */
 
-  --focus-ring:
-    0 0 0 3px rgba(198, 95, 0, 0.22);
+  --focus-ring: 0 0 0 3px rgba(156, 76, 0, 0.26);
 
   /* Intelligence */
 
-  --intel-bg: rgba(198, 95, 0, 0.08);
-  --intel-border: rgba(198, 95, 0, 0.20);
-  --intel-glow:
-    0 0 28px rgba(198, 95, 0, 0.08);
+  --intel-bg: rgba(224, 123, 0, 0.05);
+  --intel-border: rgba(224, 123, 0, 0.20);
+  --intel-glow: 0 2px 16px rgba(224, 123, 0, 0.06);
 
   /* Compatibility */
 
   --text-primary: var(--white-primary);
   --text-secondary: var(--white-secondary);
   --text-muted: var(--white-muted);
+
+  /* ----------------------------------------------------------
+     Semantic component tokens (light)
+     ---------------------------------------------------------- */
+
+  --text-on-accent: #1A1510;    /* 6.0:1 on #E07B00 · 7.9:1 on gold */
+
+  --orange-fill-a: #E07B00;
+  --orange-fill-b: #F59020;
+  --gold-fill-a: #B8942E;
+  --gold-fill-b: #D2B66D;
+
+  --btn-primary-bg: linear-gradient(135deg, #E07B00, #F59020);
+  --btn-primary-border: rgba(156, 76, 0, 0.35);
+  --btn-primary-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 3px 10px rgba(224, 123, 0, 0.22);
+  --btn-primary-shadow-hover:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 6px 18px rgba(224, 123, 0, 0.30);
+
+  --btn-cta-bg: linear-gradient(135deg, #E07B00, #F59020);
+  --btn-cta-border: rgba(156, 76, 0, 0.35);
+  --btn-cta-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 4px 14px rgba(224, 123, 0, 0.24);
+  --btn-cta-shadow-hover:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 7px 20px rgba(224, 123, 0, 0.32);
+  --btn-cta-shadow-sm:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 3px 10px rgba(224, 123, 0, 0.22);
+
+  --hero-base: linear-gradient(135deg, #FFFFFF 0%, #FBF8F0 100%);
+  --hero-glow: rgba(224, 123, 0, 0.07);
+  --hero-glow-gold: rgba(201, 168, 76, 0.06);
+  --hero-border: rgba(26, 21, 16, 0.09);
+  --hero-shadow: var(--shadow-card);
+  --hero-orb-opacity: 0.5;
+  --hero-accent-gradient: linear-gradient(110deg, #9C4C00 0%, #C65F00 100%);
+  --hero-link-text: var(--white-secondary);
+  --hero-link-bg: #FFFFFF;
+  --hero-link-border: var(--black-muted);
+
+  --wash-orange: rgba(224, 123, 0, 0.05);
+  --wash-orange-faint: rgba(224, 123, 0, 0.02);
+  --card-orb-opacity: 0.3;
+  --shadow-hover: 0 8px 24px rgba(26, 21, 16, 0.08);
+
+  --auth-brand-from: #FDFCF7;
+  --auth-brand-to: #F3EFDE;
+
+  --score-high-bg: linear-gradient(135deg, #136B35, #15803D);
+  --score-low-bg: linear-gradient(135deg, #B91C1C, #DC2626);
+  --score-text: #FFFFFF;
 }
 
 

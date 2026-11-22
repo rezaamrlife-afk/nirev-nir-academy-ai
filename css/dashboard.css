@@ -81,16 +81,14 @@
   overflow: hidden;
 
   background:
-    radial-gradient(ellipse at 84% 45%, var(--nv-accent-18), transparent 43%),
-    radial-gradient(ellipse at 8% 100%, rgba(185, 154, 74, 0.08), transparent 44%),
-    linear-gradient(125deg, #17130E 0%, #100E0B 56%, #0C0A08 100%);
+    radial-gradient(ellipse at 84% 45%, var(--hero-glow), transparent 43%),
+    radial-gradient(ellipse at 8% 100%, var(--hero-glow-gold), transparent 44%),
+    var(--hero-base);
 
-  border: 1px solid var(--nv-accent-25);
+  border: 1px solid var(--hero-border);
   border-radius: var(--radius-2xl, 26px);
 
-  box-shadow:
-    0 18px 48px rgba(0, 0, 0, 0.20),
-    inset 0 1px 0 rgba(255, 255, 255, 0.055);
+  box-shadow: var(--hero-shadow);
 
   animation: fade-up var(--dur-slow, 360ms) var(--ease-out, ease-out) both;
 }
@@ -104,6 +102,7 @@
   width: 370px;
   height: 370px;
   border-radius: 50%;
+  opacity: var(--hero-orb-opacity, 1);
   background: radial-gradient(
     circle,
     var(--nv-accent-18),
@@ -170,14 +169,14 @@
   line-height: 1.12;
   letter-spacing: -0.035em;
 
-  color: #F4F0E6;
+  color: var(--white-primary);
   overflow-wrap: anywhere;
   text-wrap: balance;
 }
 
 .dashboard-hero__title span {
   display: inline;
-  background: linear-gradient(110deg, #FF922E 0%, #E87500 62%, #D2B66D 100%);
+  background: var(--hero-accent-gradient);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -192,7 +191,7 @@
   font-weight: 400;
   line-height: 1.75;
 
-  color: #C8C0AF;
+  color: var(--white-secondary);
 }
 
 
@@ -240,21 +239,17 @@
   isolation: isolate;
   overflow: hidden;
 
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  background: linear-gradient(135deg, #F28A1C, #E87500 58%, #CF6500);
-  color: #17100A;
+  border: 1px solid var(--btn-cta-border);
+  background: var(--btn-cta-bg);
+  color: var(--text-on-accent);
 
-  box-shadow:
-    0 7px 20px var(--nv-accent-25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.24);
+  box-shadow: var(--btn-cta-shadow);
 }
 
 .dashboard-hero__cta:hover {
   transform: translateY(-2px);
   filter: brightness(1.07);
-  box-shadow:
-    0 11px 28px var(--nv-accent-35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.27);
+  box-shadow: var(--btn-cta-shadow-hover);
 }
 
 .dashboard-hero__cta:active {
@@ -262,9 +257,9 @@
 }
 
 .dashboard-hero__link {
-  border: 1px solid rgba(255, 255, 255, 0.13);
-  background: rgba(255, 255, 255, 0.035);
-  color: #E5DED1;
+  border: 1px solid var(--hero-link-border);
+  background: var(--hero-link-bg);
+  color: var(--hero-link-text);
   font-weight: 550;
 }
 
@@ -382,8 +377,8 @@
   background: linear-gradient(
     90deg,
     transparent,
-    var(--gold-pure, #B99A4A),
-    var(--gold-bright, #D2B66D),
+    var(--gold-fill-a),
+    var(--gold-fill-b),
     transparent
   );
 }
@@ -392,8 +387,8 @@
   background: linear-gradient(
     90deg,
     transparent,
-    var(--orange-core, #E87500),
-    var(--orange-bright, #FF922E),
+    var(--orange-fill-a),
+    var(--orange-fill-b),
     transparent
   );
 }
@@ -408,6 +403,7 @@
   height: 165px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(185, 154, 74, 0.09), transparent 70%);
+  opacity: var(--card-orb-opacity, 1);
   pointer-events: none;
 }
 
@@ -418,9 +414,7 @@
 .stat-card:hover {
   transform: translateY(-3px);
   border-color: var(--border-strong, rgba(255, 255, 255, 0.16));
-  box-shadow:
-    0 14px 32px rgba(0, 0, 0, 0.17),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  box-shadow: var(--shadow-hover);
 }
 
 .stat-card:hover::before { opacity: 1; }
@@ -581,10 +575,10 @@
   overflow: hidden;
 
   background:
-    radial-gradient(ellipse at 100% 0%, var(--nv-accent-12), transparent 50%),
+    radial-gradient(ellipse at 100% 0%, var(--wash-orange), transparent 50%),
     linear-gradient(
       145deg,
-      var(--nv-accent-04),
+      var(--wash-orange-faint),
       var(--surface-1, #17140F) 68%
     );
 
@@ -655,7 +649,7 @@
 
 /* JS can mark a card with pending items */
 .dashboard-card__badge--active {
-  color: #17100A;
+  color: var(--text-on-accent);
   background: var(--gold-pure, #B99A4A);
   border-color: transparent;
 }
@@ -824,15 +818,13 @@
   font-family: var(--font-ui, Inter, sans-serif);
   font-size: 14px;
   font-weight: 650;
-  color: #17100A;
+  color: var(--text-on-accent);
   cursor: pointer;
 
-  background: linear-gradient(135deg, #F28A1C, #E87500 58%, #CF6500);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: var(--btn-cta-bg);
+  border: 1px solid var(--btn-cta-border);
   border-radius: 10px;
-  box-shadow:
-    0 6px 16px var(--nv-accent-25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.24);
+  box-shadow: var(--btn-cta-shadow-sm);
 
   transition: transform 180ms ease, filter 180ms ease;
 }
@@ -1040,10 +1032,10 @@
   overflow: hidden;
 
   background:
-    radial-gradient(ellipse at 100% 0%, var(--nv-accent-12), transparent 48%),
+    radial-gradient(ellipse at 100% 0%, var(--wash-orange), transparent 48%),
     linear-gradient(
       145deg,
-      color-mix(in srgb, var(--nv-accent) 5.5%, transparent),
+      var(--wash-orange-faint),
       var(--surface-1, #17140F) 68%
     );
 
@@ -1100,7 +1092,7 @@
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: var(--orange-bright, #FF922E);
+  background: var(--orange-fill-b);
   box-shadow:
     0 0 0 4px var(--nv-accent-12),
     0 0 15px color-mix(in srgb, var(--nv-accent) 40%, transparent);
@@ -1196,8 +1188,8 @@
   height: 100%;
   background: linear-gradient(
     90deg,
-    var(--orange-core, #E87500),
-    var(--orange-bright, #FF922E)
+    var(--orange-fill-a),
+    var(--orange-fill-b)
   );
   border-radius: inherit;
   box-shadow: 0 0 10px var(--nv-accent-25);
@@ -1478,75 +1470,9 @@
 
 /* ============================================================
    24. LIGHT THEME
+   Intentionally empty: every color above comes from tokens in
+   theme.css, so Light/Dark switch without overrides here.
    ============================================================ */
-
-html[data-theme="light"] .stat-card,
-html[data-theme="light"] .activity-item,
-html[data-theme="light"] .assignment-item,
-html[data-theme="light"] .quick-action-btn {
-  background: var(--surface-1, #FFFFFF);
-  border-color: var(--border-default, #E8E3DA);
-  box-shadow:
-    0 4px 16px rgba(35, 28, 18, 0.045),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-}
-
-html[data-theme="light"] .stat-card:hover,
-html[data-theme="light"] .activity-item:hover,
-html[data-theme="light"] .assignment-item:hover,
-html[data-theme="light"] .quick-action-btn:hover {
-  background: var(--surface-2, #F8F6F1);
-  border-color: var(--orange-line, rgba(232, 117, 0, 0.30));
-}
-
-html[data-theme="light"] .stat-card__label,
-html[data-theme="light"] .stat-card__trend,
-html[data-theme="light"] .activity-item__meta,
-html[data-theme="light"] .assignment-item__message,
-html[data-theme="light"] .quick-action-btn {
-  color: var(--text-secondary, #625B50);
-}
-
-html[data-theme="light"] .stat-card__value,
-html[data-theme="light"] .activity-item__title,
-html[data-theme="light"] .assignment-item__title,
-html[data-theme="light"] .section-title,
-html[data-theme="light"] .dashboard-card__title,
-html[data-theme="light"] .assignment-empty__title,
-html[data-theme="light"] .empty-state__title,
-html[data-theme="light"] .insight-item__value,
-html[data-theme="light"] .intel-panel__title {
-  color: var(--text-primary, #211D18);
-}
-
-html[data-theme="light"] .intel-panel,
-html[data-theme="light"] .dashboard-card {
-  background:
-    radial-gradient(ellipse at 100% 0%, color-mix(in srgb, var(--nv-accent) 7.5%, transparent), transparent 50%),
-    linear-gradient(145deg, #FFFFFF, var(--surface-1, #F8F6F1) 75%);
-  border-color: var(--nv-accent-25);
-  box-shadow: 0 8px 26px rgba(35, 28, 18, 0.055);
-}
-
-html[data-theme="light"] .insight-item { border-bottom-color: var(--border-subtle, #EAE5DC); }
-html[data-theme="light"] .insight-item__label { color: var(--text-secondary, #625B50); }
-html[data-theme="light"] .insight-bar-wrap { background: #E9E4DB; }
-
-html[data-theme="light"] .empty-state__text,
-html[data-theme="light"] .assignment-empty__text,
-html[data-theme="light"] .assignment-item__meta {
-  color: var(--text-muted, #756D61);
-}
-
-html[data-theme="light"] .activity-item__icon,
-html[data-theme="light"] .assignment-item__icon,
-html[data-theme="light"] .quick-action-btn__icon {
-  background: color-mix(in srgb, var(--nv-accent) 7%, transparent);
-  border-color: color-mix(in srgb, var(--nv-accent) 13%, transparent);
-}
-
-html[data-theme="light"] .quick-action-btn__icon { color: var(--orange-core, #E87500); }
-html[data-theme="light"] .stat-card::after { opacity: 0.55; }
 
 
 /* ============================================================

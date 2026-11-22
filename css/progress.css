@@ -233,13 +233,13 @@
 
 .milestone-item__dot.reached {
   background: linear-gradient(135deg, var(--gold-dim), var(--gold-pure));
-  color: var(--black-base);
+  color: var(--text-on-accent);
   box-shadow: var(--shadow-gold-sm);
 }
 
 .milestone-item__dot.current {
   background: var(--orange-core);
-  color: var(--black-base);
+  color: var(--text-on-accent);
   box-shadow: 0 0 12px var(--orange-glow);
 }
 

@@ -352,7 +352,7 @@
   width: 40px;
   height: 40px;
 
-  color: var(--black-base, #171410);
+  color: var(--text-on-accent);
   background: linear-gradient(
     135deg,
     var(--orange-core, #E87500),

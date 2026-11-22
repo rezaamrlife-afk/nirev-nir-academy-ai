@@ -140,7 +140,7 @@
   align-items: center;
   justify-content: center;
   font-size: 0.8rem;
-  color: var(--black-base);
+  color: var(--text-on-accent);
   font-weight: 700;
 }
 
@@ -417,7 +417,7 @@
 
 .option-btn.selected .option-btn__letter {
   background: var(--gold-pure);
-  color: var(--black-base);
+  color: var(--text-on-accent);
 }
 
 /* Text answer */

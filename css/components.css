@@ -91,33 +91,25 @@ textarea:focus-visible,
 /* Primary — Main brand action */
 
 .btn--primary {
-  color: #17100A;
-  background: linear-gradient(
-    135deg,
-    var(--brand-hover),
-    var(--brand-primary)
-  );
-  border-color: var(--brand-primary);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.20),
-    0 3px 10px var(--brand-glow);
+  color: var(--text-on-accent);
+  background: var(--btn-primary-bg);
+  border-color: var(--btn-primary-border);
+  box-shadow: var(--btn-primary-shadow);
 }
 
 .btn--primary:hover {
   transform: translateY(-2px);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.22),
-    0 7px 20px var(--brand-glow);
+  box-shadow: var(--btn-primary-shadow-hover);
 }
 
 /* Accent */
 
 .btn--accent {
-  color: #17100A;
+  color: var(--text-on-accent);
   background: linear-gradient(
     135deg,
-    var(--orange-bright),
-    var(--orange-core)
+    var(--orange-fill-b),
+    var(--orange-fill-a)
   );
   border-color: var(--orange-line);
   box-shadow: 0 3px 12px var(--orange-glow);
@@ -217,8 +209,7 @@ textarea:focus-visible,
   width: 18px;
   height: 18px;
   border: 2px solid rgba(20,15,10,.2);
-  border-top-color: currentColor;
-  border-top-color: var(--black-base);
+  border-top-color: var(--text-on-accent);
   border-radius: 50%;
   animation: spin .7s linear infinite;
 }

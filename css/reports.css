@@ -90,13 +90,13 @@
   font-family: var(--font-display);
   font-size: 1.125rem;
   font-weight: 600;
-  color: var(--black-base);
+  color: var(--text-on-accent);
   flex-shrink: 0;
 }
 
-.report-card__score-circle.low    { background: linear-gradient(135deg, #c0392b, #e74c3c); color: white; }
+.report-card__score-circle.low    { background: var(--score-low-bg); color: var(--score-text); }
 .report-card__score-circle.medium { background: linear-gradient(135deg, var(--gold-dim), var(--gold-pure)); }
-.report-card__score-circle.high   { background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; }
+.report-card__score-circle.high   { background: var(--score-high-bg); color: var(--score-text); }
 
 .report-card__info { flex: 1; min-width: 0; }
 
