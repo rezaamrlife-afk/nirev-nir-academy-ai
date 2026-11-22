@@ -70,6 +70,7 @@ html[data-theme="light"] .screen--auth {
 
 /* ── Screen: full-viewport two-column ────────────────────── */
 .screen--auth {
+  display: flex;
   flex-direction: row;
   align-items: stretch;
   padding: 0;
@@ -562,7 +563,6 @@ html[data-theme="light"] .screen--auth {
 @media (prefers-reduced-motion: reduce) {
   .auth-brand__hero-logo-img { animation: none; }
 }
-/* Auth logo visibility fix */
 .auth-brand__logo-img {
   display: block;
   width: 40px;
@@ -573,11 +573,4 @@ html[data-theme="light"] .screen--auth {
   visibility: visible;
   position: relative;
   z-index: 2;
-}
-
-.auth-brand__logo-wrap {
-  display: flex;
-  align-items: center;
-  visibility: visible;
-  opacity: 1;
 }
