@@ -24,9 +24,10 @@
   justify-content: space-between;
   padding: var(--space-10) var(--space-8);
   background:
-    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,168,76,0.08) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(224,123,0,0.05) 0%, transparent 50%),
-    linear-gradient(180deg, #060606 0%, #030303 100%);
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,168,76,0.11) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(224,123,0,0.06) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 50% at 0% 100%, rgba(201,168,76,0.05) 0%, transparent 50%),
+    linear-gradient(180deg, #0C0B08 0%, #080705 100%);
   border-right: 1px solid var(--black-border);
   position: relative;
   overflow: hidden;
