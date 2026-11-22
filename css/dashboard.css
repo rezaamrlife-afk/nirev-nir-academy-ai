@@ -1,13 +1,14 @@
 
 /* ============================================================
-   NIREV AI — DASHBOARD
-   Premium Assessment Intelligence Interface
-   Desktop • Tablet • Mobile
-   Version 4.0
+   NIREV AI — DASHBOARD 5.0
+   Premium Assessment Intelligence Experience
+   Design: Warm Black / Signature Orange
+   Desktop • Laptop • Tablet • Mobile
    ============================================================ */
 
+
 /* ============================================================
-   01. DASHBOARD DESIGN FOUNDATION
+   01. DESIGN FOUNDATION
    ============================================================ */
 
 .dashboard-hero,
@@ -29,85 +30,99 @@
 }
 
 .dashboard-hero {
-  --hero-gold: var(--gold-pure);
-  --hero-orange: var(--orange-core);
+  --hero-accent: var(--orange-core, #E87500);
 
   position: relative;
   isolation: isolate;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: clamp(24px, 4vw, 56px);
+  gap: clamp(24px, 4vw, 64px);
 
-  min-height: 230px;
-  margin-bottom: var(--space-6);
-  padding: clamp(28px, 4vw, 48px);
+  min-height: 250px;
+  margin-bottom: var(--space-6, 24px);
+  padding: clamp(30px, 4.2vw, 54px);
 
   overflow: hidden;
-  border: 1px solid var(--black-border);
-  border-radius: 22px;
 
   background:
     radial-gradient(
-      ellipse at 90% 50%,
-      rgba(201, 168, 76, 0.12),
-      transparent 48%
+      ellipse at 82% 48%,
+      rgba(232, 117, 0, 0.15),
+      transparent 42%
+    ),
+    radial-gradient(
+      ellipse at 10% 100%,
+      rgba(185, 154, 74, 0.07),
+      transparent 42%
     ),
     linear-gradient(
-      120deg,
-      rgba(201, 168, 76, 0.075),
-      rgba(224, 123, 0, 0.035) 55%,
-      transparent 100%
+      125deg,
+      #17130E 0%,
+      #100E0B 55%,
+      #0C0A08 100%
     );
 
-  box-shadow:
-    0 12px 36px rgba(0, 0, 0, 0.10),
-    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(232, 117, 0, 0.20);
+  border-radius: 22px;
 
-  animation: fade-up var(--dur-slow) var(--ease-out) both;
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+
+  animation: fade-up var(--dur-slow, 360ms) var(--ease-out, ease-out) both;
 }
 
-/* Top decorative line */
+/* Ambient accent */
 
 .dashboard-hero::before {
   content: "";
   position: absolute;
+  z-index: -1;
+
+  top: -100px;
+  right: -70px;
+
+  width: 360px;
+  height: 360px;
+
+  border-radius: 50%;
+
+  background: radial-gradient(
+    circle,
+    rgba(232, 117, 0, 0.17),
+    rgba(232, 117, 0, 0.045) 42%,
+    transparent 70%
+  );
+
+  pointer-events: none;
+}
+
+/* Fine decorative line */
+
+.dashboard-hero::after {
+  content: "";
+  position: absolute;
   z-index: 2;
+
   top: 0;
   left: 8%;
   right: 8%;
+
   height: 1px;
 
   background: linear-gradient(
     90deg,
     transparent,
-    var(--gold-pure),
-    var(--orange-core),
+    rgba(232, 117, 0, 0.8),
+    rgba(255, 146, 46, 0.35),
     transparent
-  );
-
-  opacity: 0.65;
-}
-
-/* Background atmosphere */
-
-.dashboard-hero::after {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  top: -30%;
-  right: -8%;
-  width: 48%;
-  height: 160%;
-
-  background: radial-gradient(
-    ellipse,
-    rgba(201, 168, 76, 0.10),
-    transparent 68%
   );
 
   pointer-events: none;
 }
+
 
 /* ============================================================
    02. HERO CONTENT
@@ -116,9 +131,10 @@
 .dashboard-hero__content {
   position: relative;
   z-index: 2;
+
   flex: 1;
   min-width: 0;
-  max-width: 680px;
+  max-width: 720px;
 }
 
 .dashboard-hero__greeting {
@@ -126,26 +142,27 @@
   align-items: center;
   gap: 10px;
 
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 
   font-family: var(--font-mono);
   font-size: 14px;
   font-weight: 500;
-  letter-spacing: 0.13em;
   line-height: 1.5;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
 
-  color: var(--white-muted);
+  color: var(--orange-bright, #FF922E);
 }
 
 .dashboard-hero__title {
+  max-width: 700px;
   margin: 0 0 16px;
 
   font-family: var(--font-display);
-  font-size: clamp(34px, 3.5vw, 52px);
+  font-size: clamp(36px, 4vw, 58px);
   font-weight: 500;
-  line-height: 1.12;
-  letter-spacing: -0.025em;
+  line-height: 1.1;
+  letter-spacing: -0.035em;
 
   color: var(--white-primary);
   overflow-wrap: anywhere;
@@ -155,10 +172,10 @@
   display: inline;
 
   background: linear-gradient(
-    120deg,
-    var(--gold-pure),
-    var(--gold-bright) 55%,
-    var(--orange-bright)
+    110deg,
+    var(--orange-bright, #FF922E) 0%,
+    var(--orange-core, #E87500) 65%,
+    var(--gold-bright, #D2B66D) 100%
   );
 
   -webkit-background-clip: text;
@@ -167,8 +184,8 @@
 }
 
 .dashboard-hero__sub {
-  max-width: 490px;
-  margin: 0 0 26px;
+  max-width: 520px;
+  margin: 0 0 28px;
 
   font-size: 16px;
   font-weight: 400;
@@ -177,6 +194,11 @@
   color: var(--white-secondary);
 }
 
+
+/* ============================================================
+   03. HERO ACTIONS
+   ============================================================ */
+
 .dashboard-hero__actions {
   display: flex;
   align-items: center;
@@ -184,28 +206,33 @@
   gap: 12px;
 }
 
-/* Primary CTA */
-
 .dashboard-hero__cta {
+  position: relative;
+  isolation: isolate;
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
 
-  min-height: 46px;
-  padding: 0 22px;
+  min-height: 48px;
+  padding: 0 23px;
 
-  border: 1px solid transparent;
-  border-radius: 10px;
+  overflow: hidden;
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 11px;
 
   background: linear-gradient(
     135deg,
-    var(--orange-core),
-    var(--orange-bright)
+    #F28A1C,
+    #E87500 58%,
+    #CF6500
   );
 
-  color: #101010;
+  color: #17100A;
 
+  font-family: var(--font-ui);
   font-size: 15px;
   font-weight: 700;
   line-height: 1.3;
@@ -214,45 +241,52 @@
   cursor: pointer;
 
   box-shadow:
-    0 5px 16px rgba(224, 123, 0, 0.20),
-    inset 0 1px 0 rgba(255, 255, 255, 0.20);
+    0 7px 20px rgba(232, 117, 0, 0.23),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
 
   transition:
-    transform 180ms ease,
-    box-shadow 180ms ease,
-    filter 180ms ease;
+    transform 200ms ease,
+    box-shadow 200ms ease,
+    filter 200ms ease;
 }
 
 .dashboard-hero__cta:hover {
   transform: translateY(-2px);
-  filter: brightness(1.06);
+
+  filter: brightness(1.07);
 
   box-shadow:
-    0 9px 24px rgba(224, 123, 0, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.20);
+    0 11px 28px rgba(232, 117, 0, 0.30),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
-/* Secondary CTA */
+.dashboard-hero__cta:active {
+  transform: translateY(0) scale(0.985);
+}
 
 .dashboard-hero__link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  min-height: 46px;
-  padding: 0 16px;
+  min-height: 48px;
+  padding: 0 17px;
 
-  border: 1px solid transparent;
-  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 11px;
 
-  background: transparent;
-  color: var(--white-muted);
+  background: rgba(255, 255, 255, 0.025);
 
+  color: var(--white-secondary);
+
+  font-family: var(--font-ui);
   font-size: 15px;
   font-weight: 500;
+  line-height: 1.4;
   text-decoration: none;
 
   cursor: pointer;
+
   transition:
     color 180ms ease,
     background 180ms ease,
@@ -260,13 +294,14 @@
 }
 
 .dashboard-hero__link:hover {
-  color: var(--gold-bright);
-  background: rgba(201, 168, 76, 0.07);
-  border-color: var(--gold-line);
+  color: var(--orange-bright);
+  background: rgba(232, 117, 0, 0.09);
+  border-color: rgba(232, 117, 0, 0.25);
 }
 
+
 /* ============================================================
-   03. HERO CHARACTER
+   04. HERO CHARACTER
    ============================================================ */
 
 .dashboard-hero__character {
@@ -278,42 +313,46 @@
   justify-content: center;
 
   flex: 0 0 auto;
-  width: clamp(160px, 20vw, 245px);
+  width: clamp(170px, 21vw, 260px);
   align-self: stretch;
 }
 
 .dashboard-hero__character img {
   display: block;
+
   width: 100%;
-  max-height: 250px;
+  max-height: 270px;
+
   object-fit: contain;
   object-position: center;
 
   filter:
-    drop-shadow(0 14px 32px rgba(201, 168, 76, 0.16))
-    drop-shadow(0 5px 12px rgba(0, 0, 0, 0.30));
+    drop-shadow(0 18px 35px rgba(232, 117, 0, 0.13))
+    drop-shadow(0 8px 16px rgba(0, 0, 0, 0.35));
 
-  transition: transform 300ms ease;
+  transition: transform 350ms ease;
 }
 
 .dashboard-hero:hover .dashboard-hero__character img {
-  transform: translateY(-3px);
+  transform: translateY(-4px);
 }
 
+
 /* ============================================================
-   04. STATISTICS GRID
+   05. STATISTICS GRID
    ============================================================ */
 
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 18px;
+  gap: 16px;
 
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-6, 24px);
 }
 
+
 /* ============================================================
-   05. STATISTIC CARDS
+   06. STATISTIC CARDS
    ============================================================ */
 
 .stat-card {
@@ -325,23 +364,31 @@
   justify-content: space-between;
 
   min-width: 0;
-  min-height: 145px;
-  padding: 22px 22px 20px;
+  min-height: 158px;
+  padding: 23px;
 
   overflow: hidden;
 
-  background: var(--black-surface);
-  border: 1px solid var(--black-border);
-  border-radius: 16px;
+  background: linear-gradient(
+    145deg,
+    var(--black-surface, #17140F),
+    var(--black-elevated, #1E1A13)
+  );
 
-  box-shadow: var(--shadow-card);
+  border: 1px solid var(--black-border);
+  border-radius: 17px;
+
+  box-shadow:
+    var(--shadow-card),
+    inset 0 1px 0 rgba(255, 255, 255, 0.018);
 
   transition:
     transform 220ms ease,
     border-color 220ms ease,
-    box-shadow 220ms ease;
+    box-shadow 220ms ease,
+    background 220ms ease;
 
-  animation: fade-up var(--dur-slow) var(--ease-out) both;
+  animation: fade-up var(--dur-slow, 360ms) var(--ease-out, ease-out) both;
 }
 
 .stat-card:nth-child(1) { animation-delay: 40ms; }
@@ -349,18 +396,21 @@
 .stat-card:nth-child(3) { animation-delay: 120ms; }
 .stat-card:nth-child(4) { animation-delay: 160ms; }
 
-/* Accent line */
+/* Top accent */
 
 .stat-card::before {
   content: "";
   position: absolute;
-  z-index: -1;
-  top: 0;
-  left: 0;
-  right: 0;
 
-  height: 3px;
-  opacity: 0.65;
+  top: 0;
+  left: 18px;
+  right: 18px;
+
+  height: 2px;
+
+  opacity: 0.75;
+
+  border-radius: 0 0 5px 5px;
 
   transition: opacity 220ms ease;
 }
@@ -368,37 +418,41 @@
 .stat-card--gold::before {
   background: linear-gradient(
     90deg,
-    var(--gold-dim),
+    transparent,
     var(--gold-pure),
-    var(--gold-bright)
+    var(--gold-bright),
+    transparent
   );
 }
 
 .stat-card--orange::before {
   background: linear-gradient(
     90deg,
+    transparent,
     var(--orange-core),
-    var(--orange-bright)
+    var(--orange-bright),
+    transparent
   );
 }
 
-/* Subtle background glow */
+/* Ambient glow */
 
 .stat-card::after {
   content: "";
   position: absolute;
   z-index: -1;
 
-  top: -55px;
+  top: -65px;
   right: -55px;
 
-  width: 130px;
-  height: 130px;
+  width: 165px;
+  height: 165px;
+
   border-radius: 50%;
 
   background: radial-gradient(
     circle,
-    rgba(201, 168, 76, 0.075),
+    rgba(185, 154, 74, 0.09),
     transparent 70%
   );
 
@@ -408,14 +462,19 @@
 .stat-card--orange::after {
   background: radial-gradient(
     circle,
-    rgba(224, 123, 0, 0.08),
+    rgba(232, 117, 0, 0.13),
     transparent 70%
   );
 }
 
 .stat-card:hover {
   transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
+
+  border-color: rgba(255, 255, 255, 0.13);
+
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
 }
 
 .stat-card:hover::before {
@@ -432,37 +491,33 @@
   box-shadow: var(--shadow-orange);
 }
 
-/* Statistic labels */
-
 .stat-card__label {
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 
   font-family: var(--font-mono);
   font-size: 14px;
   font-weight: 500;
   line-height: 1.5;
-  letter-spacing: 0.09em;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
 
   color: var(--white-secondary);
   overflow-wrap: anywhere;
 }
 
-/* Statistic values */
-
 .stat-card__value {
   margin-bottom: 10px;
 
   font-family: var(--font-ui);
-  font-size: clamp(30px, 2.6vw, 40px);
+  font-size: clamp(30px, 2.7vw, 42px);
   font-weight: 700;
-  line-height: 1.1;
-  letter-spacing: -0.035em;
+  line-height: 1.08;
+  letter-spacing: -0.045em;
 
   font-variant-numeric: tabular-nums;
   overflow-wrap: anywhere;
 
-  animation: count-up var(--dur-slow) var(--ease-spring) both;
+  animation: count-up var(--dur-slow, 360ms) var(--ease-spring, ease-out) both;
 }
 
 .stat-card--gold .stat-card__value {
@@ -473,12 +528,11 @@
   color: var(--orange-bright);
 }
 
-/* Trend information */
-
 .stat-card__trend {
   font-size: 14px;
   font-weight: 500;
   line-height: 1.5;
+
   color: var(--white-secondary);
 }
 
@@ -490,25 +544,28 @@
   color: var(--status-danger);
 }
 
+
 /* ============================================================
-   06. MAIN DASHBOARD GRID
+   07. MAIN DASHBOARD GRID
    ============================================================ */
 
 .dashboard-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.55fr) minmax(300px, 1fr);
+
   align-items: start;
   gap: 22px;
 
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-6, 24px);
 }
 
 .dashboard-grid > * {
   min-width: 0;
 }
 
+
 /* ============================================================
-   07. SECTION HEADERS
+   08. SECTION HEADERS
    ============================================================ */
 
 .section-header {
@@ -518,7 +575,7 @@
   gap: 14px;
 
   min-width: 0;
-  margin-bottom: 18px;
+  margin-bottom: 17px;
 }
 
 .section-title {
@@ -528,7 +585,7 @@
   font-size: 18px;
   font-weight: 650;
   line-height: 1.4;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
 
   color: var(--white-primary);
 }
@@ -539,17 +596,17 @@
   justify-content: center;
 
   flex-shrink: 0;
-  min-height: 36px;
+  min-height: 38px;
+  padding: 0 4px;
 
   font-family: var(--font-mono);
   font-size: 14px;
   font-weight: 500;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.035em;
   text-transform: uppercase;
   text-decoration: none;
 
   color: var(--orange-bright);
-  opacity: 0.9;
 
   transition:
     color 180ms ease,
@@ -558,11 +615,11 @@
 
 .section-link:hover {
   color: var(--orange-light);
-  opacity: 1;
 }
 
+
 /* ============================================================
-   08. ACTIVITY LIST
+   09. ACTIVITY LIST
    ============================================================ */
 
 .activity-list {
@@ -578,20 +635,21 @@
   gap: 14px;
 
   min-width: 0;
-  padding: 14px 16px;
+  padding: 15px 16px;
 
   background: var(--black-elevated);
   border: 1px solid var(--black-border);
-  border-radius: 12px;
+  border-radius: 13px;
 
   cursor: pointer;
 
   transition:
     background 180ms ease,
     border-color 180ms ease,
-    transform 180ms ease;
+    transform 180ms ease,
+    box-shadow 180ms ease;
 
-  animation: stagger-in var(--dur-slow) var(--ease-out) both;
+  animation: stagger-in var(--dur-slow, 360ms) var(--ease-out, ease-out) both;
 }
 
 .activity-item:nth-child(1) { animation-delay: 40ms; }
@@ -600,8 +658,11 @@
 
 .activity-item:hover {
   background: var(--black-card);
-  border-color: var(--black-subtle);
-  transform: translateX(3px);
+  border-color: rgba(232, 117, 0, 0.25);
+
+  transform: translateY(-2px);
+
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.15);
 }
 
 .activity-item__left {
@@ -613,26 +674,24 @@
   min-width: 0;
 }
 
-/* Activity icon */
-
 .activity-item__icon {
   display: flex;
   align-items: center;
   justify-content: center;
 
-  flex: 0 0 42px;
-  width: 42px;
-  height: 42px;
+  flex: 0 0 43px;
+  width: 43px;
+  height: 43px;
 
+  border: 1px solid rgba(232, 117, 0, 0.12);
   border-radius: 12px;
 
   font-size: 16px;
   font-weight: 700;
 
-  background: var(--white-ghost);
+  color: var(--orange-bright);
+  background: rgba(232, 117, 0, 0.09);
 }
-
-/* Activity text */
 
 .activity-item__info {
   display: flex;
@@ -673,28 +732,31 @@
   font-variant-numeric: tabular-nums;
 }
 
+
 /* ============================================================
-   09. QUICK ACTIONS
+   10. QUICK ACTIONS
    ============================================================ */
 
 .quick-actions {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+  gap: 11px;
 }
 
 .quick-action-btn {
+  position: relative;
+
   display: flex;
   align-items: center;
   gap: 12px;
 
   min-width: 0;
-  min-height: 58px;
-  padding: 12px 14px;
+  min-height: 62px;
+  padding: 13px 14px;
 
   background: var(--black-elevated);
   border: 1px solid var(--black-border);
-  border-radius: 12px;
+  border-radius: 13px;
 
   color: var(--white-secondary);
 
@@ -710,14 +772,19 @@
     background 180ms ease,
     color 180ms ease,
     border-color 180ms ease,
-    transform 180ms ease;
+    transform 180ms ease,
+    box-shadow 180ms ease;
 }
 
 .quick-action-btn:hover {
-  background: var(--black-card);
-  border-color: var(--orange-line);
+  background: rgba(232, 117, 0, 0.075);
+  border-color: rgba(232, 117, 0, 0.28);
+
   color: var(--orange-bright);
+
   transform: translateY(-2px);
+
+  box-shadow: 0 7px 18px rgba(0, 0, 0, 0.15);
 }
 
 .quick-action-btn__icon {
@@ -725,25 +792,30 @@
   align-items: center;
   justify-content: center;
 
-  flex: 0 0 34px;
-  width: 34px;
-  height: 34px;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
 
-  border-radius: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.045);
+  border-radius: 10px;
 
-  background: var(--white-ghost);
+  background: rgba(255, 255, 255, 0.045);
 
   font-size: 15px;
 
-  transition: background 180ms ease;
+  transition:
+    background 180ms ease,
+    border-color 180ms ease;
 }
 
 .quick-action-btn:hover .quick-action-btn__icon {
-  background: var(--orange-ghost);
+  background: rgba(232, 117, 0, 0.14);
+  border-color: rgba(232, 117, 0, 0.20);
 }
 
+
 /* ============================================================
-   10. INTELLIGENCE PANEL
+   11. INTELLIGENCE PANEL
    ============================================================ */
 
 .intel-panel {
@@ -751,32 +823,49 @@
   isolation: isolate;
 
   min-width: 0;
-  padding: 22px;
+  padding: 24px;
 
-  background: var(--intel-bg);
-  border: 1px solid var(--intel-border);
-  border-radius: 16px;
+  overflow: hidden;
 
-  box-shadow: var(--intel-glow);
+  background:
+    radial-gradient(
+      ellipse at 100% 0%,
+      rgba(232, 117, 0, 0.12),
+      transparent 48%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(232, 117, 0, 0.075),
+      rgba(23, 20, 15, 0.98) 65%
+    );
+
+  border: 1px solid rgba(232, 117, 0, 0.22);
+  border-radius: 17px;
+
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
 }
 
 .intel-panel::before {
   content: "";
   position: absolute;
-  z-index: -1;
+
   top: 0;
-  left: 10%;
-  right: 10%;
+  left: 12%;
+  right: 12%;
+
   height: 1px;
 
   background: linear-gradient(
     90deg,
     transparent,
-    var(--gold-pure),
+    var(--orange-bright),
     transparent
   );
 
-  opacity: 0.45;
+  opacity: 0.65;
+  pointer-events: none;
 }
 
 .intel-panel__header {
@@ -785,13 +874,13 @@
   justify-content: space-between;
   gap: 12px;
 
-  margin-bottom: 20px;
+  margin-bottom: 21px;
 }
 
 .intel-panel__title {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 11px;
 
   min-width: 0;
   margin: 0;
@@ -805,21 +894,25 @@
 }
 
 .intel-panel__title-dot {
-  flex: 0 0 8px;
+  flex: 0 0 9px;
 
-  width: 8px;
-  height: 8px;
+  width: 9px;
+  height: 9px;
 
   border-radius: 50%;
 
-  background: var(--orange-core);
-  box-shadow: 0 0 10px var(--orange-core);
+  background: var(--orange-bright);
+
+  box-shadow:
+    0 0 0 4px rgba(232, 117, 0, 0.12),
+    0 0 15px rgba(232, 117, 0, 0.45);
 
   animation: glow-pulse 2.2s ease-in-out infinite;
 }
 
+
 /* ============================================================
-   11. INSIGHTS
+   12. INTELLIGENCE INSIGHTS
    ============================================================ */
 
 .insights-list {
@@ -834,11 +927,11 @@
   gap: 13px;
 
   min-width: 0;
-  padding: 15px 0;
+  padding: 16px 0;
 
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.075);
 
-  animation: intel-reveal var(--dur-base) var(--ease-out) both;
+  animation: intel-reveal var(--dur-base, 240ms) var(--ease-out, ease-out) both;
 }
 
 .insight-item:first-child {
@@ -860,10 +953,10 @@
   align-items: center;
   justify-content: center;
 
-  flex: 0 0 24px;
-  width: 24px;
+  flex: 0 0 27px;
+  width: 27px;
 
-  margin-top: 2px;
+  margin-top: 1px;
 
   font-size: 16px;
   color: var(--orange-bright);
@@ -875,13 +968,13 @@
 }
 
 .insight-item__label {
-  margin-bottom: 6px;
+  margin-bottom: 7px;
 
   font-family: var(--font-mono);
   font-size: 14px;
   font-weight: 500;
   line-height: 1.45;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.055em;
   text-transform: uppercase;
 
   color: var(--white-secondary);
@@ -901,13 +994,13 @@
   overflow-wrap: anywhere;
 }
 
-/* Insight progress bar */
+/* Progress indicator */
 
 .insight-bar-wrap {
   flex: 1;
   min-width: 45px;
-  max-width: 100px;
-  height: 5px;
+  max-width: 110px;
+  height: 6px;
 
   overflow: hidden;
 
@@ -926,11 +1019,14 @@
 
   border-radius: inherit;
 
-  animation: reveal-bar var(--dur-slow) var(--ease-out) both;
+  box-shadow: 0 0 10px rgba(232, 117, 0, 0.22);
+
+  animation: reveal-bar var(--dur-slow, 360ms) var(--ease-out, ease-out) both;
 }
 
+
 /* ============================================================
-   12. EMPTY STATES
+   13. EMPTY STATES
    ============================================================ */
 
 .empty-state {
@@ -940,18 +1036,30 @@
   justify-content: center;
 
   min-width: 0;
-  padding: 48px 24px;
+  padding: 50px 24px;
 
   text-align: center;
 }
 
 .empty-state__icon {
-  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  font-size: 38px;
+  width: 68px;
+  height: 68px;
+
+  margin-bottom: 19px;
+
+  border: 1px solid rgba(232, 117, 0, 0.15);
+  border-radius: 20px;
+
+  background: rgba(232, 117, 0, 0.08);
+
+  font-size: 30px;
   line-height: 1;
 
-  opacity: 0.35;
+  color: var(--orange-bright);
 }
 
 .empty-state__title {
@@ -961,11 +1069,11 @@
   font-weight: 650;
   line-height: 1.4;
 
-  color: var(--white-secondary);
+  color: var(--white-primary);
 }
 
 .empty-state__text {
-  max-width: 320px;
+  max-width: 340px;
   margin: 0 auto 22px;
 
   font-size: 15px;
@@ -975,8 +1083,9 @@
   color: var(--white-muted);
 }
 
+
 /* ============================================================
-   13. KEYBOARD ACCESSIBILITY
+   14. ACCESSIBILITY & FOCUS
    ============================================================ */
 
 .dashboard-hero__cta:focus-visible,
@@ -984,54 +1093,66 @@
 .section-link:focus-visible,
 .quick-action-btn:focus-visible,
 .activity-item:focus-visible {
-  outline: 2px solid var(--gold-bright);
+  outline: 2px solid var(--orange-bright);
   outline-offset: 3px;
 }
 
+.dashboard-hero__cta:focus:not(:focus-visible),
+.dashboard-hero__link:focus:not(:focus-visible),
+.quick-action-btn:focus:not(:focus-visible) {
+  outline: none;
+}
+
+
 /* ============================================================
-   14. LARGE DESKTOP — 1440px+
+   15. LARGE DESKTOP — 1440px+
    ============================================================ */
 
 @media (min-width: 1440px) {
   .dashboard-hero {
-    min-height: 250px;
-    padding: 48px 54px;
+    min-height: 270px;
+    padding: 52px 58px;
   }
 
   .dashboard-hero__character {
-    width: 255px;
+    width: 275px;
   }
 
   .stats-grid {
-    gap: 22px;
+    gap: 20px;
   }
 
   .stat-card {
-    min-height: 160px;
-    padding: 25px;
+    min-height: 168px;
+    padding: 26px;
   }
 
   .dashboard-grid {
     gap: 26px;
   }
+
+  .intel-panel {
+    padding: 27px;
+  }
 }
 
+
 /* ============================================================
-   15. LAPTOP — 1100px
+   16. LAPTOP — 1100px
    ============================================================ */
 
 @media (max-width: 1100px) {
   .dashboard-hero {
-    gap: 24px;
-    padding: 32px;
+    gap: 26px;
+    padding: 34px;
   }
 
   .dashboard-hero__character {
-    width: 175px;
+    width: 185px;
   }
 
   .dashboard-hero__title {
-    font-size: clamp(32px, 4vw, 42px);
+    font-size: clamp(34px, 4vw, 46px);
   }
 
   .stats-grid {
@@ -1039,36 +1160,38 @@
   }
 
   .dashboard-grid {
-    grid-template-columns: minmax(0, 1.2fr) minmax(280px, 1fr);
+    grid-template-columns: minmax(0, 1.2fr) minmax(270px, 1fr);
   }
 }
 
+
 /* ============================================================
-   16. TABLET — 900px
+   17. TABLET — 900px
    ============================================================ */
 
 @media (max-width: 900px) {
   .dashboard-hero {
-    min-height: 0;
+    min-height: 220px;
     padding: 30px;
   }
 
   .dashboard-hero__character {
-    width: 145px;
+    width: 155px;
   }
 
   .dashboard-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
   }
 
   .intel-panel {
-    padding: 22px;
+    padding: 24px;
   }
 }
 
+
 /* ============================================================
-   17. MOBILE — 600px
+   18. MOBILE — 600px
    ============================================================ */
 
 @media (max-width: 600px) {
@@ -1091,19 +1214,19 @@
   .dashboard-hero__greeting {
     margin-bottom: 12px;
     font-size: 14px;
-    letter-spacing: 0.09em;
+    letter-spacing: 0.075em;
   }
 
   .dashboard-hero__title {
-    margin-bottom: 12px;
-    font-size: clamp(30px, 8vw, 38px);
+    margin-bottom: 13px;
+    font-size: clamp(32px, 8vw, 40px);
     line-height: 1.14;
   }
 
   .dashboard-hero__sub {
-    margin-bottom: 20px;
+    margin-bottom: 21px;
     font-size: 15px;
-    line-height: 1.65;
+    line-height: 1.7;
   }
 
   .dashboard-hero__actions {
@@ -1112,11 +1235,11 @@
 
   .dashboard-hero__cta,
   .dashboard-hero__link {
-    min-height: 46px;
+    min-height: 47px;
     font-size: 15px;
   }
 
-  /* Two-column mobile statistics */
+  /* Statistics */
 
   .stats-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1125,29 +1248,32 @@
   }
 
   .stat-card {
-    min-height: 130px;
+    min-height: 137px;
     padding: 17px 15px;
-    border-radius: 13px;
+
+    border-radius: 14px;
   }
 
   .stat-card__label {
     margin-bottom: 12px;
     font-size: 14px;
-    letter-spacing: 0.045em;
+    letter-spacing: 0.035em;
   }
 
   .stat-card__value {
     margin-bottom: 8px;
-    font-size: clamp(25px, 7vw, 32px);
+    font-size: clamp(26px, 7vw, 34px);
   }
 
   .stat-card__trend {
     font-size: 14px;
-    line-height: 1.4;
+    line-height: 1.45;
   }
 
+  /* Main sections */
+
   .dashboard-grid {
-    gap: 20px;
+    gap: 21px;
     margin-bottom: 22px;
   }
 
@@ -1173,7 +1299,7 @@
   .activity-item {
     gap: 10px;
     padding: 12px;
-    border-radius: 11px;
+    border-radius: 12px;
   }
 
   .activity-item__left {
@@ -1181,9 +1307,9 @@
   }
 
   .activity-item__icon {
-    flex-basis: 38px;
-    width: 38px;
-    height: 38px;
+    flex-basis: 39px;
+    width: 39px;
+    height: 39px;
   }
 
   .activity-item__title {
@@ -1206,28 +1332,28 @@
   }
 
   .quick-action-btn {
-    min-height: 54px;
+    min-height: 56px;
     padding: 10px;
     gap: 9px;
     font-size: 14px;
   }
 
   .quick-action-btn__icon {
-    flex-basis: 30px;
-    width: 30px;
-    height: 30px;
+    flex-basis: 32px;
+    width: 32px;
+    height: 32px;
     font-size: 14px;
   }
 
   /* Intelligence */
 
   .intel-panel {
-    padding: 19px;
-    border-radius: 14px;
+    padding: 20px;
+    border-radius: 15px;
   }
 
   .intel-panel__header {
-    margin-bottom: 16px;
+    margin-bottom: 17px;
   }
 
   .intel-panel__title {
@@ -1236,7 +1362,7 @@
 
   .insight-item {
     gap: 10px;
-    padding: 13px 0;
+    padding: 14px 0;
   }
 
   .insight-item__label {
@@ -1248,21 +1374,22 @@
   }
 
   .empty-state {
-    padding: 36px 18px;
+    padding: 38px 18px;
   }
 }
 
+
 /* ============================================================
-   18. SMALL MOBILE — 380px
+   19. SMALL MOBILE — 380px
    ============================================================ */
 
 @media (max-width: 380px) {
   .dashboard-hero {
-    padding: 22px 18px;
+    padding: 23px 18px;
   }
 
   .dashboard-hero__title {
-    font-size: 29px;
+    font-size: 31px;
   }
 
   .stats-grid {
@@ -1270,12 +1397,12 @@
   }
 
   .stat-card {
-    min-height: 122px;
-    padding: 14px 12px;
+    min-height: 128px;
+    padding: 15px 12px;
   }
 
   .stat-card__value {
-    font-size: 25px;
+    font-size: 26px;
   }
 
   .activity-item {
@@ -1288,12 +1415,13 @@
   }
 
   .intel-panel {
-    padding: 16px;
+    padding: 17px;
   }
 }
 
+
 /* ============================================================
-   19. VERY SMALL MOBILE — 340px
+   20. VERY SMALL MOBILE — 340px
    ============================================================ */
 
 @media (max-width: 340px) {
@@ -1316,8 +1444,9 @@
   }
 }
 
+
 /* ============================================================
-   20. TOUCH DEVICES
+   21. TOUCH DEVICES
    ============================================================ */
 
 @media (hover: none) {
@@ -1330,10 +1459,12 @@
 
   .dashboard-hero:hover .dashboard-hero__character img {
     transform: none;
- }
+  }
+}
+
 
 /* ============================================================
-   21. REDUCED MOTION
+   22. REDUCED MOTION
    ============================================================ */
 
 @media (prefers-reduced-motion: reduce) {
