@@ -1,28 +1,38 @@
 
 /* ============================================================
-   NIREV AI — DESIGN SYSTEM
-   Version 5.1 | NIR Black & Orange Identity
+   NIREV AI — PREMIUM DESIGN SYSTEM
+   Version 5.2 | NIR Black & Orange Signature
+   Brand Family: NIR Academy / NIRVO / NIRON
    ============================================================ */
 
-/* Fonts are loaded in index.html */
+/* Fonts are loaded in index.html.
+   Do not load duplicate Google Fonts here. */
+
 
 /* ============================================================
-   01. DARK THEME — NIR BRAND
+   01. DARK THEME — CORE BRAND TOKENS
    ============================================================ */
 
 :root {
   color-scheme: dark;
 
-  /* Brand */
-  --brand-primary: #E07B00;
-  --brand-hover: #F59020;
-  --brand-active: #C96D00;
-  --brand-soft: rgba(224, 123, 0, 0.12);
-  --brand-subtle: rgba(224, 123, 0, 0.06);
-  --brand-border: rgba(224, 123, 0, 0.24);
-  --brand-glow: rgba(224, 123, 0, 0.18);
+  /* ----------------------------------------------------------
+     BRAND IDENTITY — ORANGE FIRST
+     ---------------------------------------------------------- */
 
-  /* True warm blacks */
+  --brand-primary: #E87500;
+  --brand-hover: #FF922E;
+  --brand-active: #C65F00;
+
+  --brand-soft: rgba(232, 117, 0, 0.18);
+  --brand-subtle: rgba(232, 117, 0, 0.10);
+  --brand-border: rgba(232, 117, 0, 0.34);
+  --brand-glow: rgba(232, 117, 0, 0.25);
+
+  /* ----------------------------------------------------------
+     DARK SURFACES — WARM TRUE BLACK
+     ---------------------------------------------------------- */
+
   --black-void: #080706;
   --black-deep: #0C0A08;
   --black-base: #100E0B;
@@ -31,54 +41,90 @@
   --black-card: #252017;
   --black-hover: #2B251A;
 
-  /* Borders */
+  /* ----------------------------------------------------------
+     BORDERS
+     ---------------------------------------------------------- */
+
   --black-border: rgba(255, 245, 225, 0.075);
   --black-muted: rgba(255, 245, 225, 0.12);
   --black-subtle: rgba(255, 245, 225, 0.18);
 
-  /* Orange — Primary accent */
-  --orange-core: #E07B00;
-  --orange-bright: #F59020;
-  --orange-light: #FFAA44;
-  --orange-dark: #A95C00;
-  --orange-glow: rgba(224, 123, 0, 0.20);
-  --orange-ghost: rgba(224, 123, 0, 0.09);
-  --orange-line: rgba(224, 123, 0, 0.22);
+  /* ----------------------------------------------------------
+     ORANGE — PRIMARY ACCENT
+     ---------------------------------------------------------- */
 
-  /* Gold — Secondary accent */
-  --gold-pure: #C9A84C;
-  --gold-bright: #DDB96A;
-  --gold-light: #EDD090;
-  --gold-dim: #8A6F28;
+  --orange-core: #E87500;
+  --orange-bright: #FF922E;
+  --orange-light: #FFAD55;
+  --orange-dark: #B95700;
+
+  --orange-glow: rgba(232, 117, 0, 0.26);
+  --orange-ghost: rgba(232, 117, 0, 0.12);
+  --orange-line: rgba(232, 117, 0, 0.30);
+
+  /* ----------------------------------------------------------
+     GOLD — SECONDARY ACCENT
+     ---------------------------------------------------------- */
+
+  --gold-pure: #B99A4A;
+  --gold-bright: #D2B66D;
+  --gold-light: #E6D29A;
+  --gold-dim: #82672C;
   --gold-dark: #F6EFD8;
-  --gold-muted: #D9C07A;
-  --gold-ghost: rgba(201, 168, 76, 0.09);
-  --gold-glow: rgba(201, 168, 76, 0.18);
-  --gold-line: rgba(201, 168, 76, 0.18);
+  --gold-muted: #C8AD68;
 
-  /* Text */
+  --gold-ghost: rgba(185, 154, 74, 0.06);
+  --gold-glow: rgba(185, 154, 74, 0.12);
+  --gold-line: rgba(185, 154, 74, 0.14);
+
+  /* ----------------------------------------------------------
+     TEXT
+     ---------------------------------------------------------- */
+
   --white-primary: #F4F0E6;
   --white-secondary: #C8C0AF;
   --white-muted: #918879;
   --white-subtle: #71695D;
   --white-ghost: rgba(244, 240, 230, 0.06);
 
-  /* Status */
+  /* ----------------------------------------------------------
+     STATUS COLORS
+     ---------------------------------------------------------- */
+
   --status-success: #35C98A;
   --status-success-bg: rgba(53, 201, 138, 0.10);
+
   --status-warning: #EAB308;
   --status-warning-bg: rgba(234, 179, 8, 0.10);
+
   --status-danger: #EF6464;
   --status-danger-bg: rgba(239, 100, 100, 0.10);
+
   --status-info: #70A9F5;
   --status-info-bg: rgba(112, 169, 245, 0.10);
 
-  /* Typography */
-  --font-display: 'Cormorant Garamond', Georgia, serif;
-  --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-mono: 'JetBrains Mono', Consolas, monospace;
+  /* ----------------------------------------------------------
+     TYPOGRAPHY
+     ---------------------------------------------------------- */
 
-  /* Type scale — minimum 14px */
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+
+  --font-ui:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+
+  --font-mono:
+    'JetBrains Mono',
+    Consolas,
+    monospace;
+
+  /* ----------------------------------------------------------
+     TYPE SCALE — MINIMUM 14PX
+     ---------------------------------------------------------- */
+
   --text-xs: 0.875rem;
   --text-sm: 0.9375rem;
   --text-base: 1rem;
@@ -95,7 +141,15 @@
   --line-normal: 1.55;
   --line-relaxed: 1.7;
 
-  /* Spacing */
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* ----------------------------------------------------------
+     SPACING
+     ---------------------------------------------------------- */
+
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -109,7 +163,10 @@
   --space-20: 80px;
   --space-24: 96px;
 
-  /* Radius */
+  /* ----------------------------------------------------------
+     BORDER RADIUS
+     ---------------------------------------------------------- */
+
   --radius-xs: 6px;
   --radius-sm: 9px;
   --radius-md: 12px;
@@ -118,30 +175,45 @@
   --radius-2xl: 26px;
   --radius-pill: 999px;
 
-  /* Shadows */
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.45);
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.35);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.40);
-  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.48);
-  --shadow-xl: 0 24px 64px rgba(0, 0, 0, 0.55);
+  /* ----------------------------------------------------------
+     SHADOWS
+     ---------------------------------------------------------- */
+
+  --shadow-xs:
+    0 1px 2px rgba(0, 0, 0, 0.45);
+
+  --shadow-sm:
+    0 2px 8px rgba(0, 0, 0, 0.35);
+
+  --shadow-md:
+    0 8px 24px rgba(0, 0, 0, 0.40);
+
+  --shadow-lg:
+    0 16px 40px rgba(0, 0, 0, 0.48);
+
+  --shadow-xl:
+    0 24px 64px rgba(0, 0, 0, 0.55);
 
   --shadow-gold-sm:
     0 0 0 1px var(--gold-line),
-    0 5px 20px rgba(201, 168, 76, 0.10);
+    0 5px 20px rgba(185, 154, 74, 0.10);
 
   --shadow-gold-md:
     0 0 0 1px var(--gold-line),
-    0 10px 32px rgba(201, 168, 76, 0.14);
+    0 10px 32px rgba(185, 154, 74, 0.14);
 
   --shadow-orange:
     0 0 0 1px var(--orange-line),
-    0 6px 22px rgba(224, 123, 0, 0.16);
+    0 8px 28px rgba(232, 117, 0, 0.22);
 
   --shadow-card:
     0 1px 0 rgba(255, 255, 255, 0.025) inset,
     0 4px 16px rgba(0, 0, 0, 0.32);
 
-  /* Motion */
+  /* ----------------------------------------------------------
+     TRANSITIONS & MOTION
+     ---------------------------------------------------------- */
+
   --ease-smooth: cubic-bezier(0.2, 0.8, 0.2, 1);
   --ease-out: cubic-bezier(0, 0, 0.2, 1);
   --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
@@ -153,51 +225,78 @@
   --dur-slower: 500ms;
   --dur-page: 300ms;
 
-  /* Layout */
+  /* ----------------------------------------------------------
+     LAYOUT
+     ---------------------------------------------------------- */
+
   --sidebar-w: 256px;
   --sidebar-w-collapsed: 76px;
   --topbar-h: 64px;
   --content-max: 1440px;
   --content-padding: 32px;
 
-  /* Glass */
+  /* ----------------------------------------------------------
+     GLASS
+     ---------------------------------------------------------- */
+
   --glass-bg: rgba(14, 12, 8, 0.88);
   --glass-border: rgba(255, 245, 225, 0.09);
   --glass-blur: blur(20px) saturate(150%);
 
-  /* Surface aliases */
+  /* ----------------------------------------------------------
+     SURFACE ALIASES
+     ---------------------------------------------------------- */
+
   --surface-1: var(--black-surface);
   --surface-2: var(--black-elevated);
   --surface-3: var(--black-card);
   --surface-hover: var(--black-hover);
 
-  /* Border aliases */
+  --surface: var(--black-surface);
+  --background: var(--black-base);
+
+  /* ----------------------------------------------------------
+     BORDER ALIASES
+     ---------------------------------------------------------- */
+
   --border-default: var(--black-border);
   --border-subtle: var(--black-border);
   --border-strong: var(--black-muted);
 
-  /* Focus */
-  --focus-ring: 0 0 0 3px rgba(224, 123, 0, 0.28);
+  /* ----------------------------------------------------------
+     ACCESSIBILITY
+     ---------------------------------------------------------- */
 
-  /* Intelligence */
-  --intel-bg: rgba(224, 123, 0, 0.07);
-  --intel-border: rgba(224, 123, 0, 0.20);
-  --intel-glow: 0 0 32px rgba(224, 123, 0, 0.10);
+  --focus-ring:
+    0 0 0 3px rgba(232, 117, 0, 0.30);
 
-  /* Compatibility aliases */
-  --surface: var(--black-surface);
-  --background: var(--black-base);
+  /* ----------------------------------------------------------
+     NIR INTELLIGENCE
+     ---------------------------------------------------------- */
+
+  --intel-bg: rgba(232, 117, 0, 0.11);
+  --intel-border: rgba(232, 117, 0, 0.28);
+  --intel-glow:
+    0 0 36px rgba(232, 117, 0, 0.15);
+
+  /* ----------------------------------------------------------
+     COMPATIBILITY TOKENS
+     ---------------------------------------------------------- */
+
   --text-primary: var(--white-primary);
   --text-secondary: var(--white-secondary);
   --text-muted: var(--white-muted);
 }
 
+
 /* ============================================================
-   02. LIGHT THEME
+   02. LIGHT THEME — WARM WHITE & ORANGE
    ============================================================ */
 
 html[data-theme="light"] {
   color-scheme: light;
+
+  /* Surfaces */
 
   --black-void: #F5F2EB;
   --black-deep: #F8F6F1;
@@ -207,25 +306,35 @@ html[data-theme="light"] {
   --black-card: #FFFFFF;
   --black-hover: #F5F0E6;
 
+  /* Borders */
+
   --black-border: rgba(40, 33, 22, 0.09);
   --black-muted: rgba(40, 33, 22, 0.14);
   --black-subtle: rgba(40, 33, 22, 0.20);
 
-  --brand-primary: #C96D00;
-  --brand-hover: #E07B00;
-  --brand-active: #A95C00;
-  --brand-soft: rgba(201, 109, 0, 0.10);
-  --brand-subtle: rgba(201, 109, 0, 0.05);
-  --brand-border: rgba(201, 109, 0, 0.22);
-  --brand-glow: rgba(201, 109, 0, 0.12);
+  /* Brand */
 
-  --orange-core: #C96D00;
-  --orange-bright: #E07B00;
-  --orange-light: #A95C00;
-  --orange-dark: #8C4D00;
-  --orange-glow: rgba(201, 109, 0, 0.12);
-  --orange-ghost: rgba(201, 109, 0, 0.06);
-  --orange-line: rgba(201, 109, 0, 0.18);
+  --brand-primary: #C65F00;
+  --brand-hover: #E87500;
+  --brand-active: #A94F00;
+
+  --brand-soft: rgba(198, 95, 0, 0.14);
+  --brand-subtle: rgba(198, 95, 0, 0.08);
+  --brand-border: rgba(198, 95, 0, 0.26);
+  --brand-glow: rgba(198, 95, 0, 0.15);
+
+  /* Orange */
+
+  --orange-core: #C65F00;
+  --orange-bright: #E87500;
+  --orange-light: #A94F00;
+  --orange-dark: #8C4100;
+
+  --orange-glow: rgba(198, 95, 0, 0.16);
+  --orange-ghost: rgba(198, 95, 0, 0.09);
+  --orange-line: rgba(198, 95, 0, 0.24);
+
+  /* Gold */
 
   --gold-pure: #98752E;
   --gold-bright: #A78336;
@@ -233,9 +342,12 @@ html[data-theme="light"] {
   --gold-dim: #B79A5C;
   --gold-dark: #F5EEDC;
   --gold-muted: #8C7138;
+
   --gold-ghost: rgba(152, 117, 46, 0.08);
   --gold-glow: rgba(152, 117, 46, 0.12);
   --gold-line: rgba(152, 117, 46, 0.20);
+
+  /* Text */
 
   --white-primary: #282219;
   --white-secondary: #51483A;
@@ -243,49 +355,93 @@ html[data-theme="light"] {
   --white-subtle: #918778;
   --white-ghost: rgba(40, 34, 25, 0.045);
 
+  /* Status */
+
   --status-success: #16845A;
   --status-success-bg: rgba(22, 132, 90, 0.09);
+
   --status-warning: #A96B12;
   --status-warning-bg: rgba(169, 107, 18, 0.09);
+
   --status-danger: #C43E4A;
   --status-danger-bg: rgba(196, 62, 74, 0.08);
+
   --status-info: #2867B2;
   --status-info-bg: rgba(40, 103, 178, 0.08);
 
-  --shadow-xs: 0 1px 2px rgba(40, 33, 22, 0.04);
-  --shadow-sm: 0 2px 8px rgba(40, 33, 22, 0.06);
-  --shadow-md: 0 8px 24px rgba(40, 33, 22, 0.08);
-  --shadow-lg: 0 16px 40px rgba(40, 33, 22, 0.10);
-  --shadow-xl: 0 24px 64px rgba(40, 33, 22, 0.12);
+  /* Shadows */
+
+  --shadow-xs:
+    0 1px 2px rgba(40, 33, 22, 0.04);
+
+  --shadow-sm:
+    0 2px 8px rgba(40, 33, 22, 0.06);
+
+  --shadow-md:
+    0 8px 24px rgba(40, 33, 22, 0.08);
+
+  --shadow-lg:
+    0 16px 40px rgba(40, 33, 22, 0.10);
+
+  --shadow-xl:
+    0 24px 64px rgba(40, 33, 22, 0.12);
 
   --shadow-card:
     0 1px 2px rgba(40, 33, 22, 0.035),
     0 5px 18px rgba(40, 33, 22, 0.045);
 
+  --shadow-orange:
+    0 0 0 1px var(--orange-line),
+    0 6px 22px rgba(198, 95, 0, 0.14);
+
+  --shadow-gold-sm:
+    0 0 0 1px var(--gold-line),
+    0 5px 20px rgba(152, 117, 46, 0.08);
+
+  --shadow-gold-md:
+    0 0 0 1px var(--gold-line),
+    0 10px 32px rgba(152, 117, 46, 0.10);
+
+  /* Glass */
+
   --glass-bg: rgba(255, 255, 255, 0.88);
   --glass-border: rgba(40, 33, 22, 0.08);
+
+  /* Surface aliases */
 
   --surface-1: var(--black-surface);
   --surface-2: var(--black-elevated);
   --surface-3: var(--black-card);
   --surface-hover: var(--black-hover);
 
+  --surface: var(--black-surface);
+  --background: var(--black-base);
+
+  /* Border aliases */
+
   --border-default: var(--black-border);
   --border-subtle: var(--black-border);
   --border-strong: var(--black-muted);
 
-  --focus-ring: 0 0 0 3px rgba(201, 109, 0, 0.22);
+  /* Focus */
 
-  --intel-bg: rgba(201, 109, 0, 0.06);
-  --intel-border: rgba(201, 109, 0, 0.16);
-  --intel-glow: 0 0 28px rgba(201, 109, 0, 0.06);
+  --focus-ring:
+    0 0 0 3px rgba(198, 95, 0, 0.22);
 
-  --surface: var(--black-surface);
-  --background: var(--black-base);
+  /* Intelligence */
+
+  --intel-bg: rgba(198, 95, 0, 0.08);
+  --intel-border: rgba(198, 95, 0, 0.20);
+  --intel-glow:
+    0 0 28px rgba(198, 95, 0, 0.08);
+
+  /* Compatibility */
+
   --text-primary: var(--white-primary);
   --text-secondary: var(--white-secondary);
   --text-muted: var(--white-muted);
 }
+
 
 /* ============================================================
    03. GLOBAL BASELINE
@@ -301,6 +457,7 @@ html {
 }
 
 body {
+  margin: 0;
   font-family: var(--font-ui);
   font-size: var(--text-base);
   line-height: var(--line-normal);
@@ -308,21 +465,30 @@ body {
   background: var(--black-base);
 }
 
-/* Selection */
+
+/* ============================================================
+   04. SELECTION
+   ============================================================ */
 
 ::selection {
   color: #FFFFFF;
   background: var(--orange-core);
 }
 
-/* Focus */
+
+/* ============================================================
+   05. ACCESSIBILITY
+   ============================================================ */
 
 :focus-visible {
   outline: none;
   box-shadow: var(--focus-ring);
 }
 
-/* Reduced motion */
+
+/* ============================================================
+   06. REDUCED MOTION
+   ============================================================ */
 
 @media (prefers-reduced-motion: reduce) {
   *,
