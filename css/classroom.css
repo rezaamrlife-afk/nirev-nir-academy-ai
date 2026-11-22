@@ -73,7 +73,8 @@
 }
 
 .class-card:hover {
-  border-color: var(--orange-line);
+  border-color: var(--gold-line);
+  box-shadow: var(--shadow-gold-sm);
   transform: translateY(-2px);
 }
 
