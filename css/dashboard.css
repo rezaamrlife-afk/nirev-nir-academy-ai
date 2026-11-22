@@ -1,5 +1,5 @@
 /* ============================================================
-   NIREV AI — DASHBOARD 6.2
+   NIREV AI — DASHBOARD 6.3
    Hero • Stats • Homework • Activity • Intelligence
    Dark / Light • Desktop → Mobile
    ============================================================ */
@@ -474,16 +474,18 @@
 
 /* ============================================================
    07. MAIN DASHBOARD GRID
-   Left column  : Homework (row 1) → Intelligence (row 2)
-   Right column : Recent Activity (spans both rows)
-   Without homework (teacher), Intelligence moves up by itself,
-   so no empty cell is ever left behind.
+   Markup order inside .dashboard-grid:
+     1. #pending-assignments-section  (inserted by JS, learners only)
+     2. Recent Activity card          (main column)
+     3. Right column                  (Intelligence + Quick Actions)
+   Homework spans the full row on top; below it Activity is the
+   wide left column and the right column sits beside it. For
+   teachers (no homework) the two columns simply start at row 1.
    ============================================================ */
 
 .dashboard-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.55fr) minmax(280px, 1fr);
-  grid-auto-flow: row dense;
   align-items: start;
   gap: 22px;
   margin-bottom: var(--space-6, 24px);
@@ -491,20 +493,9 @@
 
 .dashboard-grid > * { min-width: 0; }
 
-/* Homework: left column, top */
 .dashboard-grid > #pending-assignments-section {
-  grid-column: 1;
-  grid-row: 1;
+  grid-column: 1 / -1;
   margin-bottom: 0 !important;
-}
-
-/* Recent Activity: right column, spans both rows.
-   Works with or without the .dashboard-section--activity class. */
-.dashboard-grid > .dashboard-section--activity,
-.dashboard-grid > :has(> #recent-activity-list),
-.dashboard-grid > :has(#recent-activity-list):not(#pending-assignments-section) {
-  grid-column: 2;
-  grid-row: 1 / span 2;
 }
 
 /* Never leave an empty grid cell */
@@ -1354,13 +1345,6 @@
     gap: 22px;
   }
 
-  .dashboard-grid > #pending-assignments-section,
-  .dashboard-grid > .dashboard-section--activity,
-  .dashboard-grid > :has(> #recent-activity-list),
-  .dashboard-grid > :has(#recent-activity-list):not(#pending-assignments-section) {
-    grid-column: 1;
-    grid-row: auto;
-  }
 
   .intel-panel,
   .dashboard-card { padding: 24px; }
