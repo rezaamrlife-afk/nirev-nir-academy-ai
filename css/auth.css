@@ -1,68 +1,8 @@
 /* ============================================================
-   NIREV AI — Auth Page  [v7 — token-driven, Light + Dark]
+   NIREV AI — Auth Page  [v6 — NIRVE-inspired layout]
    Bold product name · NIR Academy logo as hero · clean layout
-   Colors: NIREV gold / orange
-
-   Theming: every color comes from theme.css tokens. The few
-   values that differ per theme and have no global token are
-   defined once below as --auth-* variables (Dark default,
-   Light override). Nothing else in this file is theme-aware.
+   Colors: NIREV gold / orange — unchanged
    ============================================================ */
-
-/* ── Local auth tokens ────────────────────────────────────── */
-.screen--auth {
-  /* Gold used as TEXT (pure gold fails contrast on light) */
-  --auth-gold-text: var(--gold-pure);
-
-  /* Big product name gradient */
-  --auth-title-a: var(--gold-light);
-  --auth-title-b: var(--gold-pure);
-  --auth-title-c: var(--gold-dim);
-
-  /* Small "NIREV" logo text gradient */
-  --auth-logo-a: var(--gold-pure);
-  --auth-logo-b: var(--gold-light);
-
-  /* Brand panel washes */
-  --auth-wash-gold: rgba(201,168,76,0.10);
-  --auth-wash-orange: rgba(224,123,0,0.07);
-
-  /* Hero logo card */
-  --auth-logo-card-bg: rgba(201,168,76,0.04);
-  --auth-logo-card-shadow:
-    0 0 0 1px rgba(201,168,76,0.08),
-    0 20px 60px rgba(0,0,0,0.6),
-    0 4px 20px rgba(201,168,76,0.12);
-
-  /* Founder card, tabs */
-  --auth-founder-bg: rgba(255,245,210,0.03);
-  --auth-tab-hover: rgba(255,245,210,0.04);
-  --auth-tab-shadow: 0 1px 4px rgba(0,0,0,0.3);
-}
-
-html[data-theme="light"] .screen--auth {
-  --auth-gold-text: var(--gold-bright);
-
-  --auth-title-a: var(--gold-light);
-  --auth-title-b: var(--gold-dim);
-  --auth-title-c: var(--gold-bright);
-
-  --auth-logo-a: var(--gold-bright);
-  --auth-logo-b: var(--gold-dim);
-
-  --auth-wash-gold: rgba(201,168,76,0.14);
-  --auth-wash-orange: rgba(224,123,0,0.07);
-
-  --auth-logo-card-bg: rgba(255,255,255,0.75);
-  --auth-logo-card-shadow:
-    0 1px 3px rgba(26,21,16,0.08),
-    0 16px 40px rgba(26,21,16,0.12),
-    0 4px 20px rgba(201,168,76,0.16);
-
-  --auth-founder-bg: rgba(255,255,255,0.75);
-  --auth-tab-hover: rgba(26,21,16,0.04);
-  --auth-tab-shadow: 0 1px 4px rgba(26,21,16,0.10);
-}
 
 /* ── Panel visibility ─────────────────────────────────────── */
 .auth-form-panel         { display: none; }
@@ -88,9 +28,9 @@ html[data-theme="light"] .screen--auth {
   flex-direction: column;
   padding: var(--space-10) var(--space-12);
   background:
-    radial-gradient(ellipse 80% 50% at 50% 0%,    var(--auth-wash-gold) 0%, transparent 65%),
-    radial-gradient(ellipse 50% 40% at 100% 100%, var(--auth-wash-orange) 0%, transparent 55%),
-    linear-gradient(170deg, var(--auth-brand-from) 0%, var(--auth-brand-to) 100%);
+    radial-gradient(ellipse 80% 50% at 50% 0%,   rgba(201,168,76,0.10) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 40% at 100% 100%, rgba(224,123,0,0.07)  0%, transparent 55%),
+    linear-gradient(170deg, #0E0C09 0%, #070503 100%);
   border-right: 1px solid var(--black-border);
   overflow: hidden;
 }
@@ -134,7 +74,7 @@ html[data-theme="light"] .screen--auth {
   font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--auth-gold-text);
+  color: var(--gold-pure);
   margin-bottom: 3px;
 }
 
@@ -162,20 +102,21 @@ html[data-theme="light"] .screen--auth {
   animation: fade-up var(--dur-slow) var(--ease-out) 0.15s both;
 }
 
-/* Big bold product name */
+/* Big bold product name — like NIRVE */
 .auth-brand__product-name {
   font-family: var(--font-display);
   font-size: clamp(4rem, 8vw, 7.5rem);
   font-weight: 600;
   letter-spacing: 0.04em;
   line-height: 0.9;
-  color: var(--auth-gold-text);
+  color: var(--gold-pure);
   margin: 0 0 var(--space-3);
+  /* Subtle gradient like NIRVE's teal — but gold for NIREV */
   background: linear-gradient(
     160deg,
-    var(--auth-title-a) 0%,
-    var(--auth-title-b) 50%,
-    var(--auth-title-c) 100%
+    var(--gold-light) 0%,
+    var(--gold-pure)  50%,
+    var(--gold-dim)   100%
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -191,7 +132,7 @@ html[data-theme="light"] .screen--auth {
   margin-bottom: var(--space-3);
 }
 
-/* Short divider line */
+/* Short divider line — like NIRVE's teal line */
 .auth-brand__hero-text::after {
   content: '';
   display: block;
@@ -234,7 +175,7 @@ html[data-theme="light"] .screen--auth {
   background: rgba(201,168,76,0.05);
 }
 
-/* ── Right: NIR Academy logo as hero image ────────────────── */
+/* ── Right: NIR Academy logo as hero image — like NIRVE's logo card ── */
 .auth-brand__hero-logo {
   flex-shrink: 0;
   display: flex;
@@ -249,10 +190,13 @@ html[data-theme="light"] .screen--auth {
   height: 220px;
   object-fit: contain;
   border-radius: var(--radius-2xl);
-  background: var(--auth-logo-card-bg);
+  background: rgba(201,168,76,0.04);
   border: 1px solid rgba(201,168,76,0.12);
   padding: var(--space-4);
-  box-shadow: var(--auth-logo-card-shadow);
+  box-shadow:
+    0 0 0 1px rgba(201,168,76,0.08),
+    0 20px 60px rgba(0,0,0,0.6),
+    0 4px 20px rgba(201,168,76,0.12);
   /* Floating effect */
   animation: float 4s ease-in-out infinite;
 }
@@ -267,7 +211,7 @@ html[data-theme="light"] .screen--auth {
   font-size: 0.65rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--auth-gold-text);
+  color: var(--gold-pure);
   background: rgba(201,168,76,0.08);
   border: 1px solid rgba(201,168,76,0.18);
   border-radius: var(--radius-pill);
@@ -288,7 +232,7 @@ html[data-theme="light"] .screen--auth {
   gap: var(--space-3);
   margin-top: var(--space-8);
   padding: var(--space-3) var(--space-4);
-  background: var(--auth-founder-bg);
+  background: rgba(255,245,210,0.03);
   border: 1px solid rgba(201,168,76,0.10);
   border-radius: var(--radius-lg);
   animation: fade-up var(--dur-slow) var(--ease-out) 0.3s both;
@@ -302,7 +246,7 @@ html[data-theme="light"] .screen--auth {
   height: 32px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--gold-dim), var(--gold-pure));
-  color: var(--text-on-accent);
+  color: var(--black-void);
   font-family: var(--font-display);
   font-size: 0.95rem;
   font-weight: 600;
@@ -382,7 +326,7 @@ html[data-theme="light"] .screen--auth {
   font-size: 1.75rem;
   font-weight: 600;
   letter-spacing: 0.12em;
-  background: linear-gradient(135deg, var(--auth-logo-a), var(--auth-logo-b));
+  background: linear-gradient(135deg, var(--gold-pure), var(--gold-light));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -431,7 +375,7 @@ html[data-theme="light"] .screen--auth {
 
 .auth-tab:hover:not(.active) {
   color: var(--white-secondary);
-  background: var(--auth-tab-hover);
+  background: rgba(255,245,210,0.04);
 }
 
 .auth-tab.active {
@@ -439,7 +383,7 @@ html[data-theme="light"] .screen--auth {
   color: var(--gold-bright);
   border: 1px solid rgba(201,168,76,0.18);
   font-weight: 600;
-  box-shadow: var(--auth-tab-shadow);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
 }
 
 /* ── Role Selector ────────────────────────────────────────── */
@@ -476,7 +420,7 @@ html[data-theme="light"] .screen--auth {
 
 .auth-role-btn__icon {
   font-size: 1.25rem;
-  color: var(--auth-gold-text);
+  color: var(--gold-pure);
 }
 
 .auth-role-btn__text {
@@ -556,9 +500,4 @@ html[data-theme="light"] .screen--auth {
   .auth-card__header { margin-bottom: var(--space-3); }
   .auth-tabs         { margin-bottom: var(--space-3); }
   .form-group        { margin-bottom: var(--space-3); }
-}
-
-/* ── Accessibility ────────────────────────────────────────── */
-@media (prefers-reduced-motion: reduce) {
-  .auth-brand__hero-logo-img { animation: none; }
 }
