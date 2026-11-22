@@ -196,6 +196,17 @@ textarea:focus-visible,
   box-shadow: none;
 }
 
+/* Solid (filled) buttons: Light uses a flat muted look, not a faded orange */
+.btn--primary:disabled,
+.btn--primary[disabled],
+.btn--accent:disabled,
+.btn--accent[disabled] {
+  opacity: var(--btn-disabled-solid-opacity);
+  background: var(--btn-disabled-bg);
+  color: var(--btn-disabled-text);
+  border-color: var(--btn-disabled-border);
+}
+
 /* Loading */
 
 .btn.loading {

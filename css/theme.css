@@ -355,6 +355,20 @@
   --score-high-bg: linear-gradient(135deg, #27AE60, #2ECC71);
   --score-low-bg: linear-gradient(135deg, #C0392B, #E74C3C);
   --score-text: #FFFFFF;
+
+  /* Interactive cards / option buttons (skill-card, type-btn, option-btn) */
+  --control-bg: var(--black-surface);
+  --control-bg-option: var(--black-elevated);
+  --control-border: var(--black-border);
+  --control-shadow: none;
+  --control-border-selected: var(--gold-pure);
+  --skill-icon-color: var(--white-primary);
+
+  /* Disabled solid buttons */
+  --btn-disabled-solid-opacity: 0.45;
+  --btn-disabled-bg: var(--btn-primary-bg);
+  --btn-disabled-text: var(--text-on-accent);
+  --btn-disabled-border: var(--btn-primary-border);
 }
 
 
@@ -559,6 +573,18 @@ html[data-theme="light"] {
   --score-high-bg: linear-gradient(135deg, #136B35, #15803D);
   --score-low-bg: linear-gradient(135deg, #B91C1C, #DC2626);
   --score-text: #FFFFFF;
+
+  --control-bg: #FFFFFF;
+  --control-bg-option: #FFFFFF;
+  --control-border: var(--black-subtle);          /* rgba(26,21,16,.20) */
+  --control-shadow: var(--shadow-card);
+  --control-border-selected: var(--gold-dim);     /* 3.4:1 on white */
+  --skill-icon-color: var(--orange-bright);
+
+  --btn-disabled-solid-opacity: 1;
+  --btn-disabled-bg: #E8E4D8;
+  --btn-disabled-text: #6B6358;
+  --btn-disabled-border: rgba(26, 21, 16, 0.10);
 }
 
 

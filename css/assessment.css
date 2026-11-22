@@ -72,8 +72,9 @@
 }
 
 .skill-card {
-  background: var(--black-surface);
-  border: 1px solid var(--black-border);
+  background: var(--control-bg);
+  border: 1px solid var(--control-border);
+  box-shadow: var(--control-shadow);
   border-radius: var(--radius-xl);
   padding: var(--space-6);
   cursor: pointer;
@@ -101,7 +102,7 @@
 .skill-card:hover::before { opacity: 1; }
 
 .skill-card.selected {
-  border-color: var(--gold-pure);
+  border-color: var(--control-border-selected);
   background: linear-gradient(135deg, rgba(212,175,55,0.10), rgba(212,175,55,0.04));
   box-shadow: var(--shadow-gold-md);
 }
@@ -109,6 +110,7 @@
 .skill-card.selected::before { opacity: 1; }
 
 .skill-card__icon {
+  color: var(--skill-icon-color);
   font-size: 1.75rem;
   margin-bottom: var(--space-3);
   display: block;
@@ -168,8 +170,9 @@
   flex: 1;
   min-width: 120px;
   padding: var(--space-4) var(--space-5);
-  background: var(--black-surface);
-  border: 1px solid var(--black-border);
+  background: var(--control-bg);
+  border: 1px solid var(--control-border);
+  box-shadow: var(--control-shadow);
   border-radius: var(--radius-lg);
   cursor: pointer;
   transition: all var(--dur-base) var(--ease-smooth);
@@ -183,7 +186,7 @@
 }
 
 .type-btn.selected {
-  border-color: var(--gold-pure);
+  border-color: var(--control-border-selected);
   background: var(--gold-ghost);
   box-shadow: var(--shadow-gold-sm);
 }
@@ -376,8 +379,9 @@
   align-items: center;
   gap: var(--space-4);
   padding: var(--space-4) var(--space-5);
-  background: var(--black-elevated);
-  border: 1px solid var(--black-border);
+  background: var(--control-bg-option);
+  border: 1px solid var(--control-border);
+  box-shadow: var(--control-shadow);
   border-radius: var(--radius-lg);
   cursor: pointer;
   transition: all var(--dur-base) var(--ease-smooth);
@@ -394,7 +398,7 @@
 }
 
 .option-btn.selected {
-  border-color: var(--gold-pure);
+  border-color: var(--control-border-selected);
   background: var(--gold-ghost);
   color: var(--gold-bright);
   box-shadow: var(--shadow-gold-sm);

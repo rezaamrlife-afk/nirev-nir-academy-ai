@@ -134,58 +134,10 @@ html[data-theme="light"] .stat-card::before { opacity: 1; }
 
 /* ══ 9. ASSESSMENT ══════════════════════════════════════════ */
 
-/* Skill cards */
-html[data-theme="light"] .skill-card {
-  background: var(--black-elevated);
-  border-color: rgba(26,21,16,0.08);
-  box-shadow: none;
-}
+/* Skill cards, type buttons and option buttons are token-driven
+   (--control-* in theme.css). Only state colors remain here. */
 
-html[data-theme="light"] .skill-card:hover {
-  background: var(--black-surface);
-  border-color: rgba(201,168,76,0.30);
-  box-shadow: var(--shadow-sm);
-  transform: translateY(-2px);
-}
-
-html[data-theme="light"] .skill-card.selected {
-  background: rgba(201,168,76,0.05);
-  border-color: var(--gold-pure);
-  box-shadow: 0 0 0 3px rgba(201,168,76,0.12);
-}
-
-/* Type buttons */
-html[data-theme="light"] .type-btn {
-  background: var(--black-elevated);
-  border-color: rgba(26,21,16,0.08);
-}
-
-html[data-theme="light"] .type-btn:hover {
-  background: var(--black-surface);
-  border-color: rgba(201,168,76,0.28);
-}
-
-html[data-theme="light"] .type-btn.active {
-  background: rgba(201,168,76,0.07);
-  border-color: rgba(201,168,76,0.35);
-}
-
-/* Quiz options */
-html[data-theme="light"] .option-btn {
-  background: var(--black-elevated);
-  border-color: rgba(26,21,16,0.08);
-}
-
-html[data-theme="light"] .option-btn:hover {
-  background: var(--black-surface);
-  border-color: rgba(201,168,76,0.28);
-}
-
-html[data-theme="light"] .option-btn.selected {
-  background: rgba(201,168,76,0.07);
-  border-color: var(--gold-pure);
-}
-
+/* Quiz option states */
 html[data-theme="light"] .option-btn.correct {
   background: rgba(21,128,61,0.06);
   border-color: rgba(21,128,61,0.30);
