@@ -1480,3 +1480,50 @@
     transform: none !important;
   }
 }
+
+/* ============================================================
+   NIREV AI — DASHBOARD
+   Bottom Navigation Compatibility
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+  /* Reserve space for the fixed mobile navigation */
+  .page-content:has(.dashboard-hero) {
+    padding-bottom: calc(
+      100px + env(safe-area-inset-bottom, 0px)
+    );
+    scroll-padding-bottom: calc(
+      100px + env(safe-area-inset-bottom, 0px)
+    );
+  }
+
+  /* Prevent dashboard sections from being clipped */
+  .dashboard-hero,
+  .stats-grid,
+  .dashboard-grid,
+  .quick-actions,
+  .intel-panel,
+  .activity-list {
+    scroll-margin-bottom: 100px;
+  }
+}
+
+/* Smaller mobile screens */
+@media (max-width: 600px) {
+
+  .page-content:has(.dashboard-hero) {
+    padding-bottom: calc(
+      110px + env(safe-area-inset-bottom, 0px)
+    );
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+
+  .page-content:has(.dashboard-hero) {
+    scroll-behavior: auto;
+  }
+}
+
