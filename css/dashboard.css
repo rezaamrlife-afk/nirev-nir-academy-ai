@@ -199,18 +199,18 @@
 .stat-card--gold:hover   { border-color: var(--gold-line); box-shadow: var(--shadow-gold-sm); }
 .stat-card--orange:hover { border-color: var(--orange-line); box-shadow: var(--shadow-orange); }
 
-/* Top accent line */
+/* Top accent line — always visible */
 .stat-card::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 2px;
   border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-  opacity: 0;
+  opacity: 0.55;
   transition: opacity var(--dur-base);
 }
 
-.stat-card--gold::before   { background: linear-gradient(90deg, var(--gold-dim), var(--gold-pure)); }
+.stat-card--gold::before   { background: linear-gradient(90deg, var(--gold-dim), var(--gold-pure), var(--gold-bright)); }
 .stat-card--orange::before { background: linear-gradient(90deg, var(--orange-core), var(--orange-bright)); }
 .stat-card:hover::before   { opacity: 1; }
 
