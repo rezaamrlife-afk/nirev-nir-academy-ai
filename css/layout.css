@@ -1,9 +1,9 @@
 
 /* ============================================================
    NIREV AI — PREMIUM LAYOUT SYSTEM
-   Version 5.0
-   Premium SaaS Navigation Experience
-   Desktop • Tablet • Mobile • Responsive
+   Version 6.0
+   Desktop Sidebar + Mobile Bottom Navigation
+   Teacher • Student • Responsive
    ============================================================ */
 
 /* ============================================================
@@ -34,16 +34,10 @@
   justify-content: center;
   padding: clamp(16px, 4vw, 44px);
   background:
-    radial-gradient(
-      ellipse 65% 55% at 50% 0%,
-      rgba(232, 117, 0, 0.10),
-      transparent 68%
-    ),
-    radial-gradient(
-      ellipse 40% 40% at 100% 100%,
-      rgba(212, 175, 55, 0.045),
-      transparent 70%
-    ),
+    radial-gradient(ellipse 65% 55% at 50% 0%,
+      rgba(232,117,0,.10), transparent 68%),
+    radial-gradient(ellipse 40% 40% at 100% 100%,
+      rgba(212,175,55,.045), transparent 70%),
     var(--black-void, #080706);
 }
 
@@ -76,25 +70,18 @@
 
   color: var(--white-primary, #F4F0E6);
   background: var(--black-surface, #100E0B);
-
   border-inline-end: 1px solid var(--black-border, #2B251D);
 
-  box-shadow: 12px 0 36px rgba(0, 0, 0, 0.12);
+  box-shadow: 12px 0 36px rgba(0,0,0,.12);
 
   -webkit-backdrop-filter: blur(24px) saturate(150%);
   backdrop-filter: blur(24px) saturate(150%);
 
   transition:
-    transform 300ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 300ms cubic-bezier(.22,1,.36,1),
     box-shadow 300ms ease,
     visibility 300ms ease;
-
-  will-change: transform;
 }
-
-/* ============================================================
-   03. SIDEBAR BRAND
-   ============================================================ */
 
 .sidebar__brand {
   flex-shrink: 0;
@@ -129,7 +116,6 @@
     var(--gold-light, #F4DF91),
     var(--gold-pure, #D4AF37)
   );
-
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -137,7 +123,7 @@
   font-family: var(--font-display, inherit);
   font-size: 26px;
   font-weight: 700;
-  letter-spacing: 0.105em;
+  letter-spacing: .105em;
   line-height: 1.1;
 }
 
@@ -147,7 +133,7 @@
   height: 7px;
   background: var(--orange-core, #E87500);
   border-radius: 50%;
-  box-shadow: 0 0 10px rgba(232, 117, 0, 0.55);
+  box-shadow: 0 0 10px rgba(232,117,0,.55);
   animation: glow-pulse 3s ease-in-out infinite;
 }
 
@@ -158,8 +144,7 @@
   height: 40px;
   object-fit: cover;
   border-radius: 12px;
-  border: 1px solid var(--gold-line, rgba(212, 175, 55, 0.25));
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  border: 1px solid var(--gold-line, rgba(212,175,55,.25));
 }
 
 .sidebar__tagline {
@@ -167,12 +152,12 @@
   font-family: var(--font-ui, inherit);
   font-size: 14px;
   font-weight: 500;
-  letter-spacing: 0.035em;
+  letter-spacing: .035em;
   line-height: 1.5;
 }
 
 /* ============================================================
-   04. SIDEBAR NAVIGATION
+   03. SIDEBAR NAVIGATION
    ============================================================ */
 
 .sidebar__nav {
@@ -192,17 +177,9 @@
   width: 4px;
 }
 
-.sidebar__nav::-webkit-scrollbar-track {
-  background: transparent;
-}
-
 .sidebar__nav::-webkit-scrollbar-thumb {
   background: var(--black-subtle, #302A21);
   border-radius: 20px;
-}
-
-.sidebar__nav::-webkit-scrollbar-thumb:hover {
-  background: var(--orange-core, #E87500);
 }
 
 .nav-section {
@@ -222,12 +199,10 @@
   font-family: var(--font-ui, inherit);
   font-size: 14px;
   font-weight: 700;
-  letter-spacing: 0.075em;
+  letter-spacing: .075em;
   line-height: 1.5;
   text-transform: uppercase;
 }
-
-/* Navigation item */
 
 .nav-item {
   position: relative;
@@ -250,12 +225,10 @@
   font-size: 14px;
   font-weight: 550;
   line-height: 1.45;
-  letter-spacing: 0;
 
   text-decoration: none;
   cursor: pointer;
   user-select: none;
-
   -webkit-tap-highlight-color: transparent;
 
   transition:
@@ -267,25 +240,20 @@
 
 .nav-item:hover {
   color: var(--white-primary, #F4F0E6);
-  background: var(--white-ghost, rgba(255, 255, 255, 0.045));
-  border-color: rgba(255, 255, 255, 0.035);
+  background: var(--white-ghost, rgba(255,255,255,.045));
+  border-color: rgba(255,255,255,.035);
 }
 
 .nav-item:active {
-  transform: scale(0.985);
+  transform: scale(.985);
 }
-
-/* Active navigation */
 
 .nav-item.active {
   color: var(--orange-bright, #FF922E);
-  background: rgba(232, 117, 0, 0.105);
-  border-color: rgba(232, 117, 0, 0.22);
+  background: rgba(232,117,0,.105);
+  border-color: rgba(232,117,0,.22);
   font-weight: 700;
-
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.025),
-    0 3px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.025);
 }
 
 .nav-item.active::before {
@@ -293,7 +261,6 @@
   position: absolute;
   inset-inline-start: -1px;
   top: 20%;
-
   width: 3px;
   height: 60%;
 
@@ -304,7 +271,7 @@
   );
 
   border-radius: 0 5px 5px 0;
-  box-shadow: 0 0 12px rgba(232, 117, 0, 0.35);
+  box-shadow: 0 0 12px rgba(232,117,0,.35);
 }
 
 .nav-item__icon {
@@ -319,12 +286,9 @@
   color: currentColor;
   font-size: 18px;
   line-height: 1;
+  opacity: .82;
 
-  opacity: 0.82;
-
-  transition:
-    opacity 180ms ease,
-    transform 180ms ease;
+  transition: opacity 180ms ease;
 }
 
 .nav-item:hover .nav-item__icon,
@@ -332,17 +296,11 @@
   opacity: 1;
 }
 
-.nav-item.active .nav-item__icon {
-  transform: scale(1.04);
-}
-
 .nav-item__label {
   flex: 1;
   min-width: 0;
   line-height: 1.45;
 }
-
-/* Navigation badge */
 
 .nav-item__badge {
   display: inline-flex;
@@ -355,8 +313,8 @@
   margin-inline-start: auto;
 
   color: var(--orange-bright, #FF922E);
-  background: rgba(232, 117, 0, 0.10);
-  border: 1px solid rgba(232, 117, 0, 0.20);
+  background: rgba(232,117,0,.10);
+  border: 1px solid rgba(232,117,0,.20);
   border-radius: 999px;
 
   font-family: var(--font-ui, inherit);
@@ -366,13 +324,12 @@
 }
 
 /* ============================================================
-   05. SIDEBAR FOOTER
+   04. SIDEBAR FOOTER
    ============================================================ */
 
 .sidebar__footer {
   flex-shrink: 0;
   padding: 15px;
-
   background: var(--black-surface, #100E0B);
   border-top: 1px solid var(--black-border, #2B251D);
 }
@@ -388,16 +345,13 @@
   background: transparent;
   border: 1px solid transparent;
   border-radius: 12px;
-
   cursor: pointer;
 
-  transition:
-    background 180ms ease,
-    border-color 180ms ease;
+  transition: background 180ms ease, border-color 180ms ease;
 }
 
 .sidebar__user:hover {
-  background: var(--white-ghost, rgba(255, 255, 255, 0.045));
+  background: var(--white-ghost, rgba(255,255,255,.045));
   border-color: var(--black-border, #2B251D);
 }
 
@@ -417,7 +371,7 @@
     var(--orange-bright, #FF922E)
   );
 
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255,255,255,.12);
   border-radius: 12px;
 
   font-family: var(--font-ui, inherit);
@@ -432,31 +386,27 @@
 
 .user-info__name {
   overflow: hidden;
-
   color: var(--white-primary, #F4F0E6);
   font-family: var(--font-ui, inherit);
   font-size: 14px;
   font-weight: 700;
   line-height: 1.45;
-
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
 .user-info__role {
   margin-top: 3px;
-
   color: var(--white-muted, #898174);
   font-family: var(--font-ui, inherit);
   font-size: 14px;
   font-weight: 500;
   line-height: 1.4;
-
   text-transform: uppercase;
 }
 
 /* ============================================================
-   06. MAIN CONTENT
+   05. MAIN CONTENT
    ============================================================ */
 
 .main-content {
@@ -469,12 +419,11 @@
   min-height: 100dvh;
 
   margin-inline-start: var(--sidebar-w, 264px);
-
   background: transparent;
 }
 
 /* ============================================================
-   07. TOPBAR
+   06. TOPBAR
    ============================================================ */
 
 .topbar {
@@ -510,14 +459,12 @@
 
 .topbar__page-title {
   overflow: hidden;
-
   color: var(--white-primary, #F4F0E6);
   font-family: var(--font-ui, inherit);
   font-size: 17px;
   font-weight: 750;
-  letter-spacing: -0.025em;
+  letter-spacing: -.025em;
   line-height: 1.4;
-
   white-space: nowrap;
   text-overflow: ellipsis;
 }
@@ -549,8 +496,6 @@
   line-height: 1.3;
 }
 
-/* Topbar buttons */
-
 .topbar__btn {
   display: inline-flex;
   align-items: center;
@@ -577,20 +522,19 @@
 .topbar__btn:hover {
   color: var(--orange-bright, #FF922E);
   background: var(--black-card, #211D18);
-  border-color: rgba(232, 117, 0, 0.30);
+  border-color: rgba(232,117,0,.30);
 }
 
 .topbar__btn:active {
-  transform: scale(0.96);
+  transform: scale(.96);
 }
 
 /* ============================================================
-   08. PAGE CONTENT
+   07. PAGE CONTENT
    ============================================================ */
 
 .page-content {
   flex: 1;
-
   width: 100%;
   max-width: var(--content-max, 1600px);
   min-width: 0;
@@ -602,7 +546,7 @@
 }
 
 /* ============================================================
-   09. SIDEBAR OVERLAY
+   08. SIDEBAR OVERLAY
    ============================================================ */
 
 .sidebar-overlay {
@@ -612,27 +556,27 @@
   inset: 0;
   z-index: 150;
 
-  background: rgba(5, 4, 3, 0.68);
+  background: rgba(5,4,3,.68);
 
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
 
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
   cursor: pointer;
 
-  transition:
-    opacity 260ms ease,
-    visibility 260ms ease;
+  transition: opacity 260ms ease, visibility 260ms ease;
 }
 
 .sidebar-overlay.active {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
 }
 
 /* ============================================================
-   10. SIDEBAR CLOSE BUTTON
+   09. SIDEBAR CLOSE BUTTON
    ============================================================ */
 
 .sidebar__close {
@@ -643,7 +587,6 @@
   flex: 0 0 38px;
   width: 38px;
   height: 38px;
-
   margin-inline-start: auto;
 
   color: var(--white-secondary, #B8B1A5);
@@ -659,22 +602,17 @@
   transition:
     color 180ms ease,
     background 180ms ease,
-    border-color 180ms ease,
-    transform 180ms ease;
+    border-color 180ms ease;
 }
 
 .sidebar__close:hover {
   color: var(--orange-bright, #FF922E);
   background: var(--black-card, #211D18);
-  border-color: rgba(232, 117, 0, 0.30);
-}
-
-.sidebar__close:active {
-  transform: scale(0.95);
+  border-color: rgba(232,117,0,.30);
 }
 
 /* ============================================================
-   11. HAMBURGER TOGGLE
+   10. HAMBURGER BUTTON
    ============================================================ */
 
 .sidebar-toggle {
@@ -685,7 +623,6 @@
   flex: 0 0 42px;
   width: 42px;
   height: 42px;
-
   padding: 0;
 
   color: var(--white-primary, #F4F0E6);
@@ -707,15 +644,13 @@
 .sidebar-toggle:hover {
   color: var(--orange-bright, #FF922E);
   background: var(--black-card, #211D18);
-  border-color: rgba(232, 117, 0, 0.38);
-  box-shadow: 0 0 0 3px rgba(232, 117, 0, 0.07);
+  border-color: rgba(232,117,0,.38);
+  box-shadow: 0 0 0 3px rgba(232,117,0,.07);
 }
 
 .sidebar-toggle:active {
-  transform: scale(0.94);
+  transform: scale(.94);
 }
-
-/* Support common hamburger icon structures */
 
 .sidebar-toggle svg {
   display: block;
@@ -729,43 +664,26 @@
   line-height: 1;
 }
 
-.sidebar-toggle span {
-  flex-shrink: 0;
-}
+/* ============================================================
+   11. MOBILE BOTTOM NAVIGATION
+   ============================================================ */
 
-/* Three-line hamburger made from spans */
+/*
+  HTML integration contract:
 
-.sidebar-toggle .hamburger,
-.sidebar-toggle .menu-icon {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 5px;
-  width: 20px;
-  height: 20px;
-}
+  <nav class="bottom-nav" aria-label="Mobile navigation">
+    <button class="bottom-nav__item active" data-screen="dashboard">
+      <span class="bottom-nav__icon">...</span>
+      <span class="bottom-nav__label">Home</span>
+    </button>
+  </nav>
 
-.sidebar-toggle .hamburger span,
-.sidebar-toggle .menu-icon span {
-  display: block;
-  width: 20px;
-  height: 2px;
-  background: currentColor;
-  border-radius: 4px;
-  transition:
-    width 180ms ease,
-    transform 180ms ease,
-    opacity 180ms ease;
-}
+  Keep actual navigation IDs/data attributes aligned with
+  the existing JavaScript before enabling this component.
+*/
 
-.sidebar-toggle .hamburger span:nth-child(2),
-.sidebar-toggle .menu-icon span:nth-child(2) {
-  width: 14px;
-}
-
-.sidebar-toggle:hover .hamburger span:nth-child(2),
-.sidebar-toggle:hover .menu-icon span:nth-child(2) {
-  width: 20px;
+.bottom-nav {
+  display: none;
 }
 
 /* ============================================================
@@ -780,30 +698,20 @@
 
     transform: translateX(-105%);
     visibility: hidden;
-
     box-shadow: none;
   }
 
   .sidebar.open {
     transform: translateX(0);
     visibility: visible;
-
-    box-shadow: 18px 0 55px rgba(0, 0, 0, 0.34);
+    box-shadow: 18px 0 55px rgba(0,0,0,.34);
   }
 
   .sidebar-overlay {
     display: block;
-    visibility: hidden;
   }
 
-  .sidebar-overlay.active {
-    visibility: visible;
-  }
-
-  .sidebar__close {
-    display: inline-flex;
-  }
-
+  .sidebar__close,
   .sidebar-toggle {
     display: inline-flex;
   }
@@ -827,7 +735,7 @@
 }
 
 /* ============================================================
-   13. MOBILE — 600px
+   13. MOBILE BOTTOM NAVIGATION — 600px
    ============================================================ */
 
 @media (max-width: 600px) {
@@ -852,7 +760,6 @@
   .nav-item {
     min-height: 47px;
     padding: 12px;
-    border-radius: 11px;
   }
 
   .sidebar__footer {
@@ -891,6 +798,128 @@
 
   .page-content {
     padding: 22px 16px;
+    padding-bottom: calc(112px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Bottom navigation shell */
+
+  .bottom-nav {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 140;
+
+    display: flex;
+    align-items: stretch;
+    justify-content: space-around;
+    gap: 2px;
+
+    width: 100%;
+    min-height: 66px;
+
+    padding:
+      7px 8px
+      calc(7px + env(safe-area-inset-bottom, 0px));
+
+    background: rgba(16,14,11,.96);
+    border-top: 1px solid var(--black-border, #2B251D);
+
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    backdrop-filter: blur(24px) saturate(160%);
+
+    box-shadow: 0 -8px 30px rgba(0,0,0,.22);
+  }
+
+  .bottom-nav__item {
+    position: relative;
+
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+
+    min-width: 0;
+    min-height: 52px;
+    padding: 5px 2px;
+
+    color: var(--white-muted, #898174);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 12px;
+
+    font-family: var(--font-ui, inherit);
+    font-size: 14px;
+    font-weight: 550;
+    line-height: 1.2;
+
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+
+    transition:
+      color 180ms ease,
+      background 180ms ease,
+      transform 180ms ease;
+  }
+
+  .bottom-nav__item:active {
+    transform: scale(.94);
+  }
+
+  .bottom-nav__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 23px;
+    height: 23px;
+
+    font-size: 20px;
+    line-height: 1;
+    color: currentColor;
+  }
+
+  .bottom-nav__icon svg {
+    width: 21px;
+    height: 21px;
+    stroke: currentColor;
+  }
+
+  .bottom-nav__label {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.2;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .bottom-nav__item.active {
+    color: var(--orange-bright, #FF922E);
+    background: rgba(232,117,0,.085);
+  }
+
+  .bottom-nav__item.active::before {
+    content: "";
+    position: absolute;
+    top: -7px;
+    left: 50%;
+    width: 22px;
+    height: 3px;
+
+    background: var(--orange-core, #E87500);
+    border-radius: 0 0 5px 5px;
+    transform: translateX(-50%);
+    box-shadow: 0 0 10px rgba(232,117,0,.35);
+  }
+
+  .bottom-nav__item.active .bottom-nav__icon {
+    transform: translateY(-1px);
   }
 }
 
@@ -925,10 +954,19 @@
 
   .page-content {
     padding: 18px 12px;
+    padding-bottom: calc(108px + env(safe-area-inset-bottom, 0px));
   }
 
-  .sidebar__brand {
-    padding: 17px 14px;
+  .bottom-nav {
+    padding-inline: 5px;
+  }
+
+  .bottom-nav__item {
+    gap: 3px;
+  }
+
+  .bottom-nav__label {
+    font-size: 14px;
   }
 }
 
@@ -961,31 +999,30 @@
 }
 
 /* ============================================================
-   16. ACCESSIBILITY & KEYBOARD NAVIGATION
+   16. ACCESSIBILITY
    ============================================================ */
 
 .nav-item:focus-visible,
 .sidebar__user:focus-visible,
 .sidebar__close:focus-visible,
 .sidebar-toggle:focus-visible,
-.topbar__btn:focus-visible {
+.topbar__btn:focus-visible,
+.bottom-nav__item:focus-visible {
   outline: 2px solid var(--orange-bright, #FF922E);
   outline-offset: 3px;
-  box-shadow: 0 0 0 5px rgba(232, 117, 0, 0.12);
+  box-shadow: 0 0 0 5px rgba(232,117,0,.12);
 }
 
 @media (forced-colors: active) {
-  .nav-item.active {
+
+  .nav-item.active,
+  .bottom-nav__item.active {
     outline: 2px solid Highlight;
   }
 
-  .nav-item.active::before {
-    background: Highlight;
-  }
-
-  .sidebar-toggle:focus-visible,
-  .sidebar__close:focus-visible,
-  .nav-item:focus-visible {
+  .nav-item:focus-visible,
+  .bottom-nav__item:focus-visible,
+  .sidebar-toggle:focus-visible {
     outline: 2px solid Highlight;
   }
 }
@@ -1007,7 +1044,8 @@
   .nav-item,
   .sidebar-toggle,
   .sidebar__close,
-  .topbar__btn {
+  .topbar__btn,
+  .bottom-nav__item {
     -webkit-tap-highlight-color: transparent;
   }
 }
@@ -1025,8 +1063,7 @@
   .sidebar__close,
   .sidebar-toggle,
   .topbar__btn,
-  .sidebar-toggle span {
-    scroll-behavior: auto !important;
+  .bottom-nav__item {
     animation: none !important;
     transition: none !important;
   }
@@ -1037,5 +1074,5 @@
 }
 
 /* ============================================================
-   END — NIREV PREMIUM LAYOUT SYSTEM v5.0
+   END — NIREV PREMIUM LAYOUT SYSTEM v6.0
    ============================================================ */
