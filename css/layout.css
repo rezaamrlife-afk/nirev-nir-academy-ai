@@ -469,6 +469,7 @@
 /* ----- Left zone ----- */
 
 .topbar__left {
+  grid-column: 1;
   display: flex;
   align-items: center;
   gap: 14px;
@@ -523,6 +524,7 @@
 /* ----- Center zone: search ----- */
 
 .topbar__center {
+  grid-column: 2;
   display: flex;
   justify-content: center;
   min-width: 0;
@@ -593,6 +595,8 @@
 /* ----- Right zone ----- */
 
 .topbar__right {
+  grid-column: 3;
+  justify-self: end;
   display: flex;
   align-items: center;
   justify-content: flex-end;
