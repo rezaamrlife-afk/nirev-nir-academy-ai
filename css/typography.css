@@ -1,242 +1,271 @@
+
 /* ============================================================
-   NIREV AI — Premium Typography System  [v1]
-   ============================================================
-   STRATEGY
-   · Override every hardcoded font-size / letter-spacing / line-height
-     that falls below 12px or looks inconsistent.
-   · All sizes use rem so the browser base (16px) is respected.
-   · Inter is used for ALL UI text. Cormorant Garamond only for
-     editorial display headings. JetBrains Mono only for code/mono.
-   · Mobile-first responsive scale: 3 breakpoints.
-     – base  (all):   compact but readable
-     – md   (≥600px): standard desktop
-     – lg   (≥900px): full desktop
-   · letter-spacing rule: tracking > 0.08em only on ALL-CAPS labels
-     that are ≤ 11px; at 12px+ reduce to ≤ 0.10em.
-   · line-height rule: body 1.65, labels 1.4, headings 1.15.
+   NIREV AI — PREMIUM TYPOGRAPHY SYSTEM
+   Version 2.1 | Responsive | Light & Dark Mode
+   Typography only — no application logic changes
    ============================================================ */
 
-/* ══ 1. TOKEN OVERRIDES ════════════════════════════════════ */
-/*
-   Re-declare the type-scale tokens with better mobile values.
-   These replace the ones in theme.css for the whole document.
-*/
+
+/* ============================================================
+   1. GLOBAL TYPOGRAPHY TOKENS
+   ============================================================ */
+
 :root {
-  /* ── Mobile-first scale (≤599px) ── */
-  /* Floor: 12px minimum. Standard UI: 14px. Body: 15px. */
-  --text-xs:   0.75rem;    /* 12px  — labels, captions, badges  */
-  --text-sm:   0.875rem;   /* 14px  — standard UI text (nav, metadata) */
-  --text-base: 0.9375rem;  /* 15px  — body / input text */
-  --text-md:   1rem;       /* 16px  — slightly prominent UI */
-  --text-lg:   1.0625rem;  /* 17px  — sub-headings */
-  --text-xl:   1.25rem;    /* 20px  — card headings */
-  --text-2xl:  1.5rem;     /* 24px  — section headings */
-  --text-3xl:  1.875rem;   /* 30px  — page headings */
-  --text-4xl:  2.75rem;    /* 44px  — hero display */
-  --text-5xl:  3.5rem;     /* 56px  — large display */
+  /* Font families — loaded in index.html */
+  --font-ui: 'Inter', -apple-system, BlinkMacSystemFont,
+    'Segoe UI', sans-serif;
 
-  /* Shared line-height tokens */
-  --lh-tight:  1.15;
-  --lh-snug:   1.3;
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+
+  --font-mono: 'JetBrains Mono', Consolas, monospace;
+
+  /* Mobile-first type scale */
+  --text-xs: 0.75rem;       /* 12px */
+  --text-sm: 0.875rem;      /* 14px */
+  --text-base: 0.9375rem;   /* 15px */
+  --text-md: 1rem;          /* 16px */
+  --text-lg: 1.0625rem;     /* 17px */
+  --text-xl: 1.25rem;       /* 20px */
+  --text-2xl: 1.5rem;       /* 24px */
+  --text-3xl: 1.875rem;     /* 30px */
+  --text-4xl: 2.5rem;       /* 40px */
+  --text-5xl: 3.25rem;      /* 52px */
+
+  /* Font weights */
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --fw-extrabold: 800;
+
+  /* Line heights */
+  --lh-tight: 1.15;
+  --lh-snug: 1.3;
   --lh-normal: 1.5;
-  --lh-relaxed:1.65;
-  --lh-loose:  1.8;
+  --lh-relaxed: 1.65;
+  --lh-loose: 1.8;
 
-  /* Shared tracking tokens */
-  --ls-tight:  -0.02em;
+  /* Letter spacing */
+  --ls-tight: -0.025em;
   --ls-normal: -0.01em;
-  --ls-label:   0.06em;   /* ALL-CAPS UI labels  */
-  --ls-mono:    0.04em;   /* mono / code labels  */
-  --ls-wide:    0.10em;   /* spaced display text */
+  --ls-label: 0.06em;
+  --ls-mono: 0.03em;
+  --ls-wide: 0.09em;
 }
 
-/* ══ 2. BASE TYPOGRAPHY ═════════════════════════════════════ */
+
+/* ============================================================
+   2. GLOBAL FONT SETTINGS
+   ============================================================ */
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 body {
-  font-feature-settings: "cv02", "cv03", "cv04", "cv11"; /* Inter optical */
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-relaxed);
+  letter-spacing: var(--ls-normal);
+
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
 
-/* ══ 3. SHELL — SIDEBAR & TOPBAR ═══════════════════════════ */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-ui);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
+}
 
-/* Logo */
+button, input, select, textarea {
+  font-family: var(--font-ui);
+}
+
+code, pre, kbd, samp, .mono {
+  font-family: var(--font-mono);
+  letter-spacing: var(--ls-mono);
+}
+
+
+/* ============================================================
+   3. SIDEBAR AND NAVIGATION
+   ============================================================ */
+
 .sidebar__logo-text {
-  font-size: 1.5rem;       /* was 1.625rem — slightly tighter */
-  letter-spacing: 0.08em;  /* was 0.1em */
+  font-size: 1.5rem;
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.07em;
   line-height: 1;
 }
 
-/* Section labels */
-.nav-section__label,
-.sidebar__tagline {
-  font-size: 0.75rem;      /* 12px — raised from 11px for readability */
-  letter-spacing: 0.08em;  /* was 0.14em */
+.sidebar__tagline,
+.nav-section__label {
+  font-size: var(--text-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-label);
   line-height: 1.4;
 }
 
-/* Nav items */
 .nav-item {
-  font-size: var(--text-sm);  /* 13px */
-  font-weight: 500;
-  letter-spacing: -0.01em;
+  font-size: var(--text-sm);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-normal);
   line-height: 1.4;
 }
 
-/* Nav badge */
-.nav-item__badge {
-  font-size: 0.6875rem;   /* 11px — badge is decorative, tiny OK */
-  letter-spacing: 0.04em; /* was 0.06em */
+.nav-item__badge,
+.nav-notification-badge {
+  font-size: var(--text-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.02em;
+  line-height: 1.3;
 }
 
-/* User info */
 .user-info__name {
   font-size: var(--text-sm);
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-weight: var(--fw-semibold);
   line-height: 1.35;
 }
 
 .user-info__role {
-  font-size: 0.75rem;     /* 12px — raised from 11px */
-  letter-spacing: 0.07em; /* was 0.1em */
+  font-size: var(--text-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.04em;
   line-height: 1.4;
 }
 
-/* Topbar */
 .topbar__page-title {
   font-size: var(--text-base);
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-weight: var(--fw-semibold);
+  line-height: 1.4;
 }
 
 .topbar__status {
-  font-size: 0.75rem;     /* 12px */
-  letter-spacing: 0.04em; /* was 0.06em */
-}
-
-/* ══ 4. DASHBOARD ═══════════════════════════════════════════ */
-
-/* Hero greeting */
-.dashboard-hero__greeting {
-  font-size: 0.75rem;     /* 12px — was var(--text-sm)=13px, OK */
-  letter-spacing: 0.08em; /* was 0.14em — reduce tracking */
+  font-size: var(--text-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.02em;
   line-height: 1.4;
-  font-weight: 500;
 }
 
-/* Hero title — Cormorant display */
+
+/* ============================================================
+   4. DASHBOARD
+   ============================================================ */
+
+.dashboard-hero__greeting {
+  font-size: var(--text-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-label);
+  line-height: 1.4;
+}
+
 .dashboard-hero__title {
-  font-size: 2.75rem;     /* was 3rem */
-  font-weight: 400;
+  font-family: var(--font-display);
+  font-size: var(--text-4xl);
+  font-weight: var(--fw-medium);
   line-height: var(--lh-tight);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
 }
 
-/* Hero subtitle */
 .dashboard-hero__sub {
   font-size: var(--text-base);
+  font-weight: var(--fw-regular);
   line-height: var(--lh-relaxed);
   letter-spacing: 0;
 }
 
-/* CTA button */
-.dashboard-hero__cta {
+.dashboard-hero__cta,
+.dashboard-hero__link {
   font-size: var(--text-sm);
-  font-weight: 600;
-  letter-spacing: 0.01em;
-}
-
-/* Stat card label */
-.stat-card__label {
-  font-size: 0.75rem;     /* 12px — raised from 11px */
-  letter-spacing: 0.07em; /* was 0.12em */
-  line-height: 1.4;
-  font-weight: 500;
-}
-
-/* Stat card value */
-.stat-card__value {
-  font-size: 2.25rem;     /* was 2.5rem — fits better on tablet */
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.03em;
-}
-
-/* Stat card trend */
-.stat-card__trend {
-  font-size: var(--text-sm);
+  font-weight: var(--fw-semibold);
   line-height: 1.4;
   letter-spacing: 0;
 }
 
-/* Section headers */
-.section-title {
-  font-size: var(--text-md); /* 16px */
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  line-height: 1.3;
+.stat-card__label {
+  font-size: var(--text-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.04em;
+  line-height: 1.4;
 }
 
-.section-link {
-  font-size: 0.75rem;     /* 12px — was var(--text-xs) */
-  letter-spacing: 0.06em; /* was 0.08em */
-  font-weight: 500;
+.stat-card__value {
+  font-size: 2.25rem;
+  font-weight: var(--fw-bold);
+  letter-spacing: -0.035em;
+  line-height: 1;
 }
 
-/* Activity items */
-.activity-item__title {
-  font-size: var(--text-sm);
-  font-weight: 600;
-  letter-spacing: -0.01em;
+.stat-card__trend {
+  font-size: var(--text-xs);
+  font-weight: var(--fw-medium);
+  line-height: 1.4;
+}
+
+.section-title,
+.intel-panel__title {
+  font-size: var(--text-md);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-normal);
   line-height: 1.35;
 }
 
+.section-link {
+  font-size: var(--text-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+}
+
+.activity-item__title {
+  font-size: var(--text-sm);
+  font-weight: var(--fw-semibold);
+  line-height: 1.4;
+}
+
 .activity-item__meta {
-  font-size: 0.75rem;     /* 12px */
-  letter-spacing: 0.03em; /* was 0.04em */
+  font-size: var(--text-xs);
+  font-weight: var(--fw-regular);
   line-height: 1.4;
 }
 
 .activity-item__score {
   font-size: var(--text-base);
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-tight);
 }
 
-/* Quick actions */
 .quick-action-btn {
   font-size: var(--text-sm);
-  font-weight: 500;
-  letter-spacing: -0.01em;
+  font-weight: var(--fw-medium);
   line-height: 1.4;
 }
 
-/* Intel panel */
-.intel-panel__title {
-  font-size: var(--text-md);
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-
 .insight-item__label {
-  font-size: 0.75rem;     /* 12px — raised from 11px */
-  letter-spacing: 0.07em; /* was 0.10em */
+  font-size: var(--text-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.04em;
   line-height: 1.4;
 }
 
 .insight-item__value {
   font-size: var(--text-sm);
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-weight: var(--fw-semibold);
   line-height: 1.4;
 }
 
-/* Empty state */
 .empty-state__title {
   font-size: var(--text-lg);
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-weight: var(--fw-semibold);
+  line-height: 1.35;
 }
 
 .empty-state__text {
@@ -244,548 +273,663 @@ body {
   line-height: var(--lh-relaxed);
 }
 
-/* ══ 5. COMPONENTS ══════════════════════════════════════════ */
 
-/* Form labels */
-.form-label {
-  font-size: 0.75rem;     /* 12px — was var(--text-xs) */
-  letter-spacing: 0.06em; /* was 0.10em */
-  line-height: 1.4;
-  font-weight: 500;
+/* ============================================================
+   5. AUTHENTICATION
+   ============================================================ */
+
+.auth-brand__academy {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.06em;
+  line-height: 1.2;
 }
 
-/* Form inputs */
-.form-input {
+.auth-brand__tagline {
+  font-size: var(--text-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.05em;
+  line-height: var(--lh-relaxed);
+}
+
+.auth-brand__pill {
+  font-size: var(--text-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+}
+
+.auth-brand__nirev-name {
+  font-size: var(--text-lg);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.08em;
+  line-height: 1.3;
+}
+
+.auth-brand__nirev-sub {
+  font-size: var(--text-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.06em;
+  line-height: 1.5;
+}
+
+.auth-brand__founder-name {
+  font-size: var(--text-sm);
+  font-weight: var(--fw-semibold);
+  line-height: 1.4;
+}
+
+.auth-brand__founder-title {
+  font-size: var(--text-xs);
+  font-weight: var(--fw-regular);
+  line-height: 1.5;
+}
+
+.auth-card__logo-text {
+  font-size: 2rem;
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.06em;
+  line-height: 1.1;
+}
+
+.auth-card__subtitle {
+  font-size: var(--text-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.05em;
+  line-height: 1.6;
+}
+
+.auth-tab {
+  font-size: var(--text-sm);
+  font-weight: var(--fw-semibold);
+  line-height: 1.4;
+}
+
+.form-label {
+  font-size: var(--text-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.03em;
+  line-height: 1.4;
+}
+
+.form-input,
+.form-input::placeholder {
+  font-family: var(--font-ui);
   font-size: var(--text-base);
   line-height: var(--lh-normal);
   letter-spacing: 0;
 }
 
-.form-input::placeholder {
-  font-size: var(--text-base);
-  letter-spacing: 0;
-}
-
-/* Auth tabs */
-.auth-tab {
+.auth-role-btn__text {
   font-size: var(--text-sm);
-  font-weight: 600;
-  letter-spacing: 0;
+  font-weight: var(--fw-semibold);
+  line-height: 1.4;
 }
 
-/* Auth divider */
 .auth-divider__text {
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
+  font-size: var(--text-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.04em;
 }
 
-/* Auth card logo */
-.auth-card__logo-text {
-  font-size: 2rem;         /* was 2.25rem */
-  letter-spacing: 0.08em;  /* was 0.12em */
-}
-
-.auth-card__subtitle {
-  font-size: 0.75rem;
-  letter-spacing: 0.10em;  /* was 0.16em */
-  line-height: 1.65;
-}
-
-/* Toast */
 .toast {
   font-size: var(--text-sm);
-  font-weight: 500;
+  font-weight: var(--fw-medium);
   line-height: 1.5;
-  letter-spacing: 0;
 }
 
-/* ══ 6. AUTH BRAND PANEL ════════════════════════════════════ */
-.auth-brand__academy {
-  font-size: 1.625rem;    /* was 1.75rem */
-  letter-spacing: 0.08em; /* was 0.12em */
-}
 
-.auth-brand__tagline {
-  font-size: 0.75rem;
-  letter-spacing: 0.08em; /* was 0.12em */
-  line-height: 1.65;
-}
+/* ============================================================
+   6. ASSESSMENT
+   ============================================================ */
 
-.auth-brand__pill {
-  font-size: 0.6875rem;   /* 11px */
-  letter-spacing: 0.08em; /* was 0.1em */
-}
-
-/* ══ 7. ASSESSMENT ══════════════════════════════════════════ */
-
-/* Eyebrow labels */
-.assessment-start__eyebrow {
-  font-size: 0.75rem;     /* 12px — was 0.8rem */
-  letter-spacing: 0.10em; /* was 0.18em */
+.assessment-start__eyebrow,
+.analytics-header__eyebrow,
+.progress-header__eyebrow,
+.reports-header__eyebrow,
+.settings-header__eyebrow {
+  font-size: var(--text-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-label);
   line-height: 1.4;
-  font-weight: 500;
 }
 
-/* Assessment title */
-.assessment-start__title {
-  font-size: 2.25rem;     /* was 2.5rem */
-  font-weight: 400;
+.assessment-start__title,
+.analytics-header__title,
+.progress-header__title,
+.reports-header__title,
+.settings-header__title {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: var(--fw-medium);
   line-height: var(--lh-snug);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
 }
 
-/* Assessment subtitle */
 .assessment-start__sub {
   font-size: var(--text-base);
   line-height: var(--lh-relaxed);
-  letter-spacing: 0;
 }
 
-/* Skill cards */
 .skill-card__name {
-  font-size: var(--text-lg); /* was 1.75rem — that's display, not card name */
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-size: var(--text-lg);
+  font-weight: var(--fw-semibold);
   line-height: 1.3;
 }
 
 .skill-card__desc {
   font-size: var(--text-sm);
   line-height: var(--lh-relaxed);
-  letter-spacing: 0;
 }
 
 .skill-card__badge {
-  font-size: 0.75rem;     /* 12px — was 0.8rem */
-  letter-spacing: 0.04em; /* was 0.06em */
-  font-weight: 700;
+  font-size: var(--text-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.03em;
 }
 
-/* Type buttons */
 .type-btn__name {
   font-size: var(--text-sm);
-  font-weight: 500;
-  letter-spacing: 0;
+  font-weight: var(--fw-semibold);
+  line-height: 1.4;
 }
 
 .type-btn__desc {
-  font-size: 0.75rem;     /* 12px — was 0.78rem */
+  font-size: var(--text-xs);
   line-height: 1.5;
-  letter-spacing: 0;
 }
 
-/* Question text */
-.question-text {
+.assessment-start__action,
+.assessment-start__meta {
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}
+
+.question-text,
+.question-card__text {
   font-size: var(--text-md);
-  font-weight: 400;
+  font-weight: var(--fw-regular);
   line-height: var(--lh-relaxed);
   letter-spacing: 0;
 }
 
-/* Option buttons */
+.question-card__type,
+.question-card__difficulty {
+  font-size: var(--text-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.03em;
+  line-height: 1.4;
+}
+
+.quiz-progress__label,
+.quiz-progress__count,
+.progress-label {
+  font-size: var(--text-xs);
+  font-weight: var(--fw-semibold);
+  line-height: 1.4;
+}
+
 .option-label {
-  font-size: 0.75rem;     /* 12px — was 0.75rem OK */
-  letter-spacing: 0.08em; /* was 0.18em — too wide */
-  font-weight: 600;
+  font-size: var(--text-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.03em;
 }
 
 .option-text {
   font-size: var(--text-base);
   line-height: var(--lh-normal);
-  letter-spacing: 0;
 }
 
-/* Progress counter */
-.progress-label {
-  font-size: 0.75rem;
-  letter-spacing: 0.06em; /* was 0.12em */
+.results-hero__label {
+  font-size: var(--text-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-label);
+  line-height: 1.4;
 }
 
-/* Result heading */
+.results-hero__score {
+  font-size: 3.5rem;
+  font-weight: var(--fw-bold);
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.results-hero__cefr {
+  font-size: var(--text-xl);
+  font-weight: var(--fw-semibold);
+  line-height: 1.3;
+}
+
+.results-hero__ielts {
+  font-size: var(--text-sm);
+  font-weight: var(--fw-medium);
+  line-height: 1.4;
+}
+
 .result-title {
   font-size: var(--text-xl);
-  font-weight: 400;
+  font-weight: var(--fw-semibold);
   line-height: var(--lh-snug);
-  letter-spacing: 0;
 }
 
-/* ══ 8. ANALYTICS ═══════════════════════════════════════════ */
 
-.analytics-eyebrow,
-.analytics-section__eyebrow {
-  font-size: 0.75rem;     /* 12px — was 0.8rem */
-  letter-spacing: 0.10em; /* was 0.18em */
-  line-height: 1.4;
-  font-weight: 500;
-}
+/* ============================================================
+   7. ANALYTICS
+   ============================================================ */
 
 .analytics-title,
 .analytics-section__title {
-  font-size: 1.875rem;    /* was 2rem */
-  font-weight: 400;
+  font-size: var(--text-3xl);
+  font-weight: var(--fw-medium);
   line-height: var(--lh-snug);
-  letter-spacing: -0.01em;
 }
 
-/* Chart labels — 11px minimum */
 .chart-label,
 .chart-tick,
-.chart-legend {
-  font-size: 0.6875rem;   /* 11px — was 11px OK */
-  letter-spacing: 0.03em; /* was 0 */
+.chart-legend,
+.radar-label {
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0;
   line-height: 1.4;
 }
 
-/* Metric cards */
 .metric-value {
   font-size: var(--text-xl);
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: 1;
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-tight);
+  line-height: 1.15;
 }
 
 .metric-label {
-  font-size: 0.75rem;
-  letter-spacing: 0.06em; /* was 0.08em */
+  font-size: var(--text-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.04em;
   line-height: 1.4;
 }
 
-/* Performance rows */
 .perf-skill-name {
   font-size: var(--text-sm);
-  font-weight: 500;
-  letter-spacing: 0;
+  font-weight: var(--fw-medium);
+  line-height: 1.4;
 }
 
 .perf-skill-score {
-  font-size: 0.75rem;
-  letter-spacing: 0.06em; /* was 0.08em */
+  font-size: var(--text-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.02em;
 }
 
-/* Recommendation text */
 .recommendation-text {
   font-size: var(--text-sm);
   line-height: var(--lh-relaxed);
-  letter-spacing: 0;
 }
 
-/* ══ 9. PROGRESS ════════════════════════════════════════════ */
 
-.progress-eyebrow {
-  font-size: 0.75rem;     /* 12px — was 0.8rem */
-  letter-spacing: 0.10em; /* was 0.18em */
-  font-weight: 500;
-}
+/* ============================================================
+   8. PROGRESS
+   ============================================================ */
 
 .progress-heading {
-  font-size: 1.875rem;    /* was 2rem */
-  font-weight: 400;
+  font-size: var(--text-3xl);
+  font-weight: var(--fw-medium);
   line-height: var(--lh-snug);
-  letter-spacing: -0.01em;
 }
 
-/* Big CEFR score number */
 .cefr-score-num,
 .progress-score-big {
-  font-size: 4.5rem;      /* was 5rem — slightly reduced for mobile fit */
+  font-size: 4rem;
   font-weight: 300;
   line-height: 1;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.04em;
 }
 
 .cefr-label {
-  font-size: 0.75rem;     /* 12px — was 0.8rem */
-  letter-spacing: 0.08em; /* was 0.1em */
-  font-weight: 500;
+  font-size: var(--text-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.05em;
 }
 
 .cefr-level-name {
-  font-size: 1.375rem;    /* was 1.5rem */
-  font-weight: 500;
-  letter-spacing: -0.01em;
+  font-size: 1.375rem;
+  font-weight: var(--fw-medium);
   line-height: 1.3;
 }
 
 .progress-sub {
   font-size: var(--text-base);
   line-height: var(--lh-relaxed);
-  letter-spacing: 0;
 }
 
-/* Progress band labels */
 .band-label,
 .level-label {
-  font-size: 0.75rem;     /* 12px — was 0.78rem */
-  letter-spacing: 0.06em; /* was 0.1em */
-  font-weight: 500;
+  font-size: var(--text-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.03em;
 }
 
-/* Skill bars */
 .skill-name {
   font-size: var(--text-sm);
-  font-weight: 600;
-  letter-spacing: 0;
+  font-weight: var(--fw-semibold);
 }
 
 .skill-score {
-  font-size: 0.75rem;
-  letter-spacing: 0.04em; /* was 0.06em */
-  font-weight: 500;
+  font-size: var(--text-xs);
+  font-weight: var(--fw-medium);
 }
 
 .skill-desc {
   font-size: var(--text-base);
-  font-weight: 600;
-  letter-spacing: 0;
+  font-weight: var(--fw-semibold);
 }
 
-/* Milestone labels */
 .milestone-label {
-  font-size: 0.75rem;     /* 12px — was 0.78rem */
-  letter-spacing: 0.04em; /* was 0.06em */
+  font-size: var(--text-xs);
+  font-weight: var(--fw-medium);
 }
 
 .milestone-value {
-  font-size: 1.125rem;    /* was 1.25rem */
-  font-weight: 500;
-  letter-spacing: -0.01em;
+  font-size: 1.125rem;
+  font-weight: var(--fw-semibold);
 }
 
-/* ══ 10. REPORTS ════════════════════════════════════════════ */
 
-.report-eyebrow {
-  font-size: 0.75rem;
-  letter-spacing: 0.10em; /* was 0.18em */
-  font-weight: 500;
-}
+/* ============================================================
+   9. REPORTS
+   ============================================================ */
 
 .report-heading {
-  font-size: 1.875rem;
-  font-weight: 400;
-  letter-spacing: -0.01em;
+  font-size: var(--text-3xl);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-snug);
 }
 
 .report-card__title {
   font-size: var(--text-lg);
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-weight: var(--fw-semibold);
 }
 
 .report-card__sub {
   font-size: var(--text-base);
-  font-weight: 600;
-  letter-spacing: 0;
+  font-weight: var(--fw-semibold);
 }
 
 .report-score {
-  font-size: 1.375rem;    /* was 1.5rem */
-  font-weight: 500;
-  letter-spacing: -0.02em;
+  font-size: 1.375rem;
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-tight);
 }
 
-.report-score-label {
-  font-size: 0.75rem;
-  letter-spacing: 0.08em; /* was 0.1em */
-}
-
+.report-score-label,
 .report-meta-label {
-  font-size: 0.75rem;     /* 12px — was 0.78rem */
-  letter-spacing: 0.04em; /* was 0.06em */
+  font-size: var(--text-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0.03em;
   line-height: 1.4;
 }
 
 .report-detail {
-  font-size: 0.8125rem;   /* 13px — was 0.8375rem */
+  font-size: var(--text-sm);
   line-height: var(--lh-normal);
 }
 
 .report-feedback {
   font-size: var(--text-sm);
   line-height: var(--lh-relaxed);
-  letter-spacing: 0;
 }
 
 .report-comment {
-  font-size: 1.0625rem;   /* was 1.125rem */
-  font-weight: 500;
-  letter-spacing: -0.01em;
+  font-size: var(--text-lg);
+  font-weight: var(--fw-medium);
+  line-height: 1.45;
 }
 
-/* ══ 11. SETTINGS ════════════════════════════════════════════ */
 
-/* Settings already uses tokens well — just tighten tracking */
-.settings-eyebrow {
-  font-size: 0.75rem;
-  letter-spacing: 0.10em; /* was 0.16em */
-}
+/* ============================================================
+   10. SETTINGS
+   ============================================================ */
 
 .settings-section__title {
   font-size: var(--text-xl);
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-tight);
 }
 
 .setting-label {
   font-size: var(--text-base);
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-weight: var(--fw-semibold);
 }
 
 .setting-desc {
   font-size: var(--text-sm);
   line-height: var(--lh-relaxed);
-  letter-spacing: 0;
 }
 
-/* ══ 12. CLASSROOM ═══════════════════════════════════════════ */
+.cefr-btn__desc {
+  font-size: var(--text-xs);
+  line-height: 1.4;
+}
+
+
+/* ============================================================
+   11. CLASSROOM
+   ============================================================ */
 
 .classroom-title {
-  font-size: 1.375rem;    /* was 1.5rem */
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-size: 1.375rem;
+  font-weight: var(--fw-bold);
   line-height: 1.25;
 }
 
 .classroom-subtitle {
   font-size: var(--text-sm);
   line-height: 1.5;
-  letter-spacing: 0;
 }
 
 .class-card__name {
   font-size: var(--text-base);
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-weight: var(--fw-semibold);
 }
 
 .class-card__meta {
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   line-height: 1.4;
-  letter-spacing: 0;
 }
 
 .student-name {
   font-size: var(--text-sm);
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-weight: var(--fw-semibold);
 }
 
 .student-meta {
-  font-size: 0.75rem;
+  font-size: var(--text-xs);
   line-height: 1.4;
-  letter-spacing: 0.02em;
 }
 
-/* ══ 13. RESPONSIVE SCALE ════════════════════════════════════ */
-/*
-   Mobile (default above) uses slightly compact sizes.
-   At ≥600px we open up. At ≥900px we go full desktop.
-*/
 
-/* ── Tablet (600px–899px) ── */
+/* ============================================================
+   12. BUTTONS AND INTERACTIVE ELEMENTS
+   ============================================================ */
+
+.btn {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: var(--fw-semibold);
+  line-height: 1.35;
+  letter-spacing: 0;
+}
+
+.btn--xs,
+.btn--sm {
+  font-size: var(--text-xs);
+}
+
+.btn--lg {
+  font-size: var(--text-base);
+}
+
+.theme-toggle,
+.topbar__btn,
+.sidebar__close,
+.sidebar-toggle {
+  font-family: var(--font-ui);
+}
+
+
+/* ============================================================
+   13. TABLET — 600px TO 899px
+   ============================================================ */
+
 @media (min-width: 600px) {
   :root {
-    --text-xs:   0.75rem;    /* 12px — same */
-    --text-sm:   0.875rem;   /* 14px — same as mobile (already 14px) */
-    --text-base: 0.9375rem;  /* 15px — same */
-    --text-md:   1rem;       /* 16px */
-    --text-lg:   1.125rem;   /* 18px */
-    --text-xl:   1.375rem;   /* 22px */
-    --text-2xl:  1.75rem;    /* 28px */
-    --text-3xl:  2.25rem;    /* 36px */
+    --text-lg: 1.125rem;
+    --text-xl: 1.375rem;
+    --text-2xl: 1.75rem;
+    --text-3xl: 2.125rem;
+    --text-4xl: 2.75rem;
+    --text-5xl: 3.5rem;
   }
 
-  .dashboard-hero__title   { font-size: 2.75rem; }
-  .assessment-start__title { font-size: 2.5rem; }
-  .stat-card__value        { font-size: 2.5rem; }
+  .dashboard-hero__title {
+    font-size: 2.75rem;
+  }
+
+  .assessment-start__title,
+  .analytics-header__title,
+  .progress-header__title,
+  .reports-header__title,
+  .settings-header__title {
+    font-size: 2.5rem;
+  }
+
+  .stat-card__value {
+    font-size: 2.5rem;
+  }
+
+  .results-hero__score {
+    font-size: 4rem;
+  }
+
   .cefr-score-num,
-  .progress-score-big      { font-size: 5rem; }
-  .analytics-title,
-  .analytics-section__title,
-  .progress-heading,
-  .report-heading          { font-size: 2rem; }
+  .progress-score-big {
+    font-size: 4.5rem;
+  }
 }
 
-/* ── Desktop (≥900px) ── */
+
+/* ============================================================
+   14. DESKTOP — 900px AND ABOVE
+   ============================================================ */
+
 @media (min-width: 900px) {
   :root {
-    --text-xs:   0.75rem;    /* 12px */
-    --text-sm:   0.875rem;   /* 14px */
-    --text-base: 1rem;       /* 16px — full desktop body */
-    --text-md:   1.0625rem;  /* 17px */
-    --text-lg:   1.125rem;   /* 18px */
-    --text-xl:   1.375rem;   /* 22px */
-    --text-2xl:  1.75rem;    /* 28px */
+    --text-base: 1rem;
+    --text-md: 1.0625rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.375rem;
+    --text-2xl: 1.75rem;
+    --text-3xl: 2.25rem;
+    --text-4xl: 3rem;
+    --text-5xl: 3.75rem;
   }
 
-  .dashboard-hero__title   { font-size: 3rem; }
-  .assessment-start__title { font-size: 2.5rem; }
-  .stat-card__value        { font-size: 2.5rem; }
-  .sidebar__logo-text      { font-size: 1.5rem; }
-  .stat-card__label        { font-size: 0.75rem; } /* stays 12px — not scaled up */
+  .dashboard-hero__title {
+    font-size: 3rem;
+  }
+
+  .assessment-start__title,
+  .analytics-header__title,
+  .progress-header__title,
+  .reports-header__title,
+  .settings-header__title {
+    font-size: 2.75rem;
+  }
+
+  .stat-card__value {
+    font-size: 2.5rem;
+  }
+
+  .results-hero__score {
+    font-size: 4.5rem;
+  }
+
+  .cefr-score-num,
+  .progress-score-big {
+    font-size: 5rem;
+  }
 }
 
-/* ══ 14. OVERRIDES — Sub-12px in other CSS files ════════════
-   These selectors exist in layout.css / analytics.css /
-   classroom.css / settings.css with hardcoded sizes below 12px.
-   Typography.css loads after them, so these win.
-   ═══════════════════════════════════════════════════════════ */
 
-/* layout.css: .sidebar__tagline 0.72rem → 12px */
-.sidebar__tagline {
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
+/* ============================================================
+   15. SMALL MOBILE — 360px AND BELOW
+   ============================================================ */
+
+@media (max-width: 360px) {
+  .dashboard-hero__title {
+    font-size: 2rem;
+  }
+
+  .assessment-start__title,
+  .analytics-header__title,
+  .progress-header__title,
+  .reports-header__title,
+  .settings-header__title {
+    font-size: 1.75rem;
+  }
+
+  .stat-card__value {
+    font-size: 1.875rem;
+  }
+
+  .results-hero__score {
+    font-size: 3rem;
+  }
+
+  .cefr-score-num,
+  .progress-score-big {
+    font-size: 3.25rem;
+  }
 }
 
-/* layout.css: .nav-section__label 0.72rem → 12px */
-.nav-section__label {
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
+
+/* ============================================================
+   16. ACCESSIBILITY AND READABILITY
+   ============================================================ */
+
+/* Prevent iOS automatic input zoom */
+input,
+select,
+textarea {
+  font-size: max(16px, 1em);
 }
 
-/* layout.css: .nav-item__badge 0.68rem → 12px */
-.nav-item__badge {
-  font-size: 0.75rem;
-  letter-spacing: 0.04em;
+/* Consistent text rendering */
+p,
+.activity-item__title,
+.activity-item__meta,
+.empty-state__text,
+.recommendation-text,
+.report-feedback,
+.setting-desc {
+  overflow-wrap: break-word;
 }
 
-/* layout.css: .user-info__role 0.72rem → 12px */
-.user-info__role {
-  font-size: 0.75rem;
-  letter-spacing: 0.07em;
+/* Placeholder readability */
+::placeholder {
+  opacity: 0.75;
 }
 
-/* analytics.css: .chart-label 11px → 12px */
-.chart-label {
-  font-size: 0.75rem;
-  letter-spacing: 0.03em;
+/* Keep icon fonts and SVGs unaffected */
+svg {
+  font-family: initial;
 }
 
-/* analytics.css: .radar-label 11px → 12px */
-.radar-label {
-  font-size: 0.75rem;
-  letter-spacing: 0.03em;
+/* Ensure typography inherits correctly in controls */
+button,
+input,
+select,
+textarea {
+  letter-spacing: inherit;
 }
-
-/* classroom.css: .nav-notification-badge 0.65rem → 12px */
-.nav-notification-badge {
-  font-size: 0.75rem;
-}
-
-/* settings.css: .cefr-btn__desc 0.62rem → 12px */
-.cefr-btn__desc {
-  font-size: 0.75rem;
-  letter-spacing: 0.03em;
-}
-
-/* ══ 15. BUTTONS — CONSISTENT LABEL SIZE ════════════════════ */
-.btn {
-  font-size: var(--text-sm);
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  line-height: 1;
-}
-
-.btn--xs { font-size: 0.75rem; letter-spacing: 0.01em; }
-.btn--sm { font-size: 0.8125rem; }
-.btn--lg { font-size: var(--text-base); }
