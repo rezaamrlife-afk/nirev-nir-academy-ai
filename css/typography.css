@@ -1,17 +1,17 @@
 
 /* ============================================================
    NIREV AI — PREMIUM TYPOGRAPHY SYSTEM
-   Version 2.1 | Responsive | Light & Dark Mode
-   Typography only — no application logic changes
+   Version 3.0
+   Responsive | Accessible | Light & Dark Mode
+   STRICT MINIMUM: 14px
    ============================================================ */
 
 
 /* ============================================================
-   1. GLOBAL TYPOGRAPHY TOKENS
+   01 — FONT AND TYPE TOKENS
    ============================================================ */
 
 :root {
-  /* Font families — loaded in index.html */
   --font-ui: 'Inter', -apple-system, BlinkMacSystemFont,
     'Segoe UI', sans-serif;
 
@@ -19,19 +19,23 @@
 
   --font-mono: 'JetBrains Mono', Consolas, monospace;
 
-  /* Mobile-first type scale */
-  --text-xs: 0.75rem;       /* 12px */
-  --text-sm: 0.875rem;      /* 14px */
-  --text-base: 0.9375rem;   /* 15px */
-  --text-md: 1rem;          /* 16px */
-  --text-lg: 1.0625rem;     /* 17px */
-  --text-xl: 1.25rem;       /* 20px */
-  --text-2xl: 1.5rem;       /* 24px */
-  --text-3xl: 1.875rem;     /* 30px */
-  --text-4xl: 2.5rem;       /* 40px */
-  --text-5xl: 3.25rem;      /* 52px */
+  /* Strict minimum */
+  --text-min: 0.875rem;       /* 14px */
 
-  /* Font weights */
+  /* Core scale */
+  --text-xs: 0.875rem;        /* 14px */
+  --text-sm: 0.9375rem;       /* 15px */
+  --text-base: 1rem;          /* 16px */
+  --text-md: 1.0625rem;       /* 17px */
+  --text-lg: 1.125rem;        /* 18px */
+  --text-xl: 1.25rem;         /* 20px */
+  --text-2xl: 1.5rem;         /* 24px */
+  --text-3xl: 1.875rem;       /* 30px */
+  --text-4xl: 2.5rem;         /* 40px */
+  --text-5xl: 3rem;           /* 48px */
+
+  /* Weights */
+  --fw-light: 300;
   --fw-regular: 400;
   --fw-medium: 500;
   --fw-semibold: 600;
@@ -48,14 +52,14 @@
   /* Letter spacing */
   --ls-tight: -0.025em;
   --ls-normal: -0.01em;
-  --ls-label: 0.06em;
-  --ls-mono: 0.03em;
-  --ls-wide: 0.09em;
+  --ls-label: 0.04em;
+  --ls-wide: 0.07em;
+  --ls-mono: 0.02em;
 }
 
 
 /* ============================================================
-   2. GLOBAL FONT SETTINGS
+   02 — GLOBAL RESET AND TYPOGRAPHY
    ============================================================ */
 
 html {
@@ -96,87 +100,83 @@ code, pre, kbd, samp, .mono {
 
 
 /* ============================================================
-   3. SIDEBAR AND NAVIGATION
+   03 — SIDEBAR AND NAVIGATION
    ============================================================ */
 
 .sidebar__logo-text {
-  font-size: 1.5rem;
+  font-size: 24px;
   font-weight: var(--fw-semibold);
   letter-spacing: 0.07em;
-  line-height: 1;
+  line-height: 1.2;
 }
 
 .sidebar__tagline,
 .nav-section__label {
-  font-size: var(--text-xs);
+  font-size: 14px;
   font-weight: var(--fw-semibold);
   letter-spacing: var(--ls-label);
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .nav-item {
-  font-size: var(--text-sm);
+  font-size: 15px;
   font-weight: var(--fw-medium);
-  letter-spacing: var(--ls-normal);
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .nav-item__badge,
 .nav-notification-badge {
-  font-size: var(--text-xs);
+  font-size: 14px;
   font-weight: var(--fw-semibold);
-  letter-spacing: 0.02em;
-  line-height: 1.3;
-}
-
-.user-info__name {
-  font-size: var(--text-sm);
-  font-weight: var(--fw-semibold);
-  line-height: 1.35;
-}
-
-.user-info__role {
-  font-size: var(--text-xs);
-  font-weight: var(--fw-medium);
-  letter-spacing: 0.04em;
   line-height: 1.4;
 }
 
+.user-info__name {
+  font-size: 15px;
+  font-weight: var(--fw-semibold);
+  line-height: 1.4;
+}
+
+.user-info__role {
+  font-size: 14px;
+  font-weight: var(--fw-medium);
+  line-height: 1.5;
+}
+
 .topbar__page-title {
-  font-size: var(--text-base);
+  font-size: 16px;
   font-weight: var(--fw-semibold);
   line-height: 1.4;
 }
 
 .topbar__status {
-  font-size: var(--text-xs);
+  font-size: 14px;
   font-weight: var(--fw-medium);
-  letter-spacing: 0.02em;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 
 /* ============================================================
-   4. DASHBOARD
+   04 — DASHBOARD
    ============================================================ */
 
 .dashboard-hero__greeting {
-  font-size: var(--text-xs);
+  font-size: 14px;
   font-weight: var(--fw-semibold);
   letter-spacing: var(--ls-label);
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .dashboard-hero__title {
   font-family: var(--font-display);
-  font-size: var(--text-4xl);
+  font-size: 40px;
   font-weight: var(--fw-medium);
-  line-height: var(--lh-tight);
+  line-height: 1.15;
   letter-spacing: -0.015em;
 }
 
 .dashboard-hero__sub {
-  font-size: var(--text-base);
+  font-size: 16px;
   font-weight: var(--fw-regular);
   line-height: var(--lh-relaxed);
   letter-spacing: 0;
@@ -184,204 +184,204 @@ code, pre, kbd, samp, .mono {
 
 .dashboard-hero__cta,
 .dashboard-hero__link {
-  font-size: var(--text-sm);
+  font-size: 15px;
   font-weight: var(--fw-semibold);
-  line-height: 1.4;
-  letter-spacing: 0;
+  line-height: 1.5;
 }
 
 .stat-card__label {
-  font-size: var(--text-xs);
+  font-size: 14px;
   font-weight: var(--fw-semibold);
-  letter-spacing: 0.04em;
-  line-height: 1.4;
+  letter-spacing: 0.03em;
+  line-height: 1.5;
 }
 
 .stat-card__value {
-  font-size: 2.25rem;
+  font-size: 36px;
   font-weight: var(--fw-bold);
   letter-spacing: -0.035em;
-  line-height: 1;
+  line-height: 1.1;
 }
 
 .stat-card__trend {
-  font-size: var(--text-xs);
+  font-size: 14px;
   font-weight: var(--fw-medium);
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .section-title,
 .intel-panel__title {
-  font-size: var(--text-md);
+  font-size: 18px;
   font-weight: var(--fw-semibold);
   letter-spacing: var(--ls-normal);
-  line-height: 1.35;
+  line-height: 1.4;
 }
 
 .section-link {
-  font-size: var(--text-xs);
+  font-size: 14px;
   font-weight: var(--fw-semibold);
-  letter-spacing: 0.02em;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .activity-item__title {
-  font-size: var(--text-sm);
+  font-size: 15px;
   font-weight: var(--fw-semibold);
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .activity-item__meta {
-  font-size: var(--text-xs);
+  font-size: 14px;
   font-weight: var(--fw-regular);
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .activity-item__score {
-  font-size: var(--text-base);
+  font-size: 16px;
   font-weight: var(--fw-bold);
   letter-spacing: var(--ls-tight);
 }
 
 .quick-action-btn {
-  font-size: var(--text-sm);
+  font-size: 15px;
   font-weight: var(--fw-medium);
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .insight-item__label {
-  font-size: var(--text-xs);
+  font-size: 14px;
   font-weight: var(--fw-semibold);
-  letter-spacing: 0.04em;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .insight-item__value {
-  font-size: var(--text-sm);
+  font-size: 15px;
+  font-weight: var(--fw-semibold);
+  line-height: 1.5;
+}
+
+.empty-state__title {
+  font-size: 18px;
   font-weight: var(--fw-semibold);
   line-height: 1.4;
 }
 
-.empty-state__title {
-  font-size: var(--text-lg);
-  font-weight: var(--fw-semibold);
-  line-height: 1.35;
-}
-
 .empty-state__text {
-  font-size: var(--text-sm);
+  font-size: 15px;
   line-height: var(--lh-relaxed);
 }
 
 
 /* ============================================================
-   5. AUTHENTICATION
+   05 — AUTHENTICATION
    ============================================================ */
 
 .auth-brand__academy {
   font-family: var(--font-display);
-  font-size: 1.75rem;
+  font-size: 28px;
   font-weight: var(--fw-semibold);
   letter-spacing: 0.06em;
-  line-height: 1.2;
+  line-height: 1.25;
 }
 
 .auth-brand__tagline {
-  font-size: var(--text-xs);
+  font-size: 14px;
   font-weight: var(--fw-medium);
-  letter-spacing: 0.05em;
-  line-height: var(--lh-relaxed);
+  letter-spacing: 0.04em;
+  line-height: 1.6;
 }
 
 .auth-brand__pill {
-  font-size: var(--text-xs);
+  font-size: 14px;
   font-weight: var(--fw-semibold);
-  letter-spacing: 0.04em;
-  line-height: 1.4;
+  letter-spacing: 0.03em;
+  line-height: 1.5;
 }
 
 .auth-brand__nirev-name {
-  font-size: var(--text-lg);
+  font-size: 18px;
   font-weight: var(--fw-bold);
-  letter-spacing: 0.08em;
-  line-height: 1.3;
+  letter-spacing: 0.07em;
+  line-height: 1.4;
 }
 
 .auth-brand__nirev-sub {
-  font-size: var(--text-xs);
+  font-size: 14px;
   font-weight: var(--fw-medium);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   line-height: 1.5;
 }
 
 .auth-brand__founder-name {
-  font-size: var(--text-sm);
+  font-size: 15px;
   font-weight: var(--fw-semibold);
-  line-height: 1.4;
-}
-
-.auth-brand__founder-title {
-  font-size: var(--text-xs);
-  font-weight: var(--fw-regular);
   line-height: 1.5;
 }
 
+.auth-brand__founder-title {
+  font-size: 14px;
+  font-weight: var(--fw-regular);
+  line-height: 1.6;
+}
+
 .auth-card__logo-text {
-  font-size: 2rem;
+  font-size: 32px;
   font-weight: var(--fw-bold);
   letter-spacing: 0.06em;
-  line-height: 1.1;
+  line-height: 1.2;
 }
 
 .auth-card__subtitle {
-  font-size: var(--text-xs);
+  font-size: 14px;
   font-weight: var(--fw-medium);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   line-height: 1.6;
 }
 
 .auth-tab {
-  font-size: var(--text-sm);
+  font-size: 15px;
   font-weight: var(--fw-semibold);
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .form-label {
-  font-size: var(--text-xs);
+  font-size: 14px;
   font-weight: var(--fw-semibold);
-  letter-spacing: 0.03em;
-  line-height: 1.4;
+  letter-spacing: 0.02em;
+  line-height: 1.5;
 }
 
-.form-input,
-.form-input::placeholder {
+.form-input {
   font-family: var(--font-ui);
-  font-size: var(--text-base);
-  line-height: var(--lh-normal);
-  letter-spacing: 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.form-input::placeholder {
+  font-size: 16px;
+  opacity: 0.75;
 }
 
 .auth-role-btn__text {
-  font-size: var(--text-sm);
+  font-size: 15px;
   font-weight: var(--fw-semibold);
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .auth-divider__text {
-  font-size: var(--text-xs);
+  font-size: 14px;
   font-weight: var(--fw-medium);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
 }
 
 .toast {
-  font-size: var(--text-sm);
+  font-size: 15px;
   font-weight: var(--fw-medium);
   line-height: 1.5;
 }
 
 
 /* ============================================================
-   6. ASSESSMENT
+   06 — ASSESSMENT
    ============================================================ */
 
 .assessment-start__eyebrow,
@@ -389,10 +389,10 @@ code, pre, kbd, samp, .mono {
 .progress-header__eyebrow,
 .reports-header__eyebrow,
 .settings-header__eyebrow {
-  font-size: var(--text-xs);
+  font-size: 14px;
   font-weight: var(--fw-semibold);
   letter-spacing: var(--ls-label);
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .assessment-start__title,
@@ -401,128 +401,133 @@ code, pre, kbd, samp, .mono {
 .reports-header__title,
 .settings-header__title {
   font-family: var(--font-display);
-  font-size: var(--text-3xl);
+  font-size: 32px;
   font-weight: var(--fw-medium);
-  line-height: var(--lh-snug);
+  line-height: 1.25;
   letter-spacing: -0.015em;
 }
 
 .assessment-start__sub {
-  font-size: var(--text-base);
+  font-size: 16px;
   line-height: var(--lh-relaxed);
 }
 
 .skill-card__name {
-  font-size: var(--text-lg);
-  font-weight: var(--fw-semibold);
-  line-height: 1.3;
-}
-
-.skill-card__desc {
-  font-size: var(--text-sm);
-  line-height: var(--lh-relaxed);
-}
-
-.skill-card__badge {
-  font-size: var(--text-xs);
-  font-weight: var(--fw-bold);
-  letter-spacing: 0.03em;
-}
-
-.type-btn__name {
-  font-size: var(--text-sm);
+  font-size: 18px;
   font-weight: var(--fw-semibold);
   line-height: 1.4;
 }
 
-.type-btn__desc {
-  font-size: var(--text-xs);
+.skill-card__desc {
+  font-size: 15px;
+  line-height: var(--lh-relaxed);
+}
+
+.skill-card__badge {
+  font-size: 14px;
+  font-weight: var(--fw-bold);
   line-height: 1.5;
+}
+
+.type-btn__name {
+  font-size: 15px;
+  font-weight: var(--fw-semibold);
+  line-height: 1.5;
+}
+
+.type-btn__desc {
+  font-size: 14px;
+  line-height: 1.6;
 }
 
 .assessment-start__action,
 .assessment-start__meta {
-  font-size: var(--text-sm);
-  line-height: 1.5;
+  font-size: 15px;
+  line-height: 1.6;
 }
 
 .question-text,
 .question-card__text {
-  font-size: var(--text-md);
+  font-size: 17px;
   font-weight: var(--fw-regular);
-  line-height: var(--lh-relaxed);
+  line-height: 1.7;
   letter-spacing: 0;
 }
 
 .question-card__type,
 .question-card__difficulty {
-  font-size: var(--text-xs);
+  font-size: 14px;
   font-weight: var(--fw-semibold);
-  letter-spacing: 0.03em;
-  line-height: 1.4;
+  letter-spacing: 0.02em;
+  line-height: 1.5;
 }
 
 .quiz-progress__label,
 .quiz-progress__count,
 .progress-label {
-  font-size: var(--text-xs);
+  font-size: 14px;
   font-weight: var(--fw-semibold);
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .option-label {
-  font-size: var(--text-xs);
+  font-size: 14px;
   font-weight: var(--fw-semibold);
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
 }
 
 .option-text {
-  font-size: var(--text-base);
-  line-height: var(--lh-normal);
+  font-size: 16px;
+  line-height: 1.6;
 }
 
 .results-hero__label {
-  font-size: var(--text-xs);
+  font-size: 14px;
   font-weight: var(--fw-semibold);
   letter-spacing: var(--ls-label);
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .results-hero__score {
-  font-size: 3.5rem;
+  font-size: 56px;
   font-weight: var(--fw-bold);
   letter-spacing: -0.04em;
-  line-height: 1;
+  line-height: 1.1;
 }
 
 .results-hero__cefr {
-  font-size: var(--text-xl);
+  font-size: 20px;
   font-weight: var(--fw-semibold);
-  line-height: 1.3;
-}
-
-.results-hero__ielts {
-  font-size: var(--text-sm);
-  font-weight: var(--fw-medium);
   line-height: 1.4;
 }
 
+.results-hero__ielts {
+  font-size: 15px;
+  font-weight: var(--fw-medium);
+  line-height: 1.5;
+}
+
 .result-title {
-  font-size: var(--text-xl);
+  font-size: 20px;
   font-weight: var(--fw-semibold);
-  line-height: var(--lh-snug);
+  line-height: 1.4;
+}
+
+.breakdown-list {
+  font-size: 15px;
+  line-height: 1.6;
 }
 
 
 /* ============================================================
-   7. ANALYTICS
+   07 — ANALYTICS
    ============================================================ */
 
 .analytics-title,
 .analytics-section__title {
-  font-size: var(--text-3xl);
-  font-weight: var(--fw-medium);
-  line-height: var(--lh-snug);
+  font-size: 30px;
+  font-weight: var(--fw-semibold);
+  line-height: 1.3;
 }
 
 .chart-label,
@@ -530,244 +535,242 @@ code, pre, kbd, samp, .mono {
 .chart-legend,
 .radar-label {
   font-family: var(--font-ui);
-  font-size: var(--text-xs);
+  font-size: 14px;
   font-weight: var(--fw-medium);
   letter-spacing: 0;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .metric-value {
-  font-size: var(--text-xl);
+  font-size: 22px;
   font-weight: var(--fw-semibold);
   letter-spacing: var(--ls-tight);
-  line-height: 1.15;
+  line-height: 1.25;
 }
 
 .metric-label {
-  font-size: var(--text-xs);
+  font-size: 14px;
   font-weight: var(--fw-semibold);
-  letter-spacing: 0.04em;
-  line-height: 1.4;
+  letter-spacing: 0.03em;
+  line-height: 1.5;
 }
 
 .perf-skill-name {
-  font-size: var(--text-sm);
+  font-size: 15px;
   font-weight: var(--fw-medium);
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .perf-skill-score {
-  font-size: var(--text-xs);
+  font-size: 14px;
   font-weight: var(--fw-semibold);
-  letter-spacing: 0.02em;
 }
 
 .recommendation-text {
-  font-size: var(--text-sm);
+  font-size: 15px;
   line-height: var(--lh-relaxed);
 }
 
 
 /* ============================================================
-   8. PROGRESS
+   08 — PROGRESS
    ============================================================ */
 
 .progress-heading {
-  font-size: var(--text-3xl);
-  font-weight: var(--fw-medium);
-  line-height: var(--lh-snug);
+  font-size: 30px;
+  font-weight: var(--fw-semibold);
+  line-height: 1.3;
 }
 
 .cefr-score-num,
 .progress-score-big {
-  font-size: 4rem;
-  font-weight: 300;
-  line-height: 1;
+  font-size: 64px;
+  font-weight: var(--fw-light);
+  line-height: 1.1;
   letter-spacing: -0.04em;
 }
 
 .cefr-label {
-  font-size: var(--text-xs);
+  font-size: 14px;
   font-weight: var(--fw-semibold);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
 }
 
 .cefr-level-name {
-  font-size: 1.375rem;
-  font-weight: var(--fw-medium);
-  line-height: 1.3;
+  font-size: 22px;
+  font-weight: var(--fw-semibold);
+  line-height: 1.4;
 }
 
 .progress-sub {
-  font-size: var(--text-base);
+  font-size: 16px;
   line-height: var(--lh-relaxed);
 }
 
 .band-label,
 .level-label {
-  font-size: var(--text-xs);
+  font-size: 14px;
   font-weight: var(--fw-medium);
-  letter-spacing: 0.03em;
+  line-height: 1.5;
 }
 
 .skill-name {
-  font-size: var(--text-sm);
+  font-size: 15px;
   font-weight: var(--fw-semibold);
 }
 
 .skill-score {
-  font-size: var(--text-xs);
+  font-size: 14px;
   font-weight: var(--fw-medium);
 }
 
 .skill-desc {
-  font-size: var(--text-base);
+  font-size: 16px;
   font-weight: var(--fw-semibold);
 }
 
 .milestone-label {
-  font-size: var(--text-xs);
+  font-size: 14px;
   font-weight: var(--fw-medium);
 }
 
 .milestone-value {
-  font-size: 1.125rem;
+  font-size: 18px;
   font-weight: var(--fw-semibold);
 }
 
 
 /* ============================================================
-   9. REPORTS
+   09 — REPORTS
    ============================================================ */
 
 .report-heading {
-  font-size: var(--text-3xl);
-  font-weight: var(--fw-medium);
-  line-height: var(--lh-snug);
+  font-size: 30px;
+  font-weight: var(--fw-semibold);
+  line-height: 1.3;
 }
 
 .report-card__title {
-  font-size: var(--text-lg);
+  font-size: 18px;
   font-weight: var(--fw-semibold);
 }
 
 .report-card__sub {
-  font-size: var(--text-base);
+  font-size: 16px;
   font-weight: var(--fw-semibold);
 }
 
 .report-score {
-  font-size: 1.375rem;
+  font-size: 22px;
   font-weight: var(--fw-semibold);
   letter-spacing: var(--ls-tight);
 }
 
 .report-score-label,
 .report-meta-label {
-  font-size: var(--text-xs);
+  font-size: 14px;
   font-weight: var(--fw-medium);
-  letter-spacing: 0.03em;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .report-detail {
-  font-size: var(--text-sm);
-  line-height: var(--lh-normal);
+  font-size: 15px;
+  line-height: 1.6;
 }
 
 .report-feedback {
-  font-size: var(--text-sm);
+  font-size: 15px;
   line-height: var(--lh-relaxed);
 }
 
 .report-comment {
-  font-size: var(--text-lg);
+  font-size: 18px;
   font-weight: var(--fw-medium);
-  line-height: 1.45;
+  line-height: 1.5;
 }
 
 
 /* ============================================================
-   10. SETTINGS
+   10 — SETTINGS
    ============================================================ */
 
 .settings-section__title {
-  font-size: var(--text-xl);
+  font-size: 20px;
   font-weight: var(--fw-bold);
   letter-spacing: var(--ls-tight);
 }
 
 .setting-label {
-  font-size: var(--text-base);
+  font-size: 16px;
   font-weight: var(--fw-semibold);
 }
 
 .setting-desc {
-  font-size: var(--text-sm);
+  font-size: 15px;
   line-height: var(--lh-relaxed);
 }
 
 .cefr-btn__desc {
-  font-size: var(--text-xs);
-  line-height: 1.4;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
 
 /* ============================================================
-   11. CLASSROOM
+   11 — CLASSROOM
    ============================================================ */
 
 .classroom-title {
-  font-size: 1.375rem;
+  font-size: 22px;
   font-weight: var(--fw-bold);
-  line-height: 1.25;
+  line-height: 1.3;
 }
 
 .classroom-subtitle {
-  font-size: var(--text-sm);
-  line-height: 1.5;
+  font-size: 15px;
+  line-height: 1.6;
 }
 
 .class-card__name {
-  font-size: var(--text-base);
+  font-size: 16px;
   font-weight: var(--fw-semibold);
 }
 
 .class-card__meta {
-  font-size: var(--text-xs);
-  line-height: 1.4;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
 .student-name {
-  font-size: var(--text-sm);
+  font-size: 15px;
   font-weight: var(--fw-semibold);
 }
 
 .student-meta {
-  font-size: var(--text-xs);
-  line-height: 1.4;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
 
 /* ============================================================
-   12. BUTTONS AND INTERACTIVE ELEMENTS
+   12 — BUTTONS AND INTERACTIVE ELEMENTS
    ============================================================ */
 
 .btn {
   font-family: var(--font-ui);
-  font-size: var(--text-sm);
+  font-size: 15px;
   font-weight: var(--fw-semibold);
-  line-height: 1.35;
+  line-height: 1.5;
   letter-spacing: 0;
 }
 
 .btn--xs,
 .btn--sm {
-  font-size: var(--text-xs);
+  font-size: 14px;
 }
 
 .btn--lg {
-  font-size: var(--text-base);
+  font-size: 16px;
 }
 
 .theme-toggle,
@@ -779,21 +782,12 @@ code, pre, kbd, samp, .mono {
 
 
 /* ============================================================
-   13. TABLET — 600px TO 899px
+   13 — TABLET
    ============================================================ */
 
 @media (min-width: 600px) {
-  :root {
-    --text-lg: 1.125rem;
-    --text-xl: 1.375rem;
-    --text-2xl: 1.75rem;
-    --text-3xl: 2.125rem;
-    --text-4xl: 2.75rem;
-    --text-5xl: 3.5rem;
-  }
-
   .dashboard-hero__title {
-    font-size: 2.75rem;
+    font-size: 44px;
   }
 
   .assessment-start__title,
@@ -801,42 +795,31 @@ code, pre, kbd, samp, .mono {
   .progress-header__title,
   .reports-header__title,
   .settings-header__title {
-    font-size: 2.5rem;
+    font-size: 38px;
   }
 
   .stat-card__value {
-    font-size: 2.5rem;
+    font-size: 40px;
   }
 
   .results-hero__score {
-    font-size: 4rem;
+    font-size: 64px;
   }
 
   .cefr-score-num,
   .progress-score-big {
-    font-size: 4.5rem;
+    font-size: 72px;
   }
 }
 
 
 /* ============================================================
-   14. DESKTOP — 900px AND ABOVE
+   14 — DESKTOP
    ============================================================ */
 
 @media (min-width: 900px) {
-  :root {
-    --text-base: 1rem;
-    --text-md: 1.0625rem;
-    --text-lg: 1.125rem;
-    --text-xl: 1.375rem;
-    --text-2xl: 1.75rem;
-    --text-3xl: 2.25rem;
-    --text-4xl: 3rem;
-    --text-5xl: 3.75rem;
-  }
-
   .dashboard-hero__title {
-    font-size: 3rem;
+    font-size: 48px;
   }
 
   .assessment-start__title,
@@ -844,31 +827,31 @@ code, pre, kbd, samp, .mono {
   .progress-header__title,
   .reports-header__title,
   .settings-header__title {
-    font-size: 2.75rem;
+    font-size: 42px;
   }
 
   .stat-card__value {
-    font-size: 2.5rem;
+    font-size: 42px;
   }
 
   .results-hero__score {
-    font-size: 4.5rem;
+    font-size: 72px;
   }
 
   .cefr-score-num,
   .progress-score-big {
-    font-size: 5rem;
+    font-size: 80px;
   }
 }
 
 
 /* ============================================================
-   15. SMALL MOBILE — 360px AND BELOW
+   15 — SMALL MOBILE
    ============================================================ */
 
 @media (max-width: 360px) {
   .dashboard-hero__title {
-    font-size: 2rem;
+    font-size: 34px;
   }
 
   .assessment-start__title,
@@ -876,36 +859,65 @@ code, pre, kbd, samp, .mono {
   .progress-header__title,
   .reports-header__title,
   .settings-header__title {
-    font-size: 1.75rem;
+    font-size: 28px;
   }
 
   .stat-card__value {
-    font-size: 1.875rem;
+    font-size: 32px;
   }
 
   .results-hero__score {
-    font-size: 3rem;
+    font-size: 48px;
   }
 
   .cefr-score-num,
   .progress-score-big {
-    font-size: 3.25rem;
+    font-size: 56px;
   }
 }
 
 
 /* ============================================================
-   16. ACCESSIBILITY AND READABILITY
+   16 — INLINE STYLE OVERRIDES
+   Known small inline text in supplied index.html
    ============================================================ */
 
-/* Prevent iOS automatic input zoom */
+#forgot-password-link {
+  font-size: 14px !important;
+}
+
+.auth-card .auth-footer,
+.auth-card .auth-footer *,
+.auth-card .auth-legal,
+.auth-card .auth-legal * {
+  font-size: 14px !important;
+  line-height: 1.6;
+}
+
+
+/* ============================================================
+   17 — FORM READABILITY AND MOBILE ACCESSIBILITY
+   ============================================================ */
+
 input,
 select,
 textarea {
-  font-size: max(16px, 1em);
+  font-family: var(--font-ui);
+  font-size: 16px;
+  line-height: 1.5;
 }
 
-/* Consistent text rendering */
+input::placeholder,
+textarea::placeholder {
+  font-size: 16px;
+  opacity: 0.75;
+}
+
+button {
+  font-family: var(--font-ui);
+  line-height: 1.5;
+}
+
 p,
 .activity-item__title,
 .activity-item__meta,
@@ -916,20 +928,54 @@ p,
   overflow-wrap: break-word;
 }
 
-/* Placeholder readability */
-::placeholder {
-  opacity: 0.75;
-}
 
-/* Keep icon fonts and SVGs unaffected */
+/* ============================================================
+   18 — SVG AND ICON SAFETY
+   Typography must not resize icon graphics
+   ============================================================ */
+
 svg {
-  font-family: initial;
+  flex-shrink: 0;
 }
 
-/* Ensure typography inherits correctly in controls */
-button,
-input,
-select,
-textarea {
-  letter-spacing: inherit;
+svg text {
+  font-family: var(--font-ui);
+  font-size: 14px;
 }
+
+
+/* ============================================================
+   19 — FINAL VISIBLE TEXT MINIMUM
+   Applies to ordinary text elements, not icon-only controls.
+   Keeps existing component-specific larger sizes intact.
+   ============================================================ */
+
+body :where(
+  p,
+  span,
+  label,
+  small,
+  a,
+  li,
+  th,
+  td,
+  figcaption,
+  legend,
+  summary,
+  button,
+  input,
+  select,
+  textarea
+) {
+  font-size: max(14px, 1em);
+}
+
+/* Explicitly preserve form readability */
+body :where(input, select, textarea) {
+  font-size: max(16px, 1em);
+}
+
+
+/* ============================================================
+   END — NIREV AI TYPOGRAPHY SYSTEM
+   ============================================================ */
