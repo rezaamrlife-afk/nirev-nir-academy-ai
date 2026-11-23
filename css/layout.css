@@ -1152,6 +1152,13 @@ html[data-theme="light"] .topbar__btn--theme .icon-moon { display: none; }
     padding-bottom: calc(112px + env(safe-area-inset-bottom, 0px));
   }
 
+  /* Pages without .page-content (assessment, analytics, progress,
+     reports, settings) need the same clearance above the fixed
+     bottom nav so their last element is not covered. */
+  .page-panel:not(.page-content):not(:has(> .page-content)) {
+    padding-bottom: calc(112px + env(safe-area-inset-bottom, 0px));
+  }
+
   /* Bottom navigation */
 
   .bottom-nav {
