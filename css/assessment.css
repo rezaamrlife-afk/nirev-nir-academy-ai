@@ -38,7 +38,7 @@
 
 .assessment-start__title {
   font-family: var(--font-display);
-  font-size: 2.5rem;
+  font-size: var(--text-4xl);
   font-weight: 400;
   color: var(--white-primary);
   line-height: 1.2;
@@ -53,7 +53,7 @@
 }
 
 .assessment-start__sub {
-  font-size: 0.9375rem;
+  font-size: var(--text-sm);
   color: var(--white-muted);
   line-height: 1.7;
   max-width: 540px;
@@ -118,7 +118,7 @@
 
 .skill-card__name {
   font-family: var(--font-display);
-  font-size: 1.25rem;
+  font-size: var(--text-xl);
   font-weight: 500;
   color: var(--white-primary);
   margin-bottom: var(--space-1);
@@ -278,7 +278,7 @@
 
 .quiz-progress__count {
   font-family: var(--font-display);
-  font-size: 1rem;
+  font-size: var(--text-base);
   color: var(--gold-bright);
 }
 
@@ -331,7 +331,7 @@
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--white-muted);
-  padding: 2px 8px;
+  padding: 2px var(--space-2);
   border: 1px solid var(--black-border);
   border-radius: var(--radius-pill);
 }
@@ -387,7 +387,7 @@
   transition: all var(--dur-base) var(--ease-smooth);
   text-align: left;
   color: var(--white-secondary);
-  font-size: 0.9375rem;
+  font-size: var(--text-sm);
   user-select: none;
 }
 
@@ -434,7 +434,7 @@
   padding: var(--space-4) var(--space-5);
   color: var(--white-primary);
   font-family: var(--font-ui);
-  font-size: 0.9375rem;
+  font-size: var(--text-sm);
   line-height: 1.7;
   resize: vertical;
   transition: all var(--dur-base) var(--ease-smooth);
@@ -513,7 +513,7 @@
 
 .results-hero__cefr {
   font-family: var(--font-display);
-  font-size: 1.5rem;
+  font-size: var(--text-2xl);
   color: var(--white-secondary);
   margin-bottom: var(--space-2);
 }
@@ -535,7 +535,7 @@
 
 @media (max-width: 700px) {
   .results-grid { grid-template-columns: 1fr; }
-  .results-hero__score { font-size: 3rem; }
+  .results-hero__score { font-size: var(--text-5xl); }
 }
 
 /* Breakdown list */
@@ -567,7 +567,7 @@
 
 .breakdown-item__score {
   font-family: var(--font-display);
-  font-size: 1.125rem;
+  font-size: var(--text-lg);
   font-weight: 500;
   min-width: 48px;
   text-align: right;

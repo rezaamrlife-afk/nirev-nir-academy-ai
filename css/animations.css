@@ -136,8 +136,8 @@
   pointer-events: none;
 }
 
-.skeleton-text    { height: 14px; margin-bottom: 8px; }
-.skeleton-title   { height: 24px; width: 60%; margin-bottom: 12px; }
+.skeleton-text    { height: 14px; margin-bottom: var(--space-2); }
+.skeleton-title   { height: 24px; width: 60%; margin-bottom: var(--space-3); }
 .skeleton-value   { height: 40px; width: 40%; }
 .skeleton-full    { height: 100%; width: 100%; }
 

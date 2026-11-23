@@ -369,6 +369,29 @@
   --btn-disabled-bg: var(--btn-primary-bg);
   --btn-disabled-text: var(--text-on-accent);
   --btn-disabled-border: var(--btn-primary-border);
+
+  /* ----------------------------------------------------------
+     CONSISTENCY TOKENS (v5.3)
+     ---------------------------------------------------------- */
+  --input-bg: var(--black-elevated);
+  --bar-width: 100%;
+
+  /* Z-index scale */
+  --z-behind: -1;
+  --z-raised: 1;
+  --z-float: 2;
+  --z-bottom-nav: 140;
+  --z-topbar: 160;
+  --z-topbar-menu: 170;
+  --z-sidebar-overlay: 190;
+  --z-sidebar: 200;
+  --z-modal: 200;
+  --z-loader: 9000;
+  --z-toast: 9100;
+  --z-noise: 9998;
+
+  /* Breakpoints (reference only - CSS vars cannot be used in @media):
+     360 / 480 / 600 / 900 / 1100 px  (legacy 500 / 700 kept for layout parity) */
 }
 
 

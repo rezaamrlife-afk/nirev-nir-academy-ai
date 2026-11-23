@@ -70,7 +70,7 @@
 
 .auth-brand__academy {
   font-family: var(--font-display);
-  font-size: 1rem;
+  font-size: var(--text-base);
   font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -144,7 +144,7 @@
 }
 
 .auth-brand__tagline-long {
-  font-size: 1.125rem;
+  font-size: var(--text-lg);
   font-weight: 600;
   color: var(--white-secondary);
   line-height: 1.4;
@@ -215,7 +215,7 @@
   background: rgba(201,168,76,0.08);
   border: 1px solid rgba(201,168,76,0.18);
   border-radius: var(--radius-pill);
-  padding: 4px 14px;
+  padding: var(--space-1) 14px;
 }
 
 /* Hidden old elements */
@@ -340,10 +340,11 @@
   background: var(--orange-core);
   box-shadow: 0 0 10px rgba(224,123,0,0.6);
   flex-shrink: 0;
-  margin-top: 4px;
+  margin-top: var(--space-1);
 }
 
 .auth-card__subtitle {
+  text-align: left;
   font-size: var(--text-sm);
   color: var(--white-muted);
   line-height: 1.5;
@@ -419,7 +420,7 @@
 .auth-role-btn input[type="radio"] { display: none; }
 
 .auth-role-btn__icon {
-  font-size: 1.25rem;
+  font-size: var(--text-xl);
   color: var(--gold-pure);
 }
 
@@ -493,7 +494,7 @@
   .auth-brand__hero-logo    { display: none; }
   .auth-brand__pills        { display: none; }
   .auth-brand__founder      { display: none; }
-  .auth-brand__product-name { font-size: 2.5rem; }
+  .auth-brand__product-name { font-size: var(--text-4xl); }
   .auth-brand__tagline-long { font-size: var(--text-sm); }
 
   .auth-form-wrap { flex: 1; padding: var(--space-4); overflow-y: auto; }
