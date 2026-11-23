@@ -267,3 +267,100 @@ html[data-theme="light"] .nav-notification-badge {
 .theme-toggle .theme-toggle__sun  { display: none; }
 html[data-theme="dark"] .theme-toggle .theme-toggle__moon { display: none; }
 html[data-theme="dark"] .theme-toggle .theme-toggle__sun  { display: block; }
+
+/* ══ 13. REPORTS PAGE ══════════════════════════════════════ */
+
+html[data-theme="light"] .reports-header__eyebrow   { color: var(--white-muted); }
+html[data-theme="light"] .reports-header__title      { color: var(--white-primary); }
+
+html[data-theme="light"] .report-card {
+  background: var(--black-surface);
+  border-color: var(--black-border);
+}
+html[data-theme="light"] .report-card:hover {
+  border-color: rgba(127,100,20,0.35);
+  box-shadow: 0 2px 16px rgba(127,100,20,0.10);
+}
+html[data-theme="light"] .report-card.expanded {
+  border-color: rgba(127,100,20,0.35);
+}
+
+html[data-theme="light"] .report-card__title         { color: var(--white-primary); }
+html[data-theme="light"] .report-card__meta          { color: var(--white-muted); }
+html[data-theme="light"] .report-card__chevron       { color: var(--white-muted); }
+
+html[data-theme="light"] .report-detail {
+  border-top-color: rgba(127,100,20,0.20);
+}
+
+html[data-theme="light"] .report-detail__stat {
+  background: var(--black-elevated);
+}
+html[data-theme="light"] .report-detail__stat-value  { color: var(--gold-bright); }
+html[data-theme="light"] .report-detail__stat-label  { color: var(--white-muted); }
+
+html[data-theme="light"] .report-q-item {
+  background: var(--black-elevated);
+}
+html[data-theme="light"] .report-q-item__num         { color: var(--white-muted); }
+html[data-theme="light"] .report-q-item__question    { color: var(--white-secondary); }
+html[data-theme="light"] .report-q-item__feedback    { color: var(--white-muted); }
+
+html[data-theme="light"] .report-export-btn {
+  background: rgba(26,21,16,0.04);
+  border-color: rgba(26,21,16,0.14);
+  color: var(--white-secondary);
+}
+html[data-theme="light"] .report-export-btn:hover {
+  background: rgba(127,100,20,0.07);
+  border-color: rgba(127,100,20,0.28);
+  color: var(--gold-bright);
+}
+
+/* ══ 14. PROGRESS PAGE ═════════════════════════════════════ */
+
+html[data-theme="light"] .progress-header__eyebrow   { color: var(--white-muted); }
+html[data-theme="light"] .progress-header__title      { color: var(--white-primary); }
+
+html[data-theme="light"] .prediction-hero {
+  background: linear-gradient(135deg, rgba(127,100,20,0.07), rgba(127,100,20,0.02));
+  border-color: rgba(127,100,20,0.25);
+}
+html[data-theme="light"] .prediction-hero__label      { color: var(--white-muted); }
+html[data-theme="light"] .prediction-hero__days-label { color: var(--white-muted); }
+html[data-theme="light"] .prediction-hero__target     { color: var(--white-secondary); }
+html[data-theme="light"] .prediction-hero__date       { color: var(--white-muted); }
+html[data-theme="light"] .prediction-hero__message    { color: var(--gold-bright); }
+
+html[data-theme="light"] .recommendation-card {
+  background: var(--black-surface);
+  border-color: var(--black-border);
+}
+html[data-theme="light"] .rec-item {
+  background: var(--black-elevated);
+  border-color: var(--black-border);
+}
+html[data-theme="light"] .rec-item__value             { color: var(--gold-bright); }
+html[data-theme="light"] .rec-item__label             { color: var(--white-muted); }
+
+html[data-theme="light"] .milestone-timeline {
+  background: var(--black-surface);
+  border-color: var(--black-border);
+}
+html[data-theme="light"] .milestone-list::before      { background: rgba(26,21,16,0.12); }
+
+html[data-theme="light"] .milestone-item__dot.future {
+  background: var(--black-elevated);
+  border-color: rgba(26,21,16,0.18);
+  color: var(--white-muted);
+}
+
+html[data-theme="light"] .milestone-item__level       { color: var(--white-primary); }
+html[data-theme="light"] .milestone-item__detail      { color: var(--white-muted); }
+html[data-theme="light"] .milestone-item__score       { color: var(--white-muted); }
+
+html[data-theme="light"] .confidence-badge.low {
+  background: rgba(26,21,16,0.05);
+  border-color: rgba(26,21,16,0.15);
+  color: var(--white-muted);
+}
