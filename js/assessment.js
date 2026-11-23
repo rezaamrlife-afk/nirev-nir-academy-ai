@@ -170,6 +170,10 @@ function _wireEngineEvents() {
     _showScreen('results');
   });
 
+  document.addEventListener('nirev:assessment:fallback', (e) => {
+    showToast(e.detail?.message ?? 'AI questions unavailable — using standard questions.', 'warning', 6000);
+  });
+
   document.addEventListener('nirev:engine:error', (e) => {
     showToast(e.detail.error ?? 'An error occurred.', 'error');
     if (!e.detail.recoverable) _showScreen('start');
