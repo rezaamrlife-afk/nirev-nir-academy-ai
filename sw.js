@@ -9,7 +9,7 @@
  * ─────────────────────────────────────────────────────────────
  */
 
-const CACHE_NAME    = 'nirev-v6';
+const CACHE_NAME    = 'nirev-v7';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -27,6 +27,8 @@ const STATIC_ASSETS = [
   '/css/progress.css',
   '/css/reports.css',
   '/css/light-mode.css',
+  '/css/landing.css',
+  '/js/landing.js',
   '/js/app.js',
   '/js/auth.js',
   '/js/config.js',
