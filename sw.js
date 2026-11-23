@@ -9,11 +9,14 @@
  * ─────────────────────────────────────────────────────────────
  */
 
-const CACHE_NAME    = 'nirev-v2';
+const CACHE_NAME    = 'nirev-v3';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/css/theme.css',
+  '/css/animations.css',
+  '/css/classroom.css',
+  '/css/typography.css',
   '/css/base.css',
   '/css/layout.css',
   '/css/components.css',
