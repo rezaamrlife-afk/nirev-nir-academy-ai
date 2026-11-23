@@ -62,11 +62,23 @@ export async function startAssessment(input) {
       previousQuestions,
     });
 
+    const wantedCount = input.questionCount ?? 5;
+    let fallbackReason = null;
+
     if (groqErr || !groqText) {
-      // Fallback to default questions
-      questions = AssessmentDomain.parseGroqQuestions('', input.skill, input.questionCount ?? 5);
+      // Groq failed or was truncated (finish_reason === 'length') → built-in bank
+      fallbackReason = groqErr ?? 'Empty response from AI.';
+      questions = AssessmentDomain.parseGroqQuestions('', input.skill, wantedCount);
     } else {
-      questions = AssessmentDomain.parseGroqQuestions(groqText, input.skill, input.questionCount ?? 5);
+      questions = AssessmentDomain.parseGroqQuestions(groqText, input.skill, wantedCount);
+      // parseGroqQuestions falls back internally on invalid JSON — detect it
+      if (questions.some(q => q.source === 'fallback')) {
+        fallbackReason = 'AI returned invalid question data.';
+      }
+    }
+
+    if (fallbackReason) {
+      console.warn('[Engine] Using built-in fallback questions:', fallbackReason);
     }
 
     // Persist to DB
@@ -94,6 +106,15 @@ export async function startAssessment(input) {
       answers:      {},
       startedAt:    session.startedAt,
     });
+
+    // Never present built-in questions as AI-generated: disclose explicitly
+    if (fallbackReason) {
+      _emit('nirev:assessment:fallback', {
+        sessionId,
+        reason:  fallbackReason,
+        message: 'AI question generation was unavailable — these are standard practice questions, not AI-generated.',
+      });
+    }
 
     _emit('nirev:assessment:started', { sessionId, questions });
     return { data: session, error: null };
@@ -173,21 +194,32 @@ async function _triggerScoring(sessionId, answers, ctx) {
       sessionId, answers, ctx.questions, ctx.skill
     ).answers;
 
-    // Score each answer via Groq
+    // Score each answer via Groq (answer type selects the token limit).
+    // A failed / truncated / invalid score is retried once; if it still
+    // cannot be scored the session is NOT saved — no placeholder scores.
     const answerScores = [];
+    const failedIds    = [];
     for (const record of answerRecords) {
       if (!record.answer || record.answer.trim() === '') {
         answerScores.push(ScoringDomain.parseGroqScore('{"score":0,"rationale":"No answer provided.","tags":["no_answer"]}', record.questionId));
         continue;
       }
 
-      const { data: scoreText, error: scoreErr } = await groq.scoreResponse(record);
-
-      if (scoreErr || !scoreText) {
-        answerScores.push(ScoringDomain.parseGroqScore('', record.questionId));
-      } else {
-        answerScores.push(ScoringDomain.parseGroqScore(scoreText, record.questionId));
+      let parsed = await _scoreOnce(record);
+      if (!parsed.scored) {
+        console.warn(`[Engine] Scoring ${record.questionId} failed (${parsed.error}) — retrying once.`);
+        parsed = await _scoreOnce(record, true);
       }
+
+      if (!parsed.scored) failedIds.push(record.questionId);
+      answerScores.push(parsed);
+    }
+
+    if (failedIds.length > 0) {
+      throw new Error(
+        `Scoring failed for ${failedIds.length} of ${answerRecords.length} answers (AI response incomplete or invalid). ` +
+        'Your result was not saved. Please try the assessment again.'
+      );
     }
 
     const userId       = store.get('user')?.id ?? 'guest';
@@ -230,6 +262,24 @@ async function _triggerScoring(sessionId, answers, ctx) {
   } catch (err) {
     _error('scoring', err.message);
   }
+}
+
+// ── Internal: Score one answer ────────────────────────────────
+// Returns a parseGroqScore() record; `scored:false` on any failure.
+// On retry the answer-type token limit is doubled (covers truncation).
+
+async function _scoreOnce(record, isRetry = false) {
+  const params = isRetry ? { ...record, max_tokens: groq.getScoringTokenLimit(record.type) * 2 } : record;
+  const res    = await groq.scoreResponse(params);
+
+  if (res.error || !res.data) {
+    return {
+      questionId: record.questionId, rawScore: null, normalised: null,
+      rationale: '', tags: [], scored: false,
+      error: res.error ?? 'Empty scoring response.',
+    };
+  }
+  return ScoringDomain.parseGroqScore(res.data, record.questionId);
 }
 
 // ── Error Handler ─────────────────────────────────────────────
