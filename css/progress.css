@@ -31,8 +31,8 @@
   display:        flex;
   flex-direction: column;
   gap:            var(--space-8, 2rem);
-  padding:        var(--space-6, 1.5rem) var(--space-5, 1.25rem);
-  max-width:      900px;
+  padding:        0;
+  max-width:      none;
   margin:         0 auto;
   animation:      pi-fade-in 0.4s ease;
 }
@@ -861,7 +861,6 @@
 @media (max-width: 540px) {
 
   #progress-content {
-    padding: var(--space-4, 1rem) var(--space-3, 0.75rem);
     gap:     var(--space-5, 1.25rem);
   }
 
@@ -921,4 +920,141 @@
     align-items:    flex-start;
   }
 
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   §12  Shared page hero — Progress & Reports
+   Matches the Assessment "Choose Your Assessment" hero card
+   (CSS only; markup/ids untouched). Tokens drive light + dark.
+   ══════════════════════════════════════════════════════════════ */
+
+#page-progress .progress-page,
+#page-reports  .reports-page {
+  --as-accent: var(--orange-core);
+  --as-gold:   var(--gold-pure);
+  max-width: 1040px;
+  margin:    0 auto;
+  padding:   var(--space-8);
+}
+
+@keyframes page-hero-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+#page-progress .progress-header,
+#page-reports  .reports-header {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  gap: 0;
+  min-height: 190px;
+  margin: 0 0 var(--space-8);
+  padding: var(--space-8);
+  text-align: left;
+  border: 1px solid var(--black-border);
+  border-radius: var(--radius-2xl);
+  background:
+    radial-gradient(120% 140% at 100% 0%, color-mix(in srgb, var(--as-accent) 14%, transparent), transparent 55%),
+    linear-gradient(135deg, var(--black-elevated), var(--black-surface));
+  box-shadow: var(--shadow-md);
+  animation: page-hero-rise 560ms var(--ease-smooth) both;
+}
+
+#page-progress .progress-header::before,
+#page-reports  .reports-header::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -90px;
+  right: -70px;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--as-gold) 34%, transparent);
+  box-shadow:
+    0 0 0 34px color-mix(in srgb, var(--as-gold) 7%, transparent),
+    0 0 0 68px color-mix(in srgb, var(--as-gold) 4%, transparent);
+  pointer-events: none;
+}
+
+#page-progress .progress-header::after,
+#page-reports  .reports-header::after {
+  content: "";
+  position: absolute;
+  inset: 0 var(--space-8) auto;
+  height: 2px;
+  border-radius: 0 0 var(--radius-pill) var(--radius-pill);
+  background: linear-gradient(90deg, transparent, var(--as-accent), var(--as-gold), transparent);
+  opacity: .7;
+  pointer-events: none;
+}
+
+#page-reports .reports-header__left { display: flex; flex-direction: column; align-items: flex-start; }
+
+#page-progress .progress-header__eyebrow,
+#page-reports  .reports-header__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  margin: 0 0 var(--space-4);
+  padding: 5px 12px 5px 24px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--white-secondary);
+  border: 1px solid var(--black-border);
+  border-radius: var(--radius-pill);
+  background:
+    radial-gradient(circle at 12px 50%, var(--as-accent) 0 3px, transparent 4px),
+    color-mix(in srgb, var(--as-accent) 8%, var(--black-surface));
+}
+
+#page-progress .progress-header__title,
+#page-reports  .reports-header__title {
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4.4vw, 3rem);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: .01em;
+  color: var(--white-pure);
+}
+
+#page-progress .progress-header__title span,
+#page-reports  .reports-header__title span {
+  background: linear-gradient(135deg, var(--gold-pure), var(--gold-light));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: var(--gold-pure);
+}
+
+@media (max-width: 900px) {
+  #page-progress .progress-page,
+  #page-reports  .reports-page { padding: var(--space-4) var(--space-2); }
+}
+
+@media (max-width: 600px) {
+  #page-progress .progress-header,
+  #page-reports  .reports-header {
+    min-height: 0;
+    padding: var(--space-6) var(--space-5);
+    border-radius: var(--radius-xl);
+    margin-bottom: var(--space-6);
+  }
+  #page-progress .progress-header::before,
+  #page-reports  .reports-header::before { top: -110px; right: -110px; }
+}
+
+@media (max-width: 480px) {
+  #page-progress .progress-page,
+  #page-reports  .reports-page { padding: var(--space-3) var(--space-2); }
 }
