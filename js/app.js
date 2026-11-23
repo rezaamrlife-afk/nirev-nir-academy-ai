@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Covers: network timeout, CDN failure, unhandled rejection
   const _safetyTimer = setTimeout(() => {
     hideLoader();
-    showScreen('auth');
+    showScreen('landing');
   }, 8000);
 
   try {
@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         _authResolved = true;
         clearTimeout(_safetyTimer);
         hideLoader();
-        showScreen('auth');
+        showScreen('landing');
       }
     );
 
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (!_authResolved) {
         clearTimeout(_safetyTimer);
         hideLoader();
-        showScreen('auth');
+        showScreen('landing');
       }
     }
     // result is a valid session → onAuthStateChange will fire and handle it
@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   } catch (err) {
     clearTimeout(_safetyTimer);
     hideLoader();
-    showScreen('auth');
+    showScreen('landing');
     console.error('[Bootstrap] failed:', err);
   }
 
@@ -186,7 +186,7 @@ function _wireSignOut() {
 function _wireSignOutEvent() {
   document.addEventListener('nirev:signout', () => {
     _appInitialized = false; // Allow re-init on next login
-    showScreen('auth');
+    showScreen('landing');
   });
 }
 
