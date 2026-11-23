@@ -92,22 +92,25 @@ function _render(container) {
 
   container.innerHTML = `
 
-    <!-- Avatar Row -->
-    <div class="settings-section" style="margin-bottom:var(--space-5)">
+    <!-- Profile Overview -->
+    <div class="settings-section settings-overview">
       <div class="settings-avatar-row">
         <div class="settings-avatar" id="settings-avatar">${initials}</div>
         <div class="settings-avatar-info">
           <div class="settings-avatar-name" id="settings-display-name">${p.full_name || 'Your Name'}</div>
           <div class="settings-avatar-email">${p.email}</div>
         </div>
+        <span class="settings-role-badge">${_escape(p.role || 'learner')}</span>
       </div>
     </div>
 
-    <!-- Profile Section -->
-    <div class="settings-section">
+    <!-- Personal Information -->
+    <div class="settings-section settings-card--personal">
       <div class="settings-section__title">
-        <span class="settings-section__icon">◈</span>
-        Profile
+        <span class="settings-section__icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+        </span>
+        Personal Information
       </div>
 
       <div class="settings-row">
@@ -121,30 +124,42 @@ function _render(container) {
           <label class="form-label" for="settings-email">Email</label>
           <input id="settings-email" type="email" class="form-input"
                  value="${_escape(p.email)}"
-                 disabled style="opacity:0.5;cursor:not-allowed;" />
+                 disabled />
         </div>
       </div>
     </div>
 
-    <!-- CEFR Level Section -->
-    <div class="settings-section">
+    <!-- Learning Profile (CEFR) -->
+    <div class="settings-section settings-card--level">
       <div class="settings-section__title">
-        <span class="settings-section__icon">⚡</span>
-        Current CEFR Level
+        <span class="settings-section__icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V14"/><path d="M10 20V9"/><path d="M16 20V5"/><path d="M22 20H2"/></svg>
+        </span>
+        Learning Profile
       </div>
-      <div class="form-label" style="margin-bottom:var(--space-3);">
-        Select your current level (or leave for AI to determine)
+      <div class="form-label settings-hint">
+        Current CEFR level — select your level, or let AI determine it
+      </div>
+      <div class="cefr-btn cefr-btn--ai ${!p.level ? 'selected' : ''}" role="button" tabindex="0">
+        <span class="cefr-btn--ai__icon" aria-hidden="true">✦</span>
+        <span class="cefr-btn--ai__text">
+          <span class="cefr-btn__level">AI-determined</span>
+          <span class="cefr-btn__desc">Level is estimated from your assessments</span>
+        </span>
+        <span class="cefr-btn--ai__check" aria-hidden="true">✓</span>
       </div>
       <div class="cefr-grid" id="cefr-grid">
         ${_buildCEFRGrid(p.level)}
       </div>
     </div>
 
-    <!-- Goal Section -->
-    <div class="settings-section">
+    <!-- Learning Goals -->
+    <div class="settings-section settings-card--goals">
       <div class="settings-section__title">
-        <span class="settings-section__icon">✦</span>
-        Learning Goal
+        <span class="settings-section__icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/></svg>
+        </span>
+        Learning Goals
       </div>
       <div class="goal-grid" id="goal-grid">
         ${_buildGoalGrid(p.goal)}
@@ -153,18 +168,20 @@ function _render(container) {
 
     <!-- Save Bar -->
     <div class="settings-save-bar">
-      <div class="settings-save-bar__status" id="settings-status">Unsaved changes</div>
-      <div style="display:flex;gap:var(--space-3);">
+      <div class="settings-save-bar__status" id="settings-status" role="status" aria-live="polite">Unsaved changes</div>
+      <div class="settings-save-bar__actions">
         <button class="btn btn--ghost" id="settings-reset-btn">Reset</button>
         <button class="btn btn--primary" id="settings-save-btn">Save Changes</button>
       </div>
     </div>
 
-    <!-- Account Section -->
-    <div class="settings-section" style="margin-top:var(--space-5)">
+    <!-- Account Actions -->
+    <div class="settings-section settings-account">
       <div class="settings-section__title">
-        <span class="settings-section__icon">⚙</span>
-        Account
+        <span class="settings-section__icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6l8-3z"/></svg>
+        </span>
+        Account Actions
       </div>
       <div class="danger-item">
         <div class="danger-item__info">
