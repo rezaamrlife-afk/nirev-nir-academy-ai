@@ -54,28 +54,50 @@ export function computeAverage(scores) {
 }
 
 // ── Pure: Parse Groq scoring response ────────────────────────
+//
+// Returns a record with `scored: true` only when the AI returned a
+// valid numeric score. On empty / malformed / score-less output it
+// returns `scored: false` (normalised = null) — it NEVER fabricates a
+// placeholder score. Callers must check `scored` before using the value.
 
 export function parseGroqScore(groqText, questionId) {
+  const unscored = (reason) => ({
+    questionId,
+    rawScore:   null,
+    normalised: null,
+    rationale:  '',
+    tags:       [],
+    scored:     false,
+    error:      reason,
+  });
+
+  if (typeof groqText !== 'string' || groqText.trim() === '') {
+    return unscored('Empty scoring response.');
+  }
+
   try {
-    const clean = groqText.replace(/```json|```/g, '').trim();
+    const clean  = groqText.replace(/```json|```/g, '').trim();
     const parsed = JSON.parse(clean);
+
+    const rawValue = parsed?.score ?? parsed?.raw_score;
+    const rawScore = (rawValue === null || rawValue === undefined || rawValue === '')
+      ? NaN
+      : Number(rawValue);
+
+    if (!Number.isFinite(rawScore)) {
+      return unscored('Scoring response contained no valid numeric score.');
+    }
 
     return {
       questionId,
-      rawScore:   parseFloat(parsed.score ?? parsed.raw_score ?? 50),
-      normalised: normalizeScore(parsed.score ?? parsed.raw_score ?? 50),
+      rawScore,
+      normalised: normalizeScore(rawScore),
       rationale:  parsed.rationale ?? parsed.feedback ?? parsed.explanation ?? '',
       tags:       parsed.tags ?? parsed.issues ?? [],
+      scored:     true,
     };
   } catch {
-    // Fallback score if parsing fails
-    return {
-      questionId,
-      rawScore:   50,
-      normalised: 50,
-      rationale:  'Score estimated based on response.',
-      tags:       [],
-    };
+    return unscored('Scoring response was not valid JSON.');
   }
 }
 
@@ -85,6 +107,7 @@ export function buildScoreBreakdown(answerScores) {
   const bySubSkill = {};
 
   answerScores.forEach(s => {
+    if (s.scored === false) return;   // never aggregate unscored answers
     s.tags?.forEach(tag => {
       if (!bySubSkill[tag]) bySubSkill[tag] = [];
       bySubSkill[tag].push(s.normalised);
@@ -105,7 +128,11 @@ export function buildScoreBreakdown(answerScores) {
 // ── Pure: Build full SessionScore ────────────────────────────
 
 export function buildSessionScore(sessionId, userId, skill, answerScores) {
-  const scores     = answerScores.map(s => s.normalised);
+  const scoredOnly = answerScores.filter(s => s.scored !== false && Number.isFinite(s.normalised));
+  if (scoredOnly.length === 0 || scoredOnly.length !== answerScores.length) {
+    throw new Error('Cannot build a session score: one or more answers were not scored.');
+  }
+  const scores     = scoredOnly.map(s => s.normalised);
   const totalScore = computeAverage(scores);
 
   return {
