@@ -9,7 +9,7 @@
  * ─────────────────────────────────────────────────────────────
  */
 
-const CACHE_NAME    = 'nirev-v5';
+const CACHE_NAME    = 'nirev-v6';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
