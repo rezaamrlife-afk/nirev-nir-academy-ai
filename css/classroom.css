@@ -593,3 +593,428 @@
   .classes-grid     { grid-template-columns: 1fr; }
   .student-panel__header { flex-direction: column; align-items: flex-start; }
 }
+
+
+/* ==========================================================================
+   LEARNER CLASSROOM - PREMIUM REDESIGN (v6.0)
+   CSS-only. Scoped to the learner view (#classroom-content containing
+   .join-class-card) so the teacher view is untouched. Theme-aware via tokens.
+   ========================================================================== */
+
+#classroom-content:has(> .join-class-card) {
+  --cls-accent: var(--orange-core);
+  --cls-gold: var(--gold-pure);
+  --cls-ok: var(--status-success, #3DAA78);
+  max-width: 980px;
+  margin-inline: auto;
+  animation: cls-rise 560ms var(--ease-smooth) both;
+}
+
+@keyframes cls-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ── Welcome header (hero) ───────────────────────────────────────────── */
+#classroom-content:has(> .join-class-card) .classroom-header {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 168px;
+  margin-bottom: var(--space-5);
+  padding: var(--space-8);
+  border: 1px solid var(--black-border);
+  border-radius: var(--radius-2xl);
+  background:
+    radial-gradient(120% 140% at 100% 0%, color-mix(in srgb, var(--cls-accent) 14%, transparent), transparent 55%),
+    linear-gradient(135deg, var(--black-elevated), var(--black-surface));
+  box-shadow: var(--shadow-md);
+}
+
+/* decorative concentric rings */
+#classroom-content:has(> .join-class-card) .classroom-header::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -90px;
+  right: -70px;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--cls-gold) 34%, transparent);
+  box-shadow:
+    0 0 0 34px color-mix(in srgb, var(--cls-gold) 7%, transparent),
+    0 0 0 68px color-mix(in srgb, var(--cls-gold) 4%, transparent);
+  pointer-events: none;
+}
+
+/* top accent hairline */
+#classroom-content:has(> .join-class-card) .classroom-header::after {
+  content: "";
+  position: absolute;
+  inset: 0 var(--space-8) auto;
+  height: 2px;
+  border-radius: 0 0 var(--radius-pill) var(--radius-pill);
+  background: linear-gradient(90deg, transparent, var(--cls-accent), var(--cls-gold), transparent);
+  opacity: .7;
+  pointer-events: none;
+}
+
+#classroom-content:has(> .join-class-card) .classroom-header > div {
+  position: relative;
+  z-index: 1;
+  max-width: 560px;
+}
+
+/* eyebrow label */
+#classroom-content:has(> .join-class-card) .classroom-header > div::before {
+  content: "Classroom";
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+  padding: 5px 12px 5px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--white-secondary);
+  border: 1px solid var(--black-border);
+  border-radius: var(--radius-pill);
+  background:
+    radial-gradient(circle at 12px 50%, var(--cls-accent) 0 3px, transparent 4px),
+    color-mix(in srgb, var(--cls-accent) 8%, var(--black-surface));
+  padding-left: 24px;
+}
+
+#classroom-content:has(> .join-class-card) .classroom-title {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4.2vw, 2.75rem);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: .01em;
+  background: linear-gradient(135deg, var(--gold-pure), var(--gold-light));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: var(--gold-pure);
+}
+
+#classroom-content:has(> .join-class-card) .classroom-subtitle {
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--white-secondary);
+}
+
+/* ── Join panel ──────────────────────────────────────────────────────── */
+#classroom-content:has(> .join-class-card) .join-class-card {
+  position: relative;
+  isolation: isolate;
+  max-width: none;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto auto;
+  column-gap: var(--space-4);
+  align-items: end;
+}
+
+/* panel surface */
+#classroom-content:has(> .join-class-card) .join-class-card::before {
+  content: "";
+  grid-area: 1 / 1 / 2 / 3;
+  align-self: stretch;
+  z-index: -1;
+  border: 1px solid var(--black-border);
+  border-radius: var(--radius-xl);
+  background:
+    radial-gradient(70% 160% at 0% 0%, color-mix(in srgb, var(--cls-gold) 9%, transparent), transparent 60%),
+    var(--black-surface);
+  box-shadow: var(--shadow-md);
+  transition: border-color var(--dur-base) var(--ease-smooth), box-shadow var(--dur-base) var(--ease-smooth);
+}
+#classroom-content:has(> .join-class-card) .join-class-card:focus-within::before {
+  border-color: color-mix(in srgb, var(--cls-accent) 55%, var(--black-border));
+  box-shadow: var(--shadow-md), 0 0 0 4px color-mix(in srgb, var(--cls-accent) 14%, transparent);
+}
+
+#classroom-content:has(> .join-class-card) .join-class-card > .form-group {
+  grid-area: 1 / 1;
+  margin: var(--space-6) 0 var(--space-6) var(--space-6);
+}
+#classroom-content:has(> .join-class-card) .join-class-card .form-label {
+  display: block;
+  margin-bottom: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--white-muted);
+}
+
+#classroom-content:has(> .join-class-card) .join-code-input {
+  width: 100%;
+  height: 58px;
+  padding: 0 var(--space-5);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  letter-spacing: .32em;
+  text-align: center;
+  color: var(--white-pure);
+  background: var(--input-bg);
+  border: 1px solid var(--black-border);
+  border-radius: var(--radius-lg);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, .06);
+  transition: border-color var(--dur-fast) var(--ease-smooth), box-shadow var(--dur-fast) var(--ease-smooth), background var(--dur-fast) var(--ease-smooth);
+}
+#classroom-content:has(> .join-class-card) .join-code-input::placeholder {
+  font-size: var(--text-base);
+  font-weight: 500;
+  letter-spacing: .08em;
+  text-transform: none;
+  color: var(--white-muted);
+  opacity: .8;
+}
+#classroom-content:has(> .join-class-card) .join-code-input:hover {
+  border-color: color-mix(in srgb, var(--cls-gold) 45%, var(--black-border));
+}
+#classroom-content:has(> .join-class-card) .join-code-input:focus {
+  outline: none;
+  border-color: var(--cls-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--cls-accent) 22%, transparent);
+}
+
+#btn-join-class {
+  grid-area: 1 / 2;
+  width: auto;
+  min-width: 168px;
+  height: 58px;
+  margin: 0 var(--space-6) var(--space-6) 0;
+  padding: 0 var(--space-6);
+  gap: var(--space-2);
+  border-radius: var(--radius-lg);
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+#btn-join-class::after {
+  content: "\2192";
+  display: inline-block;
+  font-size: 1.15em;
+  transition: transform var(--dur-base) var(--ease-smooth);
+}
+#btn-join-class:hover::after { transform: translateX(4px); }
+#btn-join-class:active { transform: translateY(0) scale(.985); }
+#btn-join-class:focus-visible { outline: 2px solid var(--brand-primary); outline-offset: 3px; }
+
+/* ── My Classes section ──────────────────────────────────────────────── */
+#classroom-content:has(> .join-class-card) #my-classes-section {
+  grid-area: 2 / 1 / 3 / 3;
+  margin-top: var(--space-8) !important;
+}
+#classroom-content:has(> .join-class-card) #my-classes-section .section-header {
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+  justify-content: flex-start;
+}
+#classroom-content:has(> .join-class-card) #my-classes-section .section-title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  letter-spacing: -.02em;
+}
+#classroom-content:has(> .join-class-card) #my-classes-section .section-title::before {
+  content: "";
+  width: 4px;
+  height: 22px;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(180deg, var(--cls-accent), var(--cls-gold));
+}
+#classroom-content:has(> .join-class-card) #my-classes-section .section-header::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--black-border), transparent);
+}
+
+/* ── Class cards ─────────────────────────────────────────────────────── */
+.learner-class-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+
+.learner-class-row {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas: "icon code" "info info";
+  align-items: start;
+  gap: var(--space-5) var(--space-3);
+  padding: var(--space-5);
+  border: 1px solid var(--black-border);
+  border-radius: var(--radius-xl);
+  background:
+    radial-gradient(90% 90% at 100% 0%, color-mix(in srgb, var(--cls-accent, var(--orange-core)) 8%, transparent), transparent 60%),
+    var(--black-surface);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .06);
+  transition:
+    transform var(--dur-base) var(--ease-smooth),
+    border-color var(--dur-base) var(--ease-smooth),
+    box-shadow var(--dur-base) var(--ease-smooth);
+  animation: cls-rise 520ms var(--ease-smooth) both;
+}
+.learner-class-row:nth-child(2) { animation-delay: 70ms; }
+.learner-class-row:nth-child(3) { animation-delay: 140ms; }
+.learner-class-row:nth-child(4) { animation-delay: 210ms; }
+.learner-class-row:nth-child(n+5) { animation-delay: 280ms; }
+
+/* top accent line (revealed on hover) */
+.learner-class-row::before {
+  content: "";
+  position: absolute;
+  inset: 0 var(--space-5) auto;
+  height: 2px;
+  border-radius: 0 0 var(--radius-pill) var(--radius-pill);
+  background: linear-gradient(90deg, var(--orange-core), var(--gold-pure));
+  opacity: 0;
+  transform: scaleX(.4);
+  transition: opacity var(--dur-base) var(--ease-smooth), transform var(--dur-slow) var(--ease-smooth);
+}
+.learner-class-row:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--orange-core) 40%, var(--black-border));
+  box-shadow: var(--shadow-lg);
+}
+.learner-class-row:hover::before { opacity: 1; transform: none; }
+
+/* icon tile (graduation cap drawn with a mask) */
+.learner-class-row__icon {
+  grid-area: icon;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border: 1px solid color-mix(in srgb, var(--gold-pure) 35%, var(--black-border));
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--orange-core) 18%, var(--black-surface)),
+    color-mix(in srgb, var(--gold-pure) 14%, var(--black-surface)));
+  transition: transform var(--dur-base) var(--ease-smooth);
+}
+.learner-class-row__icon::before {
+  content: "";
+  width: 26px;
+  height: 26px;
+  background: linear-gradient(135deg, var(--orange-core), var(--gold-pure));
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M22 10v6M2 10l10-5 10 5-10 5z'/><path d='M6 12v5c3 3 9 3 12 0v-5'/></svg>") center / contain no-repeat;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M22 10v6M2 10l10-5 10 5-10 5z'/><path d='M6 12v5c3 3 9 3 12 0v-5'/></svg>") center / contain no-repeat;
+}
+.learner-class-row:hover .learner-class-row__icon { transform: rotate(-6deg) scale(1.06); }
+
+/* class code badge */
+.learner-class-row__code {
+  grid-area: code;
+  justify-self: end;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: .18em;
+  color: var(--brand-primary);
+  background: color-mix(in srgb, var(--orange-core) 10%, transparent);
+  border: 1px dashed color-mix(in srgb, var(--orange-core) 45%, transparent);
+  border-radius: var(--radius-md);
+}
+.learner-class-row__code::before {
+  content: "Class code";
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--white-muted);
+}
+
+/* name / teacher / membership */
+.learner-class-row__info { grid-area: info; }
+.learner-class-row__name {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -.015em;
+  color: var(--white-pure);
+  overflow-wrap: anywhere;
+}
+.learner-class-row__teacher {
+  margin-top: var(--space-1);
+  font-size: var(--text-xs);
+  color: var(--white-muted);
+}
+.learner-class-row__info::after {
+  content: "Enrolled";
+  display: inline-flex;
+  align-items: center;
+  margin-top: var(--space-4);
+  padding: 4px 12px 4px 24px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--cls-ok);
+  border: 1px solid color-mix(in srgb, var(--cls-ok) 35%, transparent);
+  border-radius: var(--radius-pill);
+  background:
+    radial-gradient(circle at 12px 50%, var(--cls-ok) 0 3px, transparent 4px),
+    color-mix(in srgb, var(--cls-ok) 10%, transparent);
+}
+
+/* empty state (inline-styled <p> from JS) */
+#learner-classes-list > p {
+  margin: var(--space-3) 0 0;
+  padding: var(--space-8) var(--space-6);
+  text-align: center;
+  border: 1px dashed var(--black-border);
+  border-radius: var(--radius-xl);
+  background: color-mix(in srgb, var(--orange-core) 4%, var(--black-surface));
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────── */
+@media (max-width: 720px) {
+  #classroom-content:has(> .join-class-card) .classroom-header {
+    min-height: 0;
+    padding: var(--space-6) var(--space-5);
+    border-radius: var(--radius-xl);
+  }
+  #classroom-content:has(> .join-class-card) .classroom-header::before { top: -110px; right: -110px; }
+  #classroom-content:has(> .join-class-card) .join-class-card {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+  }
+  #classroom-content:has(> .join-class-card) .join-class-card::before { grid-area: 1 / 1 / 3 / 2; align-self: stretch; }
+  #classroom-content:has(> .join-class-card) .join-class-card > .form-group { margin: var(--space-5) var(--space-5) var(--space-4); }
+  #btn-join-class {
+    grid-area: 2 / 1;
+    width: auto;
+    margin: 0 var(--space-5) var(--space-5);
+  }
+  #classroom-content:has(> .join-class-card) #my-classes-section { grid-area: 3 / 1; }
+  .learner-class-list { grid-template-columns: 1fr; }
+}
+
+@media (hover: none) {
+  .learner-class-row:hover { transform: none; }
+}
