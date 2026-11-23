@@ -1,4 +1,3 @@
-
 /**
  * NIREV AI — Application Configuration
  * ─────────────────────────────────────────────────────────────
@@ -53,9 +52,26 @@ export const SUPABASE = {
 
 export const GROQ = {
   MODEL: 'openai/gpt-oss-120b',
-  MAX_TOKENS: 1024,
+  MAX_TOKENS: 4096,
   TEMPERATURE: 0.4,
   EDGE_FN_URL: '/functions/v1/groq-proxy',
+
+  // Per-task completion-token limits (max_tokens).
+  // Question generation depends on the assessment type (5 / 8 / 10 questions).
+  TOKEN_LIMITS: {
+    QUESTIONS: {
+      practice:  4096,   // 5 questions
+      placement: 6144,   // 8 questions
+      mock:      6144,   // 10 questions
+    },
+    // Scoring depends on the answer (question) type.
+    SCORING: {
+      'multiple-choice': 800,
+      'short-answer':    1200,
+      'essay':           2000,
+    },
+    FEEDBACK: 2500,
+  },
 };
 
 
