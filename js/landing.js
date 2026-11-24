@@ -41,18 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   $('#lp-theme')?.addEventListener('click', () => window.nirevToggleTheme?.());
-  $('#lp-announce-x')?.addEventListener('click', () => $('#lp-announce').remove());
   const yr = $('#lp-year'); if (yr) yr.textContent = new Date().getFullYear();
-
-  // Language menu (English only for now)
-  const lang = $('#lp-lang'), lbtn = $('.lp-lang__btn', lang);
-  lbtn?.addEventListener('click', e => {
-    e.stopPropagation();
-    const open = lang.classList.toggle('open');
-    lbtn.setAttribute('aria-expanded', String(open));
-  });
-  document.addEventListener('click', () => { lang?.classList.remove('open'); lbtn?.setAttribute('aria-expanded', 'false'); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') lang?.classList.remove('open'); });
 
   // Scroll reveal
   if ('IntersectionObserver' in window) {
