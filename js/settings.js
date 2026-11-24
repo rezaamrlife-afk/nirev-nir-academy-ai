@@ -72,6 +72,7 @@ async function _loadAndRender() {
       level:     profile?.level    || store.get('profile.level') || null,
       goal:      profile?.goal     || null,
       role:      profile?.role     || 'learner',
+      created_at: profile?.created_at || null,   // read-only, display only
     };
 
     _render(container);
@@ -89,6 +90,7 @@ async function _loadAndRender() {
 function _render(container) {
   const p = _state.profile;
   const initials = _getInitials(p.full_name || p.email);
+  const isTeacher = p.role === 'teacher';   // role comes from the stored profile; never editable here
 
   container.innerHTML = `
 
@@ -112,6 +114,7 @@ function _render(container) {
         </span>
         Personal Information
       </div>
+      ${isTeacher ? '<div class="form-label settings-hint">Update the name shown on your teacher account. Your email cannot be changed here.</div>' : ''}
 
       <div class="settings-row">
         <div class="form-group">
@@ -129,6 +132,7 @@ function _render(container) {
       </div>
     </div>
 
+    ${isTeacher ? '' : `
     <!-- Learning Profile (CEFR) -->
     <div class="settings-section settings-card--level">
       <div class="settings-section__title">
@@ -165,6 +169,9 @@ function _render(container) {
         ${_buildGoalGrid(p.goal)}
       </div>
     </div>
+    `}
+
+    ${isTeacher ? _teacherAccountCard(p) : ''}
 
     <!-- Save Bar -->
     <div class="settings-save-bar">
@@ -175,6 +182,7 @@ function _render(container) {
       </div>
     </div>
 
+    ${isTeacher ? '' : `
     <!-- Account Actions -->
     <div class="settings-section settings-account">
       <div class="settings-section__title">
@@ -191,6 +199,7 @@ function _render(container) {
         <button class="btn btn--secondary btn--sm" id="settings-signout-btn">Sign Out</button>
       </div>
     </div>
+    `}
 
   `;
 
@@ -271,11 +280,16 @@ async function _save() {
   const selectedCEFR = document.querySelector('.cefr-btn.selected');
   const selectedGoal = document.querySelector('.goal-btn.selected');
 
-  const updates = {
-    full_name: nameInput?.value.trim() || _state.profile.full_name,
-    level:     selectedCEFR?.dataset.level || null,
-    goal:      selectedGoal?.dataset.goal  || null,
-  };
+  const isTeacher = _state.profile?.role === 'teacher';
+
+  // Teachers only update their name — CEFR level, learning goal and role are never sent.
+  const updates = isTeacher
+    ? { full_name: nameInput?.value.trim() || _state.profile.full_name }
+    : {
+        full_name: nameInput?.value.trim() || _state.profile.full_name,
+        level:     selectedCEFR?.dataset.level || null,
+        goal:      selectedGoal?.dataset.goal  || null,
+      };
 
   try {
     const { data, error } = await updateProfile(userId, updates);
@@ -285,11 +299,9 @@ async function _save() {
       _updateStatus('error');
     } else {
       // Update store
-      store.set('profile', {
-        ...store.get('profile'),
-        fullName: updates.full_name,
-        level:    updates.level,
-      });
+      store.set('profile', isTeacher
+        ? { ...store.get('profile'), fullName: updates.full_name }
+        : { ...store.get('profile'), fullName: updates.full_name, level: updates.level });
 
       // Update sidebar user widget
       const nameEl = document.getElementById('user-name');
@@ -325,6 +337,36 @@ function _updateStatus(state) {
   } else {
     el.textContent = 'Unsaved changes';
   }
+}
+
+function _teacherAccountCard(p) {
+  const since = p.created_at ? new Date(p.created_at) : null;
+  const sinceText = since && !isNaN(since)
+    ? since.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+    : '';
+  return `
+    <!-- Account Information (teacher) -->
+    <div class="settings-section settings-card--account">
+      <div class="settings-section__title">
+        <span class="settings-section__icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6l8-3z"/></svg>
+        </span>
+        Account Information
+      </div>
+      <div class="form-label settings-hint">Your sign-in details. Your role is set when the account is created and cannot be changed here.</div>
+      <ul class="settings-info-list">
+        <li><span>Email</span><strong>${_escape(p.email)}</strong></li>
+        <li><span>Role</span><strong>Teacher</strong></li>
+        ${sinceText ? `<li><span>Member since</span><strong>${sinceText}</strong></li>` : ''}
+      </ul>
+      <div class="danger-item">
+        <div class="danger-item__info">
+          <div class="danger-item__title">Sign Out</div>
+          <div class="danger-item__desc">Sign out of your NIREV account</div>
+        </div>
+        <button class="btn btn--secondary btn--sm" id="settings-signout-btn">Sign Out</button>
+      </div>
+    </div>`;
 }
 
 function _buildCEFRGrid(currentLevel) {
