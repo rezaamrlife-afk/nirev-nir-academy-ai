@@ -317,150 +317,17 @@ html[data-theme="light"] .report-export-btn:hover {
   color: var(--gold-bright);
 }
 
-/* ══ 14. PROGRESS DASHBOARD (v5) ═══════════════════════════ */
+/* ══ 14. PROGRESS DASHBOARD (v6) ═══════════════════════════
+   progress.css is fully token-driven, so Light mode inherits the
+   correct surfaces/text automatically. Only theme-specific polish here. */
 
-/* Sections */
-html[data-theme="light"] .pi-section {
-  background:   var(--black-surface);
-  border-color: var(--black-border);
-}
-
-/* KPI cards */
-html[data-theme="light"] .pi-kpi-card {
-  background:   var(--black-elevated);
-  border-color: var(--black-border);
-}
-html[data-theme="light"] .pi-kpi-card:hover {
-  border-color: rgba(127,100,20,0.4);
-}
-html[data-theme="light"] .pi-kpi-card__eyebrow { color: var(--white-muted); }
-html[data-theme="light"] .pi-kpi-card__sub     { color: var(--white-secondary); }
-html[data-theme="light"] .pi-kpi-card__bar     { background: rgba(26,21,16,0.1); }
-html[data-theme="light"] .pi-kpi-card__bar-label { color: var(--white-muted); }
-
-/* Trajectory badge light overrides */
-html[data-theme="light"] .pi-trajectory--improving {
-  color:      #2e7d32;
-  background: rgba(46,125,50,0.1);
-}
-html[data-theme="light"] .pi-trajectory--declining {
-  color:      #c62828;
-  background: rgba(198,40,40,0.1);
-}
-html[data-theme="light"] .pi-trajectory--plateauing {
-  color:      rgba(127,100,20,0.9);
-  background: rgba(127,100,20,0.1);
-}
-
-/* Confidence badge */
-html[data-theme="light"] .pi-confidence-badge--medium {
-  background: rgba(200,100,0,0.1);
-  color:      #c06000;
-  border-color: rgba(200,100,0,0.25);
-}
-html[data-theme="light"] .pi-confidence-badge--low {
-  background:   rgba(26,21,16,0.05);
-  color:        var(--white-muted);
-  border-color: rgba(26,21,16,0.15);
-}
-
-/* Prediction */
-html[data-theme="light"] .pi-prediction__message {
-  background:   rgba(26,21,16,0.04);
-  border-left-color: rgba(127,100,20,0.4);
-  color:        var(--white-secondary);
-}
-html[data-theme="light"] .pi-prediction__unavailable {
-  background:   rgba(26,21,16,0.04);
-  border-color: rgba(26,21,16,0.15);
-}
-html[data-theme="light"] .pi-prediction__unavailable-text { color: var(--white-muted); }
-
-/* Skill cards */
-html[data-theme="light"] .pi-skill-card {
-  background:   var(--black-elevated);
-  border-color: var(--black-border);
-}
-html[data-theme="light"] .pi-skill-card:hover { border-color: rgba(127,100,20,0.4); }
-html[data-theme="light"] .pi-skill-card__name     { color: var(--white-primary); }
-html[data-theme="light"] .pi-skill-card__sessions { color: var(--white-muted); }
-html[data-theme="light"] .pi-skill-card__cefr     { color: var(--white-secondary); }
-html[data-theme="light"] .pi-skill-card__bar-track { background: rgba(26,21,16,0.1); }
-html[data-theme="light"] .pi-skill-card__gap-badge {
-  color:      #c06000;
-  background: rgba(200,100,0,0.1);
-}
-
-html[data-theme="light"] .pi-skill-trend--improving { color: #2e7d32; }
-html[data-theme="light"] .pi-skill-trend--declining  { color: #c62828; }
-html[data-theme="light"] .pi-skill-trend--plateauing { color: rgba(127,100,20,0.9); }
-
-/* Roadmap */
-html[data-theme="light"] .pi-roadmap__connector {
-  background: linear-gradient(to bottom, rgba(26,21,16,0.15) 50%, transparent);
-}
-html[data-theme="light"] .pi-roadmap__item--reached .pi-roadmap__connector {
-  background: linear-gradient(to bottom, rgba(127,100,20,0.4), rgba(26,21,16,0.08));
-}
-html[data-theme="light"] .pi-roadmap__item--future .pi-roadmap__dot {
-  background:   var(--black-elevated);
-  border-color: rgba(26,21,16,0.2);
-  color:        var(--white-muted);
-}
-html[data-theme="light"] .pi-roadmap__level       { color: var(--white-primary); }
-html[data-theme="light"] .pi-roadmap__level span  { color: var(--white-secondary); }
-html[data-theme="light"] .pi-roadmap__detail      { color: var(--white-muted); }
-html[data-theme="light"] .pi-roadmap__item--reached .pi-roadmap__detail { color: #2e7d32; }
-html[data-theme="light"] .pi-roadmap__item--current .pi-roadmap__detail { color: rgba(127,100,20,0.9); }
-html[data-theme="light"] .pi-roadmap__target      { color: var(--white-muted); }
-
-/* Study plan */
-html[data-theme="light"] .pi-plan-card {
-  background:   var(--black-elevated);
-  border-color: var(--black-border);
-}
-html[data-theme="light"] .pi-plan-card__label { color: var(--white-primary); }
-html[data-theme="light"] .pi-plan-card__note  { color: var(--white-secondary); }
-html[data-theme="light"] .pi-plan__next-action {
-  background:   rgba(26,21,16,0.04);
-  border-color: rgba(26,21,16,0.1);
-}
-html[data-theme="light"] .pi-plan__next-label  { color: var(--white-muted); }
-
-/* Insights */
-html[data-theme="light"] .pi-insight-card {
-  background:   var(--black-elevated);
-  border-color: var(--black-border);
-}
-html[data-theme="light"] .pi-insight-card--positive { border-left-color: #2e7d32; }
-html[data-theme="light"] .pi-insight-card--negative { border-left-color: #c62828; }
-html[data-theme="light"] .pi-insight-card--neutral  { border-left-color: rgba(127,100,20,0.5); }
-html[data-theme="light"] .pi-insight-card__title  { color: var(--white-muted); }
-html[data-theme="light"] .pi-insight-card__desc   { color: var(--white-secondary); }
-html[data-theme="light"] .pi-insight-card--positive .pi-insight-card__value { color: #2e7d32; }
-html[data-theme="light"] .pi-insight-card--negative .pi-insight-card__value { color: #c62828; }
-
-/* Timeline */
-html[data-theme="light"] .pi-timeline {
-  border-top-color: rgba(26,21,16,0.1);
-}
-html[data-theme="light"] .pi-timeline__label         { color: var(--white-muted); }
-html[data-theme="light"] .pi-timeline__forecast-label { color: rgba(180,80,0,0.8); }
-html[data-theme="light"] .pi-timeline__y-labels      { color: var(--white-muted); }
-html[data-theme="light"] .pi-timeline__x-labels      { color: var(--white-muted); }
-
-/* Loading / empty */
-html[data-theme="light"] .pi-loading__ring {
-  border-color:     rgba(26,21,16,0.1);
-  border-top-color: rgba(127,100,20,0.8);
-}
-html[data-theme="light"] .pi-loading__text   { color: var(--white-secondary); }
-html[data-theme="light"] .pi-empty__title    { color: var(--white-primary); }
-html[data-theme="light"] .pi-empty__text     { color: var(--white-secondary); }
-
-/* Section header */
-html[data-theme="light"] .pi-section__eyebrow { color: rgba(127,100,20,0.75); }
-html[data-theme="light"] .pi-section__title   { color: var(--white-primary); }
-
-/* Empty inline */
-html[data-theme="light"] .pi-empty-inline { color: var(--white-secondary); }
+html[data-theme="light"] .pi-section { box-shadow: 0 1px 2px rgba(26,21,16,.05), 0 8px 24px rgba(26,21,16,.04); }
+html[data-theme="light"] .pi-gauge__track,
+html[data-theme="light"] .pi-bar,
+html[data-theme="light"] .pi-road::before { background-color: rgba(26,21,16,.09); }
+html[data-theme="light"] .pi-gauge__track { background: none; stroke: rgba(26,21,16,.09); }
+html[data-theme="light"] .pi-chart__grid { border-top-color: rgba(26,21,16,.08); }
+html[data-theme="light"] .pi-radar__ring,
+html[data-theme="light"] .pi-radar__axis { stroke: rgba(26,21,16,.14); }
+html[data-theme="light"] .pi-chart__tag { color: #fff; }
+html[data-theme="light"] .pi-chart__target b { background: var(--black-elevated); }
