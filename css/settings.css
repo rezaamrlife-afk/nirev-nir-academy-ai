@@ -718,6 +718,84 @@
   .settings-account #settings-signout-btn { width: 100%; }
 }
 
+/* ── 10b. Teacher: Account Information card ─────────────── */
+
+.settings-info-list {
+  list-style: none;
+  margin: 0 0 var(--space-5);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--black-border);
+  border-radius: var(--radius-lg);
+  background: var(--black-elevated);
+  overflow: hidden;
+}
+
+.settings-info-list li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--black-border);
+}
+.settings-info-list li:last-child { border-bottom: none; }
+
+.settings-info-list span {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--white-muted);
+}
+
+.settings-info-list strong {
+  min-width: 0;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-align: right;
+  color: var(--white-primary);
+  overflow-wrap: anywhere;
+}
+
+/* Teacher hints: keep breathing room above the first field / list */
+.settings-card--personal .settings-hint,
+.settings-card--account .settings-hint { margin-bottom: var(--space-4); }
+
+/* Sign Out sits at the bottom of the card, clearly separated */
+.settings-card--account .danger-item {
+  margin-top: auto;
+  padding: var(--space-4) 0 0;
+  border-top: 1px solid color-mix(in srgb, var(--status-danger) 22%, var(--black-border));
+  border-bottom: none;
+}
+
+.settings-card--account { display: flex; flex-direction: column; }
+
+.settings-card--account #settings-signout-btn {
+  min-width: 120px;
+  color: var(--status-danger);
+  border-color: color-mix(in srgb, var(--status-danger) 45%, transparent);
+  background: var(--status-danger-bg);
+  transition: transform var(--dur-fast) var(--ease-smooth), background var(--dur-fast) var(--ease-smooth), border-color var(--dur-fast) var(--ease-smooth);
+}
+.settings-card--account #settings-signout-btn:hover {
+  transform: translateY(-1px);
+  border-color: var(--status-danger);
+  background: color-mix(in srgb, var(--status-danger) 16%, transparent);
+}
+.settings-card--account #settings-signout-btn:active { transform: scale(.98); }
+.settings-card--account #settings-signout-btn:focus-visible { outline: 2px solid var(--status-danger); outline-offset: 3px; }
+
+@media (max-width: 600px) {
+  .settings-card--account .danger-item { flex-direction: column; align-items: stretch; }
+  .settings-card--account #settings-signout-btn { width: 100%; }
+  .settings-info-list li { flex-direction: column; align-items: flex-start; gap: 2px; }
+  .settings-info-list strong { text-align: left; }
+}
+
 /* ── 11. Reduced motion ──────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
