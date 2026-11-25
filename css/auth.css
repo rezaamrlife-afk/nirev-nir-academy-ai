@@ -80,7 +80,7 @@
 
 .auth-brand__tagline {
   font-family: var(--font-mono);
-  font-size: 0.9375rem;
+  font-size: 0.6rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--white-muted);
@@ -125,7 +125,7 @@
 
 .auth-brand__product-sub {
   font-family: var(--font-mono);
-  font-size: 0.9375rem;
+  font-size: 0.8rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--white-muted);
@@ -165,7 +165,7 @@
 
 .auth-brand__pill {
   font-family: var(--font-mono);
-  font-size: 0.9375rem;
+  font-size: 0.75rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--white-muted);
@@ -208,7 +208,7 @@
 
 .auth-brand__hero-badge {
   font-family: var(--font-mono);
-  font-size: 0.9375rem;
+  font-size: 0.65rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--gold-pure);
@@ -248,7 +248,7 @@
   background: linear-gradient(135deg, var(--gold-dim), var(--gold-pure));
   color: var(--black-void);
   font-family: var(--font-display);
-  font-size: 1.0625rem;
+  font-size: 0.95rem;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -258,7 +258,7 @@
 }
 
 .auth-brand__founder-name {
-  font-size: 1.0625rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   color: var(--gold-bright);
   letter-spacing: -0.01em;
@@ -267,7 +267,7 @@
 
 .auth-brand__founder-title {
   font-family: var(--font-mono);
-  font-size: 0.9375rem;
+  font-size: 0.65rem;
   color: var(--white-muted);
   letter-spacing: 0.04em;
   line-height: 1.4;
@@ -425,7 +425,7 @@
 }
 
 .auth-role-btn__text {
-  font-size: 1rem;
+  font-size: 0.72rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   font-weight: 600;

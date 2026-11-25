@@ -23,7 +23,7 @@
 
 .reports-header__eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.9375rem;
+  font-size: 0.8rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--white-muted);
@@ -110,7 +110,7 @@
 
 .report-card__meta {
   font-family: var(--font-mono);
-  font-size: 0.9375rem;
+  font-size: 0.78rem;
   color: var(--white-muted);
   letter-spacing: 0.06em;
   display: flex;
@@ -127,7 +127,7 @@
 
 .report-card__chevron {
   color: var(--white-muted);
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   transition: transform var(--dur-base);
 }
 
@@ -175,7 +175,7 @@
 
 .report-detail__stat-label {
   font-family: var(--font-mono);
-  font-size: 1.0625rem;
+  font-size: 0.75rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--white-muted);
@@ -200,7 +200,7 @@
 
 .report-q-item__num {
   font-family: var(--font-mono);
-  font-size: 0.9375rem;
+  font-size: 0.8rem;
   color: var(--white-muted);
   min-width: 24px;
   margin-top: 2px;
@@ -209,13 +209,13 @@
 .report-q-item__content { flex: 1; }
 
 .report-q-item__question {
-  font-size: 1.0625rem;
+  font-size: 0.8375rem;
   color: var(--white-secondary);
   margin-bottom: var(--space-1);
 }
 
 .report-q-item__feedback {
-  font-size: 1.0625rem;
+  font-size: 0.85rem;
   color: var(--white-muted);
   font-style: italic;
   line-height: 1.5;
