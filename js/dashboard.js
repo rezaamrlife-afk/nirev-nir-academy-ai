@@ -375,7 +375,7 @@ function _renderInsights(analytics, prediction) {
               <span style="color:var(--gold-bright)">
                 ${_esc(prediction.currentLevel)} → ${_esc(prediction.targetLevel)}
               </span>
-              <span style="color:var(--text-muted);font-size:0.875rem;">
+              <span style="color:var(--text-muted);font-size:1.0625rem;">
                 ~${_esc(prediction.estimatedDays)} days
               </span>
             </div>
@@ -391,7 +391,7 @@ function _renderInsights(analytics, prediction) {
             <div class="insight-bar-wrap">
               <div class="insight-bar" style="width:${consistency}%"></div>
             </div>
-            <span style="color:var(--text-muted);font-size:0.875rem;">
+            <span style="color:var(--text-muted);font-size:1.0625rem;">
               ${consistency}%
             </span>
           </div>
@@ -408,7 +408,7 @@ function _renderInsights(analytics, prediction) {
               style="text-transform:capitalize;color:var(--orange-bright)"
             >
               ${_esc(topGap.skill)}
-              <span style="color:var(--text-muted);font-size:0.875rem;text-transform:none;">
+              <span style="color:var(--text-muted);font-size:1.0625rem;text-transform:none;">
                 +${Math.round(topGap.gap)} pts needed
               </span>
             </div>
@@ -425,7 +425,7 @@ function _renderEmptyInsights() {
   if (!container) return;
 
   container.innerHTML = `
-    <div style="padding:var(--space-6);text-align:center;color:var(--text-muted);font-size:0.9375rem;">
+    <div style="padding:var(--space-6);text-align:center;color:var(--text-muted);font-size:1.0625rem;">
       Complete an assessment to unlock intelligence insights.
     </div>
   `;
