@@ -201,7 +201,7 @@ function _exportReport(score, userName) {
           color: #0D0D0D;
         }
         .logo span { color: #D4AF37; }
-        .meta { text-align: right; font-size: 0.875rem; color: #666; }
+        .meta { text-align: right; font-size: 0.8rem; color: #666; }
         .score-hero {
           text-align: center;
           padding: 30px;
@@ -240,16 +240,16 @@ function _exportReport(score, userName) {
           border-radius: 8px;
         }
         .stat-value { font-size: 1.5rem; font-weight: 700; color: #D4AF37; }
-        .stat-label { font-size: 0.875rem; color: #999; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
+        .stat-label { font-size: 0.7rem; color: #999; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
         h2 { font-size: 1rem; color: #333; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.1em; border-bottom: 1px solid #eee; padding-bottom: 8px; }
         .q-item { display: flex; gap: 12px; padding: 12px; border-bottom: 1px solid #f0f0f0; align-items: flex-start; }
-        .q-num { font-size: 0.875rem; color: #999; min-width: 30px; margin-top: 2px; }
-        .q-feedback { flex: 1; font-size: 0.875rem; color: #444; font-style: italic; }
+        .q-num { font-size: 0.75rem; color: #999; min-width: 30px; margin-top: 2px; }
+        .q-feedback { flex: 1; font-size: 0.85rem; color: #444; font-style: italic; }
         .q-score { font-size: 1.1rem; font-weight: 700; min-width: 36px; text-align: right; }
         .q-score.high   { color: #27ae60; }
         .q-score.medium { color: #D4AF37; }
         .q-score.low    { color: #e74c3c; }
-        .footer { margin-top: 40px; text-align: center; font-size: 0.875rem; color: #999; border-top: 1px solid #eee; padding-top: 20px; }
+        .footer { margin-top: 40px; text-align: center; font-size: 0.75rem; color: #999; border-top: 1px solid #eee; padding-top: 20px; }
         @media print {
           body { padding: 20px; }
           .no-print { display: none; }
