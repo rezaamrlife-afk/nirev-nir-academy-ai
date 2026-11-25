@@ -491,7 +491,7 @@
 
   color: var(--white-muted, #898174);
   font-family: var(--font-ui, inherit);
-  font-size: 13px;
+  font-size: 17px;
   font-weight: 550;
   line-height: 1.2;
   white-space: nowrap;
@@ -587,7 +587,7 @@
   border-radius: 7px;
 
   font-family: var(--font-mono, monospace);
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 600;
   line-height: 1.3;
 }
@@ -745,7 +745,7 @@ html[data-theme="light"] .topbar__btn--theme .icon-moon { display: none; }
   width: 32px;
   height: 32px;
   border-radius: var(--radius-sm);
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .topbar__profile-name {
@@ -818,7 +818,7 @@ html[data-theme="light"] .topbar__btn--theme .icon-moon { display: none; }
 .topbar-menu__email {
   overflow: hidden;
   color: var(--white-muted, #898174);
-  font-size: 13px;
+  font-size: 17px;
   line-height: 1.4;
   text-overflow: ellipsis;
   white-space: nowrap;
