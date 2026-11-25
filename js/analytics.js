@@ -126,7 +126,7 @@ function _renderAnalytics(analytics) {
         <div class="chart-container" id="line-chart-container">
           ${charts.scoreLine.values.length > 0
             ? _buildLineChart(charts.scoreLine)
-            : '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--white-muted);font-size:0.8rem;">Complete more assessments to see your progress</div>'
+            : '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--white-muted);font-size:1.0625rem;">Complete more assessments to see your progress</div>'
           }
         </div>
       </div>
@@ -135,7 +135,7 @@ function _renderAnalytics(analytics) {
         <div class="radar-container" id="radar-chart-container">
           ${charts.skillRadar.labels.length > 1
             ? _buildRadarChart(charts.skillRadar)
-            : '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--white-muted);font-size:0.8rem;text-align:center;">Complete assessments in multiple skills</div>'
+            : '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--white-muted);font-size:1.0625rem;text-align:center;">Complete assessments in multiple skills</div>'
           }
         </div>
       </div>
