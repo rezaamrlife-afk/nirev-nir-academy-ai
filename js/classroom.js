@@ -504,7 +504,7 @@ function _showStudentDetail(sid, profile, scores) {
   const skills = Object.keys(bySkill);
   let skillRows = '';
   if (skills.length === 0) {
-    skillRows = '<p style="color:var(--white-muted);font-size:0.875rem;">No assessments yet.</p>';
+    skillRows = '<p style="color:var(--white-muted);font-size:1.0625rem;">No assessments yet.</p>';
   } else {
     skills.forEach(skill => {
       const arr  = bySkill[skill];
@@ -534,10 +534,10 @@ function _showStudentDetail(sid, profile, scores) {
     '<div class="student-detail">' +
       '<button class="btn-back" id="btn-back-to-list">← Back to Students</button>' +
       '<div class="student-detail__header">' +
-        '<div class="student-row__avatar" style="width:48px;height:48px;font-size:1rem;">' + _initials(profile.full_name) + '</div>' +
+        '<div class="student-row__avatar" style="width:48px;height:48px;font-size:1.125rem;">' + _initials(profile.full_name) + '</div>' +
         '<div>' +
-          '<div style="font-size:1.1rem;font-weight:700;color:var(--white-pure);">' + (profile.full_name ?? '—') + '</div>' +
-          '<div style="font-size:0.8rem;color:var(--white-muted);">' + (profile.email ?? '') + '</div>' +
+          '<div style="font-size:1.125rem;font-weight:700;color:var(--white-pure);">' + (profile.full_name ?? '—') + '</div>' +
+          '<div style="font-size:1.0625rem;color:var(--white-muted);">' + (profile.email ?? '') + '</div>' +
         '</div>' +
         (level ? '<div class="student-row__level" style="margin-left:auto;">' + level + '</div>' : '') +
         (overallAvg !== null ? '<div style="font-size:1.25rem;font-weight:700;color:var(--white-pure);margin-left:var(--space-3);">' + overallAvg + '%</div>' : '') +
@@ -545,7 +545,7 @@ function _showStudentDetail(sid, profile, scores) {
       '<div class="skill-detail-list">' + skillRows + '</div>' +
       '<button class="btn btn--primary" id="btn-assign-assessment" style="margin-top:var(--space-4);width:100%;">✦ Assign Assessment</button>' +
       '<div id="assignment-history-section" style="margin-top:var(--space-5);">' +
-        '<div style="font-size:0.75rem;font-weight:700;letter-spacing:0.08em;color:var(--white-muted);text-transform:uppercase;margin-bottom:var(--space-3);">Assignment History</div>' +
+        '<div style="font-size:0.9375rem;font-weight:700;letter-spacing:0.08em;color:var(--white-muted);text-transform:uppercase;margin-bottom:var(--space-3);">Assignment History</div>' +
         '<div id="assignment-history-list"><div class="assessment-loading"><div class="assessment-loading__ring"></div></div></div>' +
       '</div>' +
     '</div>' +
@@ -558,7 +558,7 @@ function _showStudentDetail(sid, profile, scores) {
           '<h3 style="margin:0;color:var(--white-pure);">Assign Assessment</h3>' +
           '<button id="assign-modal-close" style="background:none;border:none;color:var(--white-muted);font-size:1.2rem;cursor:pointer;">✕</button>' +
         '</div>' +
-        '<div style="font-size:0.85rem;color:var(--white-muted);margin-bottom:var(--space-4);">Assigning to: <strong style="color:var(--white-pure);">' + (profile.full_name ?? 'Student') + '</strong></div>' +
+        '<div style="font-size:1.0625rem;color:var(--white-muted);margin-bottom:var(--space-4);">Assigning to: <strong style="color:var(--white-pure);">' + (profile.full_name ?? 'Student') + '</strong></div>' +
         '<div class="form-group">' +
           '<label class="form-label">Skill</label>' +
           '<select class="form-input" id="assign-skill">' +
@@ -654,12 +654,12 @@ async function _loadAssignmentHistory(studentId) {
     .order('created_at', { ascending: false });
 
   if (error) {
-    listEl.innerHTML = '<p style="color:var(--white-muted);font-size:0.8rem;">Could not load history.</p>';
+    listEl.innerHTML = '<p style="color:var(--white-muted);font-size:1.0625rem;">Could not load history.</p>';
     return;
   }
 
   if (!data || data.length === 0) {
-    listEl.innerHTML = '<p style="color:var(--white-muted);font-size:0.8rem;">No assignments sent yet.</p>';
+    listEl.innerHTML = '<p style="color:var(--white-muted);font-size:0.9375rem;">No assignments sent yet.</p>';
     return;
   }
 
@@ -672,11 +672,11 @@ async function _loadAssignmentHistory(studentId) {
 
     return '<div style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-2) 0;border-bottom:1px solid rgba(255,255,255,0.06);">' +
       '<div style="flex:1;min-width:0;">' +
-        '<div style="font-size:0.85rem;font-weight:600;color:var(--white-pure);">' + skill + ' · ' + a.level + '</div>' +
-        (a.message ? '<div style="font-size:0.75rem;color:var(--white-muted);font-style:italic;margin-top:2px;">"' + a.message + '"</div>' : '') +
-        '<div style="font-size:0.72rem;color:var(--white-muted);margin-top:2px;">' + date + '</div>' +
+        '<div style="font-size:1.0625rem;font-weight:600;color:var(--white-pure);">' + skill + ' · ' + a.level + '</div>' +
+        (a.message ? '<div style="font-size:1.0625rem;color:var(--white-muted);font-style:italic;margin-top:2px;">"' + a.message + '"</div>' : '') +
+        '<div style="font-size:1.0625rem;color:var(--white-muted);margin-top:2px;">' + date + '</div>' +
       '</div>' +
-      '<div style="font-size:0.72rem;font-weight:700;color:' + statusColor + ';background:' + statusColor + '18;border-radius:999px;padding:2px 8px;flex-shrink:0;">' + statusLabel + '</div>' +
+      '<div style="font-size:1.0625rem;font-weight:700;color:' + statusColor + ';background:' + statusColor + '18;border-radius:999px;padding:2px 8px;flex-shrink:0;">' + statusLabel + '</div>' +
     '</div>';
   }).join('');
 }
@@ -750,7 +750,7 @@ async function _loadLearnerClasses() {
     .order('joined_at', { ascending: false });
 
   if (error || !data || data.length === 0) {
-    listEl.innerHTML = '<p style="color:var(--white-muted);font-size:0.875rem;">No classes joined yet.</p>';
+    listEl.innerHTML = '<p style="color:var(--white-muted);font-size:1.0625rem;">No classes joined yet.</p>';
     return;
   }
 
